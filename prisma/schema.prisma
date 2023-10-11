@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String            @id @default(uuid())
+  email     String            @unique @db.VarChar(100)
+  name      String?           @db.VarChar(50)
+  username  String?           @db.VarChar(50)
+  password  String?           @db.VarChar(100)
+  phone     String?           @unique @db.VarChar(20)
+  role      enum_admins_role? @default(admin)
+  status    enum_status?      @default(active)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+}
+
+model User {
+  id        String       @id @default(uuid())
+  email     String       @unique @db.VarChar(100)
+  name      String?      @db.VarChar(50)
+  phone     String?      @db.VarChar(20)
+  address   String?      @db.VarChar(100)
+  city      String?      @db.VarChar(50)
+  ktp       String?      @db.VarChar(20)
+  photo     String?
+  otp       String?      @db.VarChar(10)
+  tokenFCM  String?      @db.VarChar(255)
+  status    enum_status? @default(active)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  events       Event[]
+  participants Participant[]
+}
+
+model Event {
+  id             String         @id @default(uuid())
+  title          String         @db.VarChar(255)
+  content        String
+  image          String?        @db.VarChar(255)
+  lat            String         @db.VarChar(20)
+  long           String         @db.VarChar(20)
+  address        String?
+  price          Int?           @default(0) @db.Integer
+  maxParticipant Int?           @default(0) @db.Integer
+  eventDate      DateTime
+  presenceMethod enum_presence? @default(anytime)
+  openTime       DateTime?
+  closeTime      DateTime?
+  status         enum_status    @default(inactive)
+  rating         Int?           @default(0) @db.Integer
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  participants Participant[]
+}
+
+model Participant {
+  id       String                    @id @default(uuid())
+  usersId  String
+  users    User                      @relation(fields: [usersId], references: [id])
+  eventsId String
+  events   Event                     @relation(fields: [eventsId], references: [id])
+  status   enum_participants_status? @default(book)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Article {
+  id        String      @id @default(uuid())
+  title     String?     @db.VarChar(255)
+  content   String?
+  image     String?     @db.VarChar(255)
+  rating    Int         @default(0) @db.Integer
+  status    enum_status @default(active)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+enum enum_admins_role {
+  super_admin @map("super admin")
+  accounting
+  admin
+}
+
+enum enum_status {
+  active
+  inactive
+}
+
+enum enum_participants_status {
+  book
+  payment
+  completed
+  cancel
+}
+
+enum enum_presence {
+  anytime
+  called
+}
