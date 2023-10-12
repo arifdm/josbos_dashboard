@@ -26,13 +26,13 @@ const authOptions = {
       if (account?.provider === "google") {
         try {
           const resCheck = await axios.get(
-            `https://moantri.com/api/auth/admin/check?email=${email}`
+            `https://josbos-dashboard.vercel.app/api/auth/admin/check?email=${email}`
             // `http://localhost:3000/api/auth/admin/check?email=${email}`
           );
           console.log("CHECK: ", resCheck.data.status);
           if (resCheck.data.status === false) {
             await axios.post(
-              "https://moantri.com/api/auth/admin",
+              "https://josbos-dashboard.vercel.app/api/auth/admin",
               // "http://localhost:3000/api/auth/admin",
               { name, email, status: true }
             );

@@ -117,8 +117,8 @@ export default function NavDashboard() {
                     className="h-8 w-auto rounded max-w-full align-middle border-none"
                     width={80}
                     height={80}
-                    src="/Icon-orange.png"
-                    alt="Moantri Logo"
+                    src="/logoDashboard.png"
+                    alt="Logo"
                   />
                 </Link>
               </div>

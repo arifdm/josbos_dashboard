@@ -23,9 +23,6 @@ const Home = () => {
       <NavHome status={status} />
       <Hero session={session} status={status} />
       <About />
-      <UI />
-      <Blog />
-      <Footer />
     </div>
   );
 };

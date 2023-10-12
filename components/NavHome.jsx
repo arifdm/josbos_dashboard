@@ -22,13 +22,13 @@ export default function NavHome({ status }) {
       >
         <div className="flex lg:flex-1">
           <Link href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Moantri</span>
+            <span className="sr-only">Josbos</span>
             <Image
               className="h-8 w-auto"
               width={135}
               height={32}
-              src="/Logo-horiz-trans.png"
-              alt="Moantri Logo"
+              src="/Logo.png"
+              alt="Logo"
             />
           </Link>
         </div>
