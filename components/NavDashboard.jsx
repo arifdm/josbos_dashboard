@@ -93,7 +93,7 @@ export default function NavDashboard() {
         </Dialog>
       </Transition.Root>
 
-      <header className="relative bg-[#344A9F]">
+      <header className="relative bg-[#FCB92D]">
         <nav
           aria-label="Top"
           className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
