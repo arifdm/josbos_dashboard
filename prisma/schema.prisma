@@ -73,11 +73,11 @@ model Transactions {
 model VehicleBrands {
   id        String   @id @default(uuid())
   name      String?  @db.VarChar(255)
-  type      String?  @default(uuid())
   status    Boolean? @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  type   String?         @default(uuid())
   types  VehicleTypes?   @relation(fields: [type], references: [id])
   models VehicleModels[]
 }
@@ -85,13 +85,13 @@ model VehicleBrands {
 model VehicleModels {
   id        String   @id @default(uuid())
   name      String?  @db.VarChar(255)
-  brand     String?  @default(uuid())
-  type      String?  @default(uuid())
   status    Boolean? @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  brand  String?        @default(uuid())
   brands VehicleBrands? @relation(fields: [brand], references: [id])
+  type   String?
   types  VehicleTypes?  @relation(fields: [type], references: [id])
 
   Transactions Transactions[]
