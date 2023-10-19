@@ -3,10 +3,21 @@ import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request) {
-  const data = await prisma.vehicleBrands.findMany({
-    include: {
-      users: true,
-      events: true,
+  const data = await prisma.vehicleModel.findMany({
+    select: {
+      id: true,
+      name: true,
+      size: true,
+      brands: {
+        select: {
+          name: true,
+          types: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
   if (!data) {

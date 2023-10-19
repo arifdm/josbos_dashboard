@@ -21,20 +21,21 @@ model Admin {
 }
 
 model User {
-  id           String         @id @default(uuid())
-  email        String         @unique @db.VarChar(100)
-  name         String?        @db.VarChar(50)
-  phone        String?        @db.VarChar(20)
-  address      String?        @db.VarChar(100)
-  city         String?        @db.VarChar(50)
-  ktp          String?        @db.VarChar(20)
-  photo        String?
-  otp          String?        @db.VarChar(10)
-  tokenFCM     String?        @db.VarChar(255)
-  status       enum_status?   @default(active)
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  Transactions Transactions[]
+  id        String       @id @default(uuid())
+  email     String       @unique @db.VarChar(100)
+  name      String?      @db.VarChar(50)
+  phone     String?      @db.VarChar(20)
+  address   String?      @db.VarChar(100)
+  city      String?      @db.VarChar(50)
+  ktp       String?      @db.VarChar(20)
+  photo     String?
+  otp       String?      @db.VarChar(10)
+  tokenFCM  String?      @db.VarChar(255)
+  status    enum_status? @default(active)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  Transactions Transaction[]
 }
 
 model Article {
@@ -48,9 +49,8 @@ model Article {
   updatedAt DateTime    @updatedAt
 }
 
-model Transactions {
+model Transaction {
   id          String    @id @default(uuid())
-  city        String?   @default(uuid())
   address     String?
   latitude    String?   @db.VarChar(255)
   longitude   String?   @db.VarChar(255)
@@ -63,49 +63,138 @@ model Transactions {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  userID String? @default(uuid())
-  users  User?   @relation(fields: [userID], references: [id])
+  user  String? @default(uuid())
+  users User?   @relation(fields: [user], references: [id])
 
-  vehicleModelID String?        @default(uuid())
-  vehicleModels  VehicleModels? @relation(fields: [vehicleModelID], references: [id])
+  price           String?         @default(uuid())
+  servicePricings ServicePricing? @relation(fields: [price], references: [id])
 }
 
-model VehicleBrands {
+model Category {
+  id        String   @id @default(uuid())
+  name      String?  @db.VarChar(255)
+  icon      String?  @db.VarChar(255)
+  orderFee  Int?
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  services Service[]
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String?  @db.VarChar(255)
+  description String?
+  icon        String?  @db.VarChar(255)
+  status      Boolean? @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category   String?   @default(uuid())
+  categories Category? @relation(fields: [category], references: [id])
+  // vehicleModel  String?       @default(uuid())
+  // vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
+
+  serviceSpecialist ServiceSpecialist[]
+  servicePricing    ServicePricing[]
+}
+
+model Specialist {
+  id        String                   @id @default(uuid())
+  name      String?                  @db.VarChar(255)
+  city      String?                  @default(uuid())
+  address   String?
+  latitude  String?                  @db.VarChar(255)
+  longitude String?                  @db.VarChar(255)
+  phone     String?                  @db.VarChar(255)
+  photo     String?
+  balances  Int?
+  status    enum_specialists_status? @default(offline)
+  createdAt DateTime                 @default(now())
+  updatedAt DateTime                 @updatedAt
+
+  cities            Cities?             @relation(fields: [city], references: [id])
+  serviceSpecialist ServiceSpecialist[]
+}
+
+model ServiceSpecialist {
+  id         String   @id @default(uuid())
+  specialist String?  @default(uuid())
+  service    String?  @default(uuid())
+  status     Boolean? @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  services    Service?    @relation(fields: [service], references: [id])
+  specialists Specialist? @relation(fields: [specialist], references: [id])
+}
+
+model Cities {
+  id        String   @id @default(uuid())
+  name      String?  @db.VarChar(255)
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deleted   Boolean  @default(false)
+
+  servicePricings ServicePricing[]
+  specialists     Specialist[]
+}
+
+model ServicePricing {
+  id        String   @id @default(uuid())
+  price     Int?
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  service       String?       @default(uuid())
+  services      Service?      @relation(fields: [service], references: [id])
+  city          String?       @default(uuid())
+  cities        Cities?       @relation(fields: [city], references: [id])
+  vehicleModel  String?       @default(uuid())
+  vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
+
+  transactions Transaction[]
+}
+
+model VehicleType {
   id        String   @id @default(uuid())
   name      String?  @db.VarChar(255)
   status    Boolean? @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  type   String?         @default(uuid())
-  types  VehicleTypes?   @relation(fields: [type], references: [id])
-  models VehicleModels[]
+  brands VehicleBrand[]
 }
 
-model VehicleModels {
+model VehicleBrand {
   id        String   @id @default(uuid())
   name      String?  @db.VarChar(255)
   status    Boolean? @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  brand  String?        @default(uuid())
-  brands VehicleBrands? @relation(fields: [brand], references: [id])
-  type   String?
-  types  VehicleTypes?  @relation(fields: [type], references: [id])
-
-  Transactions Transactions[]
+  type   String?        @default(uuid())
+  types  VehicleType?   @relation(fields: [type], references: [id])
+  models VehicleModel[]
 }
 
-model VehicleTypes {
-  id        String   @id @default(uuid())
-  name      String?  @db.VarChar(255)
-  status    Boolean? @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model VehicleModel {
+  id        String     @id @default(uuid())
+  name      String?    @db.VarChar(255)
+  size      enum_size? @default(middle)
+  status    Boolean?   @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
-  brands VehicleBrands[]
-  models VehicleModels[]
+  brand  String?       @default(uuid())
+  brands VehicleBrand? @relation(fields: [brand], references: [id])
+  // types  VehicleType?  @relation(fields: [type], references: [id])
+
+  // services       Service[]
+  ServicePricing ServicePricing[]
 }
 
 enum enum_admins_role {
@@ -119,14 +208,26 @@ enum enum_status {
   inactive
 }
 
-enum enum_participants_status {
-  book
-  payment
-  completed
-  cancel
+enum enum_size {
+  small
+  middle
+  big
 }
 
-enum enum_presence {
-  anytime
-  called
+enum enum_specialists_status {
+  online
+  offline
+  banned
+  pending
+}
+
+enum enum_transactions_status {
+  pending
+  taken
+  unpaid
+  paid
+  ontheway
+  process
+  completed
+  canceled
 }
