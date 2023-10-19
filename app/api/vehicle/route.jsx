@@ -3,7 +3,7 @@ import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request) {
-  const data = await prisma.participant.findMany({
+  const data = await prisma.vehicleBrands.findMany({
     include: {
       users: true,
       events: true,

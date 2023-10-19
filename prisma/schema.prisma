@@ -50,8 +50,6 @@ model Article {
 
 model Transactions {
   id          String    @id @default(uuid())
-  user        String?   @default(uuid())
-  vehicle     String?   @default(uuid())
   city        String?   @default(uuid())
   address     String?
   latitude    String?   @db.VarChar(255)
@@ -65,8 +63,11 @@ model Transactions {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  users    User?     @relation(fields: [user], references: [id])
-  vehicles Vehicles? @relation(fields: [vehicle], references: [id])
+  userID String? @default(uuid())
+  users  User?   @relation(fields: [userID], references: [id])
+
+  vehicleModelID String?        @default(uuid())
+  vehicleModels  VehicleModels? @relation(fields: [vehicleModelID], references: [id])
 }
 
 model VehicleBrands {
@@ -77,9 +78,8 @@ model VehicleBrands {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  vehicle Vehicles[]
-  types   VehicleTypes?   @relation(fields: [type], references: [id])
-  models  VehicleModels[]
+  types  VehicleTypes?   @relation(fields: [type], references: [id])
+  models VehicleModels[]
 }
 
 model VehicleModels {
@@ -91,9 +91,10 @@ model VehicleModels {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  vehicle Vehicles[]
-  brands  VehicleBrands? @relation(fields: [brand], references: [id])
-  types   VehicleTypes?  @relation(fields: [type], references: [id])
+  brands VehicleBrands? @relation(fields: [brand], references: [id])
+  types  VehicleTypes?  @relation(fields: [type], references: [id])
+
+  Transactions Transactions[]
 }
 
 model VehicleTypes {
@@ -105,24 +106,6 @@ model VehicleTypes {
 
   brands VehicleBrands[]
   models VehicleModels[]
-}
-
-model Vehicles {
-  id        String   @id @default(uuid())
-  type      String?  @default(uuid())
-  brand     String?  @default(uuid())
-  model     String?  @default(uuid())
-  cilinder  String?  @default(uuid())
-  plate     String?  @db.VarChar(255)
-  user      String?  @default(uuid())
-  status    Boolean? @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  transaction Transactions[]
-
-  vehicleBrands VehicleBrands? @relation(fields: [brand], references: [id])
-  vehicleModels VehicleModels? @relation(fields: [model], references: [id])
 }
 
 enum enum_admins_role {
