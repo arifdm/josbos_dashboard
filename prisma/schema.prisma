@@ -21,59 +21,20 @@ model Admin {
 }
 
 model User {
-  id        String       @id @default(uuid())
-  email     String       @unique @db.VarChar(100)
-  name      String?      @db.VarChar(50)
-  phone     String?      @db.VarChar(20)
-  address   String?      @db.VarChar(100)
-  city      String?      @db.VarChar(50)
-  ktp       String?      @db.VarChar(20)
-  photo     String?
-  otp       String?      @db.VarChar(10)
-  tokenFCM  String?      @db.VarChar(255)
-  status    enum_status? @default(active)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-
-  events       Event[]
-  participants Participant[]
-}
-
-model Event {
-  id             String         @id @default(uuid())
-  title          String         @db.VarChar(255)
-  content        String
-  image          String?        @db.VarChar(255)
-  lat            String         @db.VarChar(20)
-  long           String         @db.VarChar(20)
-  address        String?
-  price          Int?           @default(0) @db.Integer
-  maxParticipant Int?           @default(0) @db.Integer
-  eventDate      DateTime
-  presenceMethod enum_presence? @default(anytime)
-  openTime       DateTime?
-  closeTime      DateTime?
-  status         enum_status    @default(inactive)
-  rating         Int?           @default(0) @db.Integer
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id])
-
-  participants Participant[]
-}
-
-model Participant {
-  id       String                    @id @default(uuid())
-  usersId  String
-  users    User                      @relation(fields: [usersId], references: [id])
-  eventsId String
-  events   Event                     @relation(fields: [eventsId], references: [id])
-  status   enum_participants_status? @default(book)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String         @id @default(uuid())
+  email        String         @unique @db.VarChar(100)
+  name         String?        @db.VarChar(50)
+  phone        String?        @db.VarChar(20)
+  address      String?        @db.VarChar(100)
+  city         String?        @db.VarChar(50)
+  ktp          String?        @db.VarChar(20)
+  photo        String?
+  otp          String?        @db.VarChar(10)
+  tokenFCM     String?        @db.VarChar(255)
+  status       enum_status?   @default(active)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Transactions Transactions[]
 }
 
 model Article {
@@ -85,6 +46,83 @@ model Article {
   status    enum_status @default(active)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+}
+
+model Transactions {
+  id          String    @id @default(uuid())
+  user        String?   @default(uuid())
+  vehicle     String?   @default(uuid())
+  city        String?   @default(uuid())
+  address     String?
+  latitude    String?   @db.VarChar(255)
+  longitude   String?   @db.VarChar(255)
+  promo       String?   @default(uuid())
+  amount      Int?
+  discount    Int?
+  total       Int?
+  note        String?
+  serviceDate DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  users    User?     @relation(fields: [user], references: [id])
+  vehicles Vehicles? @relation(fields: [vehicle], references: [id])
+}
+
+model VehicleBrands {
+  id        String   @id @default(uuid())
+  name      String?  @db.VarChar(255)
+  type      String?  @default(uuid())
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  vehicle Vehicles[]
+  types   VehicleTypes?   @relation(fields: [type], references: [id])
+  models  VehicleModels[]
+}
+
+model VehicleModels {
+  id        String   @id @default(uuid())
+  name      String?  @db.VarChar(255)
+  brand     String?  @default(uuid())
+  type      String?  @default(uuid())
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  vehicle Vehicles[]
+  brands  VehicleBrands? @relation(fields: [brand], references: [id])
+  types   VehicleTypes?  @relation(fields: [type], references: [id])
+}
+
+model VehicleTypes {
+  id        String   @id @default(uuid())
+  name      String?  @db.VarChar(255)
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  brands VehicleBrands[]
+  models VehicleModels[]
+}
+
+model Vehicles {
+  id        String   @id @default(uuid())
+  type      String?  @default(uuid())
+  brand     String?  @default(uuid())
+  model     String?  @default(uuid())
+  cilinder  String?  @default(uuid())
+  plate     String?  @db.VarChar(255)
+  user      String?  @default(uuid())
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transaction Transactions[]
+
+  vehicleBrands VehicleBrands? @relation(fields: [brand], references: [id])
+  vehicleModels VehicleModels? @relation(fields: [model], references: [id])
 }
 
 enum enum_admins_role {
