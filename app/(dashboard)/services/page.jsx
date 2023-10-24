@@ -1,27 +1,35 @@
 import Link from "next/link";
 import prisma from "@/prisma/prisma";
 import Image from "next/image";
-import AddArticle from "./addPage";
+import AddPage from "./addPage";
 import UpdatePage from "./updatePage";
 import DeletePage from "./deletePage";
-// import { useSession } from "next-auth/react";
 
 const getData = async () => {
-  const res = await prisma.article.findMany();
+  const res = await prisma.service.findMany({
+    select: {
+      id: true,
+      name: true,
+      categories: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
   return res;
 };
-
 export const revalidate = 1;
 
-const Articles = async () => {
-  const articles = await getData();
-  // console.log("RES_ARTICLE: ", articles);
+const Services = async () => {
+  const data = await getData();
+  // console.log("RES_: ", data);
 
   return (
     <div className="bg-white">
       <div className=" w-full grid grid-cols-2">
         <div className="mb-2">
-          <AddArticle />
+          <AddPage />
         </div>
       </div>
       <div className="flex flex-col">
@@ -35,36 +43,40 @@ const Articles = async () => {
                       #
                     </th>
                     <th scope="col" className="px-6 py-4">
-                      Image
+                      Category
                     </th>
                     <th scope="col" className="px-6 py-4">
-                      Title
+                      Services
                     </th>
                     <th scope="col" className="px-6 py-4 text-center">
+                      Price
+                    </th>
+                    <th scope="col" className="px-1 py-4 text-center">
                       Action
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {articles?.map((item, index) => (
+                  {data?.map((item, index) => (
                     <tr
                       key={index}
-                      className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-200 dark:hover:bg-neutral-200"
+                      className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-200 dark:hover:bg-neutral-100"
                     >
                       <td className="whitespace-nowrap px-6 py-4 font-medium">
                         {index + 1}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        <Image
-                          className="rounded-lg overflow-hidden"
-                          src={item.image}
-                          alt=""
-                          width={100}
-                          height={100}
-                        />
+                        {item.name}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {item.title}
+                        {item.categories.name}
+                      </td>
+                      <td>
+                        <div className="full flex justify-center gap-2 align-middle">
+                          <button className="btn btn-warning btn-sm">
+                            3 City
+                          </button>
+                        </div>
                       </td>
                       <td>
                         <div className="full flex justify-center gap-2 align-middle">
@@ -84,4 +96,4 @@ const Articles = async () => {
   );
 };
 
-export default Articles;
+export default Services;

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-const DeleteArticle = ({ article }) => {
+const DeletePage = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -11,7 +11,7 @@ const DeleteArticle = ({ article }) => {
 
   const handleDelete = async (id) => {
     setIsLoading(true);
-    await axios.delete(`/api/articles?id=${id}`);
+    await axios.delete(`/api/promo?id=${id}`);
     setIsLoading(false);
     router.refresh();
     setIsOpen(false);
@@ -30,7 +30,7 @@ const DeleteArticle = ({ article }) => {
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">
-            Are sure to delete {article.title}?
+            Are sure to delete {data.title}?
           </h3>
 
           <div className="modal-action">
@@ -40,7 +40,7 @@ const DeleteArticle = ({ article }) => {
             {!isLoading ? (
               <button
                 type="button"
-                onClick={() => handleDelete(article.id)}
+                onClick={() => handleDelete(data.id)}
                 className="btn btn-primary"
               >
                 Yes
@@ -57,4 +57,4 @@ const DeleteArticle = ({ article }) => {
   );
 };
 
-export default DeleteArticle;
+export default DeletePage;

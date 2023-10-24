@@ -2,19 +2,34 @@ import Link from "next/link";
 import prisma from "@/prisma/prisma";
 import Image from "next/image";
 import AddPage from "./addPage";
-import UpdateArticle from "./updateArticle";
-import DeleteArticle from "./deletePage";
+import UpdatePage from "./updatePage";
+import DeletePage from "./deletePage";
 
-const getEvent = async () => {
-  const res = await prisma.event.findMany();
+const getData = async () => {
+  const res = await prisma.vehicleModel.findMany({
+    select: {
+      id: true,
+      name: true,
+      size: true,
+      brands: {
+        select: {
+          name: true,
+          types: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
   return res;
 };
-
 export const revalidate = 1;
 
-const Events = async () => {
-  const events = await getEvent();
-  // console.log("RES_ARTICLE: ", events);
+const Vehicles = async () => {
+  const data = await getData();
+  // console.log("RES_: ", data);
 
   return (
     <div className="bg-white">
@@ -34,41 +49,47 @@ const Events = async () => {
                       #
                     </th>
                     <th scope="col" className="px-6 py-4">
-                      Image
+                      Vehicle
                     </th>
                     <th scope="col" className="px-6 py-4">
-                      Title
+                      Brand
                     </th>
-                    <th scope="col" className="px-6 py-4 text-center">
+                    <th scope="col" className="px-6 py-4">
+                      Model
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Size
+                    </th>
+                    <th scope="col" className="px-1 py-4 text-center">
                       Action
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {events?.map((item, index) => (
+                  {data?.map((item, index) => (
                     <tr
                       key={index}
-                      className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-200 dark:hover:bg-neutral-200"
+                      className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-200 dark:hover:bg-neutral-100"
                     >
                       <td className="whitespace-nowrap px-6 py-4 font-medium">
                         {index + 1}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        <Image
-                          className="rounded-lg overflow-hidden"
-                          src={item.image}
-                          alt=""
-                          width={100}
-                          height={100}
-                        />
+                        {item.brands.types.name}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {item.title}
+                        {item.brands.name}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {item.name}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {item?.size}
                       </td>
                       <td>
-                        <div className="full flex justify-evenly align-middle">
-                          <UpdateArticle article={item} />
-                          <DeleteArticle article={item} />
+                        <div className="full flex justify-center gap-2 align-middle">
+                          <UpdatePage article={item} />
+                          <DeletePage article={item} />
                         </div>
                       </td>
                     </tr>
@@ -83,4 +104,4 @@ const Events = async () => {
   );
 };
 
-export default Events;
+export default Vehicles;

@@ -2,7 +2,16 @@ import prisma from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
-  const data = await prisma.event.findFirst({
+  const data = await prisma.service.findFirst({
+    select: {
+      id: true,
+      name: true,
+      categories: {
+        select: {
+          name: true,
+        },
+      },
+    },
     where: { id: params?.id },
   });
   if (!data) {

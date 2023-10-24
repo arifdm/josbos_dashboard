@@ -49,12 +49,28 @@ model Article {
   updatedAt DateTime    @updatedAt
 }
 
+model Promo {
+  id          String           @id @default(uuid())
+  title       String?          @db.VarChar(255)
+  content     String?
+  image       String?          @db.VarChar(255)
+  code        String?          @db.VarChar(255)
+  type        enum_promo_type?
+  discount    Int?
+  limitCount  Int?
+  maxDiscount Int?
+  status      enum_status      @default(active)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  transactions Transaction[]
+}
+
 model Transaction {
   id          String    @id @default(uuid())
   address     String?
   latitude    String?   @db.VarChar(255)
   longitude   String?   @db.VarChar(255)
-  promo       String?   @default(uuid())
   amount      Int?
   discount    Int?
   total       Int?
@@ -62,6 +78,9 @@ model Transaction {
   serviceDate DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  promo  String? @default(uuid())
+  promos Promo?  @relation(fields: [promo], references: [id])
 
   user  String? @default(uuid())
   users User?   @relation(fields: [user], references: [id])
@@ -88,6 +107,7 @@ model Service {
   description String?
   icon        String?  @db.VarChar(255)
   status      Boolean? @default(true)
+  orderMethod Json
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -149,12 +169,12 @@ model ServicePricing {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  service       String?       @default(uuid())
-  services      Service?      @relation(fields: [service], references: [id])
-  city          String?       @default(uuid())
-  cities        Cities?       @relation(fields: [city], references: [id])
-  vehicleModel  String?       @default(uuid())
-  vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
+  service       String?      @default(uuid())
+  services      Service?     @relation(fields: [service], references: [id])
+  city          String       @default(uuid())
+  cities        Cities       @relation(fields: [city], references: [id])
+  vehicleModel  String       @default(uuid())
+  vehicleModels VehicleModel @relation(fields: [vehicleModel], references: [id])
 
   transactions Transaction[]
 }
@@ -206,6 +226,11 @@ enum enum_admins_role {
 enum enum_status {
   active
   inactive
+}
+
+enum enum_promo_type {
+  amount
+  percent
 }
 
 enum enum_size {

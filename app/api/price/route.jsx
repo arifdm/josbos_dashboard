@@ -3,13 +3,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
-  const data = await prisma.event.findMany({
-    include: {
-      author: true,
+  const searchParams = request.nextUrl.searchParams;
+  const service = searchParams.get("service");
+  const name = searchParams.get("cityName");
+
+  const data = await prisma.ServicePricing.findMany({
+    where: {
+      cities: {
+        name: {
+          endsWith: name,
+          mode: "insensitive",
+        },
+      },
+      service,
     },
-    // orderBy: {
-    //   createdAt: "desc",
-    // },
   });
   if (!data) {
     return NextResponse.json({
@@ -21,35 +28,15 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const {
-    title,
-    content,
-    image,
-    lat,
-    long,
-    address,
-    price,
-    eventDate,
-    presenceMethod,
-    openTime,
-    closeTime,
-    authorId,
-  } = await request.json();
+  const { price, service, city, vehicleModel } = await request.json();
 
   const data = await prisma.event.create({
     data: {
-      title,
-      content,
-      image,
-      lat,
-      long,
-      address,
       price,
-      eventDate: new Date(eventDate).toISOString(),
-      presenceMethod,
-      openTime: new Date(openTime).toISOString(),
-      closeTime: new Date(closeTime).toISOString(),
-      authorId,
+      service,
+      city,
+      vehicleModel,
+      status: true,
     },
   });
   revalidatePath(data);

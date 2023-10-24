@@ -1,27 +1,27 @@
 import Link from "next/link";
 import prisma from "@/prisma/prisma";
 import Image from "next/image";
-import AddArticle from "./addPage";
+import AddPage from "./addPage";
 import UpdatePage from "./updatePage";
 import DeletePage from "./deletePage";
 // import { useSession } from "next-auth/react";
 
 const getData = async () => {
-  const res = await prisma.article.findMany();
+  const res = await prisma.promo?.findMany();
   return res;
 };
 
 export const revalidate = 1;
 
-const Articles = async () => {
-  const articles = await getData();
-  // console.log("RES_ARTICLE: ", articles);
+const Promos = async () => {
+  const promos = await getData();
+  // console.log("RES_ARTICLE: ", promos);
 
   return (
     <div className="bg-white">
       <div className=" w-full grid grid-cols-2">
         <div className="mb-2">
-          <AddArticle />
+          <AddPage />
         </div>
       </div>
       <div className="flex flex-col">
@@ -40,13 +40,19 @@ const Articles = async () => {
                     <th scope="col" className="px-6 py-4">
                       Title
                     </th>
+                    <th scope="col" className="px-6 py-4">
+                      Diskon
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Kode Promo
+                    </th>
                     <th scope="col" className="px-6 py-4 text-center">
                       Action
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {articles?.map((item, index) => (
+                  {promos?.map((item, index) => (
                     <tr
                       key={index}
                       className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-200 dark:hover:bg-neutral-200"
@@ -66,10 +72,26 @@ const Articles = async () => {
                       <td className="whitespace-nowrap px-6 py-4">
                         {item.title}
                       </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <span className="font-medium text-xl">
+                          {item.type === "percent"
+                            ? item.discount + "%"
+                            : item.discount}
+                        </span>
+                        {item.maxDiscount && (
+                          <span>
+                            <br />
+                            Maksimal {item.maxDiscount}
+                          </span>
+                        )}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        {item.code}
+                      </td>
                       <td>
                         <div className="full flex justify-center gap-2 align-middle">
-                          <UpdatePage article={item} />
-                          <DeletePage article={item} />
+                          <UpdatePage data={item} />
+                          <DeletePage data={item} />
                         </div>
                       </td>
                     </tr>
@@ -84,4 +106,4 @@ const Articles = async () => {
   );
 };
 
-export default Articles;
+export default Promos;

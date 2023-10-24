@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const AddArticle = () => {
+const AddPage = () => {
   const router = useRouter();
 
   const [title, setTitle] = useState("");
@@ -16,7 +16,7 @@ const AddArticle = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    await axios.post("/api/articles", { title, content, image });
+    await axios.post("/api/promo", { title, content, image });
     setIsLoading(false);
     setTitle("");
     setContent("");
@@ -32,7 +32,7 @@ const AddArticle = () => {
 
   return (
     <div>
-      <button className="btn btn-primary btn-md" onClick={handleModal}>
+      <button className="btn btn-success btn-md" onClick={handleModal}>
         Add New
       </button>
       <div className={isOpen ? "modal modal-open" : "modal"}>
@@ -90,4 +90,4 @@ const AddArticle = () => {
   );
 };
 
-export default AddArticle;
+export default AddPage;

@@ -17,8 +17,11 @@ const navigation = {
   pages: [
     { name: "Dashboard", href: "/mainboard" },
     { name: "Articles", href: "/articles" },
-    { name: "Events", href: "/events" },
-    { name: "Users", href: "/users" },
+    { name: "Promos", href: "/promos" },
+    { name: "Vehicles", href: "/vehicles" },
+    { name: "Services & Prices", href: "/services" },
+    { name: "Pemesan", href: "/pemesan" },
+    { name: "Mitra", href: "/mitra" },
   ],
 };
 
@@ -102,7 +105,7 @@ export default function NavDashboard() {
             <div className="flex h-16 items-center">
               <button
                 type="button"
-                className="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
+                className="relative rounded-md bg-yellow-400 p-2 text-white lg:hidden"
                 onClick={() => setOpen(true)}
               >
                 <span className="absolute -inset-0.5" />
@@ -130,7 +133,7 @@ export default function NavDashboard() {
                     <Link
                       key={page.name}
                       href={page.href}
-                      className="flex items-center text-sm font-medium text-gray-200 hover:text-white"
+                      className="flex items-center text-sm font-medium text-gray-700 hover:text-indigo-700"
                     >
                       {page.name}
                     </Link>
@@ -156,7 +159,7 @@ export default function NavDashboard() {
                         aria-hidden="true"
                       />
                     )}
-                    <span className="ml-2 text-sm font-medium text-gray-200 group-hover:text-white">
+                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-indigo-700">
                       {session?.user?.name}
                     </span>
                     <span className="sr-only">items in cart, view bag</span>
@@ -165,7 +168,7 @@ export default function NavDashboard() {
                 <div className="ml-4 flow-root lg:ml-6">
                   <button
                     onClick={async () => await signOut()}
-                    className="text-blue-500 hover:text-blue-300 text-sm"
+                    className="text-red-500 hover:text-gray-700 text-sm font-bold"
                   >
                     Sign Out
                   </button>
