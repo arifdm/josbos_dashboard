@@ -27,9 +27,8 @@ export default function Example() {
               Rawat mobil sendiri merepotkan?
             </h1>
             <br />
-            <br />
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Sekarang mudah... Kamu pesan, kami segera datang
+              Gunakan Josbos sekarang
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">
               Josbos adalah aplikasi yang menghadirkan layanan perawatan dan

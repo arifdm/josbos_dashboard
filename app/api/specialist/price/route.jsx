@@ -4,22 +4,48 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
+
+  const city = searchParams.get("city");
   const service = searchParams.get("service");
-  const name = searchParams.get("cityName");
+  const vehicleModel = searchParams.get("vehicleModel");
 
-  const newName = name.replace(" City", "").replace(" Regency", "");
-  // console.log("CITY: ", newName);
-
-  const data = await prisma.ServicePricing.findMany({
+  const data = await prisma.ServiceSpecialist.findMany({
     where: {
+      city,
+      service,
+      vehicleModel,
+    },
+    select: {
+      id: true,
+      price: true,
+      city: true,
+      service: true,
+      vehicleModel: true,
       cities: {
-        name: {
-          endsWith: newName,
-          mode: "insensitive",
+        select: {
+          id: true,
+          name: true,
         },
       },
-      service,
+      specialists: true,
+      // services: {
+      //   select: {
+      //     id: true,
+      //     name: true,
+      //   },
+      // },
+      // vehicleModels: {
+      //   select: {
+      //     id: true,
+      //     name: true,
+      //   },
+      // },
     },
+    // include: {
+    //   specialists: true,
+    //   cities: true,
+    //   vehicleModels: true,
+    // },
   });
   if (!data) {
     return NextResponse.json({
@@ -31,16 +57,9 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const { price, service, city, vehicleModel } = await request.json();
-
-  const data = await prisma.event.create({
-    data: {
-      price,
-      service,
-      city,
-      vehicleModel,
-      status: true,
-    },
+  const { title, content, image } = await request.json();
+  const data = await prisma.ServiceSpecialist.create({
+    data: { title, content, image },
   });
   revalidatePath(data);
   return NextResponse.json({
@@ -55,7 +74,7 @@ export async function DELETE(request) {
   const id = searchParams.get("id");
 
   try {
-    await prisma.event.delete({
+    await prisma.ServiceSpecialist.delete({
       where: { id },
     });
     return NextResponse.json({

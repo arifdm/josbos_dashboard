@@ -1,5 +1,5 @@
-import NavDashboard from "@/components/NavDashboard";
 import { Suspense } from "react";
+import NavDashboard from "@/components/NavDashboard";
 import Loading from "./loading";
 
 export const metadata = {

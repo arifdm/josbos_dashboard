@@ -1,7 +1,7 @@
+import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/libs/NextAuthProvider";
-import { Suspense } from "react";
 import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });

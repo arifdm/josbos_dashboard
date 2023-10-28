@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
-  const data = await prisma.service.findMany();
+  const data = await prisma.specialist.findMany();
   if (!data) {
     return NextResponse.json({
       status: false,
@@ -14,36 +14,9 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const {
-    title,
-    content,
-    image,
-    lat,
-    long,
-    address,
-    price,
-    eventDate,
-    presenceMethod,
-    openTime,
-    closeTime,
-    authorId,
-  } = await request.json();
-
-  const data = await prisma.service.create({
-    data: {
-      title,
-      content,
-      image,
-      lat,
-      long,
-      address,
-      price,
-      eventDate: new Date(eventDate).toISOString(),
-      presenceMethod,
-      openTime: new Date(openTime).toISOString(),
-      closeTime: new Date(closeTime).toISOString(),
-      authorId,
-    },
+  const { title, content, image } = await request.json();
+  const data = await prisma.specialist.create({
+    data: { title, content, image },
   });
   revalidatePath(data);
   return NextResponse.json({
@@ -58,7 +31,7 @@ export async function DELETE(request) {
   const id = searchParams.get("id");
 
   try {
-    await prisma.service.delete({
+    await prisma.specialist.delete({
       where: { id },
     });
     return NextResponse.json({

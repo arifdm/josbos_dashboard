@@ -33,6 +33,7 @@ const Vehicles = async () => {
 
   return (
     <div className="bg-white">
+      <div className="text-xl font-semibold mb-5">Vehicles</div>
       <div className=" w-full grid grid-cols-2">
         <div className="mb-2">
           <AddPage />

@@ -85,8 +85,11 @@ model Transaction {
   user  String? @default(uuid())
   users User?   @relation(fields: [user], references: [id])
 
-  price           String?         @default(uuid())
-  servicePricings ServicePricing? @relation(fields: [price], references: [id])
+  servicePrice    String?         @default(uuid())
+  servicePricings ServicePricing? @relation(fields: [servicePrice], references: [id])
+
+  serviceSpecialist  String?            @default(uuid())
+  serviceSpecialists ServiceSpecialist? @relation(fields: [serviceSpecialist], references: [id])
 }
 
 model Category {
@@ -107,7 +110,7 @@ model Service {
   description String?
   icon        String?  @db.VarChar(255)
   status      Boolean? @default(true)
-  orderMethod Json
+  orderMethod Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -116,14 +119,13 @@ model Service {
   // vehicleModel  String?       @default(uuid())
   // vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
 
-  serviceSpecialist ServiceSpecialist[]
-  servicePricing    ServicePricing[]
+  serviceSpecialists ServiceSpecialist[]
+  servicePricings    ServicePricing[]
 }
 
 model Specialist {
   id        String                   @id @default(uuid())
   name      String?                  @db.VarChar(255)
-  city      String?                  @default(uuid())
   address   String?
   latitude  String?                  @db.VarChar(255)
   longitude String?                  @db.VarChar(255)
@@ -131,23 +133,64 @@ model Specialist {
   photo     String?
   balances  Int?
   status    enum_specialists_status? @default(offline)
+  rating    Int                      @default(0) @db.Integer
   createdAt DateTime                 @default(now())
   updatedAt DateTime                 @updatedAt
 
-  cities            Cities?             @relation(fields: [city], references: [id])
+  city   String? @default(uuid())
+  cities Cities? @relation(fields: [city], references: [id])
+
   serviceSpecialist ServiceSpecialist[]
 }
 
-model ServiceSpecialist {
-  id         String   @id @default(uuid())
-  specialist String?  @default(uuid())
-  service    String?  @default(uuid())
-  status     Boolean? @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+model ServicePricing {
+  id        String   @id @default(uuid())
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  price     Int?
 
-  services    Service?    @relation(fields: [service], references: [id])
-  specialists Specialist? @relation(fields: [specialist], references: [id])
+  service  String?  @default(uuid())
+  services Service? @relation(fields: [service], references: [id])
+
+  city   String @default(uuid())
+  cities Cities @relation(fields: [city], references: [id])
+
+  vehicleSize  String      @default(uuid())
+  vehicleSizes VehicleSize @relation(fields: [vehicleSize], references: [id])
+
+  transactions Transaction[]
+}
+
+model ServiceSpecialist {
+  id        String   @id @default(uuid())
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  price     Int?
+
+  service      String?     @default(uuid())
+  services     Service?    @relation(fields: [service], references: [id])
+  specialist   String?     @default(uuid())
+  specialists  Specialist? @relation(fields: [specialist], references: [id])
+  city         String      @default(uuid())
+  cities       Cities      @relation(fields: [city], references: [id])
+  vehicleSize  String      @default(uuid())
+  vehicleSizes VehicleSize @relation(fields: [vehicleSize], references: [id])
+
+  transactions Transaction[]
+}
+
+model VehicleSize {
+  id        String   @id @default(uuid())
+  name      String?  @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  servicePricings    ServicePricing[]
+  serviceSpecialists ServiceSpecialist[]
+
+  vehicleModels VehicleModel[]
 }
 
 model Cities {
@@ -158,25 +201,9 @@ model Cities {
   updatedAt DateTime @updatedAt
   deleted   Boolean  @default(false)
 
-  servicePricings ServicePricing[]
-  specialists     Specialist[]
-}
-
-model ServicePricing {
-  id        String   @id @default(uuid())
-  price     Int?
-  status    Boolean? @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  service       String?      @default(uuid())
-  services      Service?     @relation(fields: [service], references: [id])
-  city          String       @default(uuid())
-  cities        Cities       @relation(fields: [city], references: [id])
-  vehicleModel  String       @default(uuid())
-  vehicleModels VehicleModel @relation(fields: [vehicleModel], references: [id])
-
-  transactions Transaction[]
+  servicePricings    ServicePricing[]
+  serviceSpecialists ServiceSpecialist[]
+  specialists        Specialist[]
 }
 
 model VehicleType {
@@ -202,19 +229,20 @@ model VehicleBrand {
 }
 
 model VehicleModel {
-  id        String     @id @default(uuid())
-  name      String?    @db.VarChar(255)
-  size      enum_size? @default(middle)
-  status    Boolean?   @default(true)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id        String   @id @default(uuid())
+  name      String?  @db.VarChar(255)
+  status    Boolean? @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   brand  String?       @default(uuid())
   brands VehicleBrand? @relation(fields: [brand], references: [id])
   // types  VehicleType?  @relation(fields: [type], references: [id])
 
   // services       Service[]
-  ServicePricing ServicePricing[]
+  // ServiceSpecialists ServiceSpecialist[]
+  vehicleSize  String?
+  vehicleSizes VehicleSize? @relation(fields: [vehicleSize], references: [id])
 }
 
 enum enum_admins_role {

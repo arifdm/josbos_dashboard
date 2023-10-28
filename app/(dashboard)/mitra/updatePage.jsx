@@ -4,24 +4,21 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const AddPage = () => {
+const UpdatePage = ({ article }) => {
   const router = useRouter();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
+  const [title, setTitle] = useState(article.title);
+  const [content, setContent] = useState(article.content);
+  const [image, setImage] = useState(article.image);
+
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    await axios.post("/api/article", { title, content, image });
+    await axios.put(`/api/articles/${article.id}`, { title, content, image });
     setIsLoading(false);
-    setTitle("");
-    setContent("");
-    setImage("");
-
     router.refresh();
     setIsOpen(false);
   };
@@ -32,13 +29,14 @@ const AddPage = () => {
 
   return (
     <div>
-      <button className="btn btn-success btn-md" onClick={handleModal}>
-        Add New
+      <button className="btn btn-info btn-sm" onClick={handleModal}>
+        Edit
       </button>
+
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add New Article</h3>
-          <form onSubmit={handleSubmit}>
+          <h3 className="font-bold text-lg">Update {article.title}</h3>
+          <form onSubmit={handleUpdate}>
             <div className="form-control w-full">
               <label className="label font-bold">Title</label>
               <input
@@ -46,7 +44,7 @@ const AddPage = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="input input-bordered"
-                placeholder="Article Name"
+                placeholder="Product Name"
               />
             </div>
             <div className="form-control w-full">
@@ -60,7 +58,7 @@ const AddPage = () => {
               />
             </div>
             <div className="form-control w-full">
-              <label className="label font-bold">Images</label>
+              <label className="label font-bold">Image</label>
               <input
                 type="text"
                 value={image}
@@ -75,11 +73,11 @@ const AddPage = () => {
               </button>
               {!isLoading ? (
                 <button type="submit" className="btn btn-primary">
-                  Save
+                  Update
                 </button>
               ) : (
                 <button type="button" className="btn loading">
-                  Saving...
+                  Updating...
                 </button>
               )}
             </div>
@@ -90,4 +88,4 @@ const AddPage = () => {
   );
 };
 
-export default AddPage;
+export default UpdatePage;
