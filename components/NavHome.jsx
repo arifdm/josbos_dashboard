@@ -10,7 +10,6 @@ export default function NavHome({ status }) {
     { name: "Home", href: "#" },
     { name: "About Us", href: "#about" },
     { name: "Help", href: "#ui" },
-    { name: "Blogs", href: "#blog" },
     { name: "Contact Us", href: "#footer" },
   ];
 
