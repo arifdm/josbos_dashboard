@@ -51,13 +51,13 @@ export default function Example() {
             </div>
           </div>
           <div className="relative mt-16 h-80 lg:mt-8">
-            {/* <img
-              className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
-              src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
-              alt="App screenshot"
+            <img
+              className="absolute left-0 top-0 w-[65rem] max-w-none"
+              src="/images/bmw-3-sedan-cover-779x447.png"
+              alt="Car"
               width={1824}
               height={1080}
-            /> */}
+            />
           </div>
         </div>
       </div>
