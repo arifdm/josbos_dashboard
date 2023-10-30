@@ -46,7 +46,8 @@ export default function Example() {
           <p className="mt-6 text-lg leading-8 text-gray-600">
             Dengan aplikasi yang dirancang dengan sangat baik untuk memudahkan
             Pengguna saat melakukan pesanan dengan 4 pilihan cara pesan sehingga
-            mendapatkan layanan yang berkualitas dengan tarif yang pas.
+            mendapatkan layanan yang berkualitas dengan tarif yang hemat dan
+            pas.
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
