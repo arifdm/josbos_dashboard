@@ -7,20 +7,20 @@ export async function GET(request) {
 
   const city = searchParams.get("city");
   const service = searchParams.get("service");
-  const vehicleModel = searchParams.get("vehicleModel");
+  const vehicleSize = searchParams.get("vehicleSize");
 
   const data = await prisma.ServiceSpecialist.findMany({
     where: {
       city,
       service,
-      vehicleModel,
+      vehicleSize,
     },
     select: {
       id: true,
       price: true,
       city: true,
       service: true,
-      vehicleModel: true,
+      vehicleSize: true,
       cities: {
         select: {
           id: true,

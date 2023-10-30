@@ -12,6 +12,17 @@ export async function GET(request) {
           name: true,
         },
       },
+      // servicePricings: {
+      //   select: {
+      //     city: true,
+      //     price: true,
+      //   },
+      // },
+      _count: {
+        select: {
+          servicePricings: true,
+        },
+      },
     },
   });
   if (!data) {

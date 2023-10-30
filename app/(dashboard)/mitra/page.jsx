@@ -6,7 +6,7 @@ import UpdatePage from "./updatePage";
 import DeletePage from "./deletePage";
 
 const getUser = async () => {
-  const res = await prisma.user.findMany();
+  const res = await prisma.specialist.findMany();
   return res;
 };
 

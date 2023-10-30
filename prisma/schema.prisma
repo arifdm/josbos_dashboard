@@ -106,7 +106,7 @@ model Category {
 
 model Service {
   id          String   @id @default(uuid())
-  name        String?  @db.VarChar(255)
+  name        String   @db.VarChar(255)
   description String?
   icon        String?  @db.VarChar(255)
   status      Boolean? @default(true)
@@ -114,8 +114,8 @@ model Service {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  category   String?   @default(uuid())
-  categories Category? @relation(fields: [category], references: [id])
+  category   String   @default(uuid())
+  categories Category @relation(fields: [category], references: [id])
   // vehicleModel  String?       @default(uuid())
   // vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
 
@@ -145,13 +145,12 @@ model Specialist {
 
 model ServicePricing {
   id        String   @id @default(uuid())
-  status    Boolean? @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  price     Int?
+  price     Int
 
-  service  String?  @default(uuid())
-  services Service? @relation(fields: [service], references: [id])
+  service  String  @default(uuid())
+  services Service @relation(fields: [service], references: [id])
 
   city   String @default(uuid())
   cities Cities @relation(fields: [city], references: [id])
@@ -164,15 +163,14 @@ model ServicePricing {
 
 model ServiceSpecialist {
   id        String   @id @default(uuid())
-  status    Boolean? @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  price     Int?
+  price     Int
 
-  service      String?     @default(uuid())
-  services     Service?    @relation(fields: [service], references: [id])
-  specialist   String?     @default(uuid())
-  specialists  Specialist? @relation(fields: [specialist], references: [id])
+  service      String      @default(uuid())
+  services     Service     @relation(fields: [service], references: [id])
+  specialist   String      @default(uuid())
+  specialists  Specialist  @relation(fields: [specialist], references: [id])
   city         String      @default(uuid())
   cities       Cities      @relation(fields: [city], references: [id])
   vehicleSize  String      @default(uuid())
@@ -223,8 +221,8 @@ model VehicleBrand {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  type   String?        @default(uuid())
-  types  VehicleType?   @relation(fields: [type], references: [id])
+  type   String         @default(uuid())
+  types  VehicleType    @relation(fields: [type], references: [id])
   models VehicleModel[]
 }
 
@@ -235,8 +233,8 @@ model VehicleModel {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  brand  String?       @default(uuid())
-  brands VehicleBrand? @relation(fields: [brand], references: [id])
+  brand  String       @default(uuid())
+  brands VehicleBrand @relation(fields: [brand], references: [id])
   // types  VehicleType?  @relation(fields: [type], references: [id])
 
   // services       Service[]

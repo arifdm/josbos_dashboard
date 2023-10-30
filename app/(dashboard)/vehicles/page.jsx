@@ -10,7 +10,11 @@ const getData = async () => {
     select: {
       id: true,
       name: true,
-      size: true,
+      vehicleSizes: {
+        select: {
+          name: true,
+        },
+      },
       brands: {
         select: {
           name: true,
@@ -85,7 +89,7 @@ const Vehicles = async () => {
                         {item.name}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {item?.size}
+                        {item?.vehicleSizes?.name}
                       </td>
                       <td>
                         <div className="full flex justify-center gap-2 align-middle">

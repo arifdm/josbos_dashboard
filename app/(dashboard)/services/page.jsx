@@ -15,6 +15,11 @@ const getData = async () => {
           name: true,
         },
       },
+      _count: {
+        select: {
+          servicePricings: true,
+        },
+      },
     },
   });
   return res;
@@ -23,7 +28,7 @@ export const revalidate = 1;
 
 const Services = async () => {
   const data = await getData();
-  // console.log("RES_: ", data);
+  console.log("RES_: ", data);
 
   return (
     <div className="bg-white">
@@ -50,7 +55,7 @@ const Services = async () => {
                       Services
                     </th>
                     <th scope="col" className="px-6 py-4 text-center">
-                      Price
+                      City
                     </th>
                     <th scope="col" className="px-1 py-4 text-center">
                       Action
@@ -67,16 +72,18 @@ const Services = async () => {
                         {index + 1}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {item.name}
+                        {item.categories.name}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {item.categories.name}
+                        {item.name}
                       </td>
                       <td>
                         <div className="full flex justify-center gap-2 align-middle">
-                          <button className="btn btn-warning btn-sm">
-                            3 City
-                          </button>
+                          <Link href={`/services/price?id=${item.id}`}>
+                            <button className="btn btn-warning btn-sm">
+                              {item._count.servicePricings}
+                            </button>
+                          </Link>
                         </div>
                       </td>
                       <td>

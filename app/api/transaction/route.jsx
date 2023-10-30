@@ -1,30 +1,9 @@
-import { generateToken } from "@/libs/utils";
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
-  const data = await prisma.vehicleModel.findMany({
-    select: {
-      id: true,
-      name: true,
-      vehicleSizes: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-      brands: {
-        select: {
-          name: true,
-          types: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const data = await prisma.transaction.findMany();
   if (!data) {
     return NextResponse.json({
       status: false,
@@ -35,23 +14,41 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const { name, email } = await request.json();
-  // console.log("BODY: ", name, email);
-
-  const dataUser = await prisma.participant.create({
-    data: { name, email },
+  const {
+    address,
+    latitude,
+    longitude,
+    amount,
+    discount,
+    total,
+    note,
+    serviceDate,
+    promo,
+    user,
+    servicePrice,
+    serviceSpecialist,
+  } = await request.json();
+  const data = await prisma.transaction.create({
+    data: {
+      address,
+      latitude,
+      longitude,
+      amount,
+      discount,
+      total,
+      note,
+      serviceDate,
+      promo,
+      user,
+      servicePrice,
+      serviceSpecialist,
+    },
   });
-
-  // GENERATE TOKEN ACCESS
-  const tokenAccess = generateToken({
-    user: { id: dataUser.id, email: dataUser.email },
-  });
-
+  revalidatePath(data);
   return NextResponse.json({
     status: true,
     message: "Entry successfully created",
-    data: dataUser,
-    tokenAccess,
+    data: data,
   });
 }
 
@@ -60,7 +57,7 @@ export async function DELETE(request) {
   const id = searchParams.get("id");
 
   try {
-    await prisma.participant.delete({
+    await prisma.transaction.delete({
       where: { id },
     });
     return NextResponse.json({
