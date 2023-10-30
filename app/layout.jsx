@@ -7,8 +7,8 @@ import Loading from "./loading";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Moantri",
-  description: "Mau antri makin nyaman, gunakan moantri sekarang!",
+  title: "Josbos",
+  description: "Rawat mobil sendiri merepotkan? Gunakan Josbos sekarang",
 };
 
 export default function RootLayout({ children }) {
