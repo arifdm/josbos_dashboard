@@ -23,6 +23,7 @@ const Home = () => {
       <NavHome status={status} />
       <Hero session={session} status={status} />
       <About />
+      <Footer />
     </div>
   );
 };

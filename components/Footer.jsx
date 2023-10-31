@@ -1,4 +1,7 @@
-import { CalendarDaysIcon, HandRaisedIcon } from "@heroicons/react/24/outline";
+import {
+  BuildingOfficeIcon,
+  HandRaisedIcon,
+} from "@heroicons/react/24/outline";
 
 export default function Footer() {
   return (
@@ -6,37 +9,32 @@ export default function Footer() {
       id="footer"
       className="relative isolate overflow-hidden bg-gray-900 py-16 sm:py-24 lg:py-32"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-2">
-          <div className="max-w-xl lg:max-w-lg">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              Moantri.
+          <div className="max-w-xl lg:max-w-lg pr-2">
+            <h2 className="text-3xl font-bold tracking-tight text-yellow-500 sm:text-4xl">
+              Josbos
             </h2>
             <p className="mt-4 text-lg leading-8 text-gray-300">
-              Yuk segera download aplikasi Moantri sekarang untuk menghindari
-              antrian yang tidak produktif lagi...!
+              Startup yang menghubungkan Kamu dengan Mitra Spesialis
+              profesional, menggunakan aplikasi yang nyaman dan mudah dipakai.
+              Josbos menghadirkan layanan perawatan, perbaikan dan kondisi
+              darurat kendaraan Kamu, kapan saja di mana saja.
             </p>
-            <div className="mt-6 flex max-w-md gap-x-4">
-              <button
-                type="submit"
-                className="flex-none rounded-md bg-orange-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-600"
-              >
-                Download Moantri
-              </button>
-            </div>
           </div>
           <dl className="grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:pt-2">
             <div className="flex flex-col items-start">
               <div className="rounded-md bg-white/5 p-2 ring-1 ring-white/10">
-                <CalendarDaysIcon
+                <BuildingOfficeIcon
                   className="h-6 w-6 text-white"
                   aria-hidden="true"
                 />
               </div>
-              <dt className="mt-4 font-semibold text-white">Organizer</dt>
+              <dt className="mt-4 font-semibold text-white">Head Office</dt>
               <dd className="mt-2 leading-6 text-gray-400 text-[15px]">
-                Silakan publikasikan acara untuk memudahkan mengatur dan
-                memonitor peserta yang hadir.
+                Jl. Pandean I No 89, Depok, Sleman, Yogyakarta<br></br>
+                <br></br>
+                Email: contact@josbos.com
               </dd>
             </div>
             <div className="flex flex-col items-start">
@@ -46,10 +44,11 @@ export default function Footer() {
                   aria-hidden="true"
                 />
               </div>
-              <dt className="mt-4 font-semibold text-white">Partisipant</dt>
+              <dt className="mt-4 font-semibold text-white">Partnership</dt>
               <dd className="mt-2 leading-6 text-gray-400 text-[15px]">
-                Saatnya atur waktu & kegiatan lainnya lebih produktif karena
-                antri acara Mu lebih nyaman & terukur.
+                Silakan gabung menjadi bagian dari ekosistem Josbos.<br></br>
+                <br></br>
+                Contact: +62 82360 705805
               </dd>
             </div>
           </dl>
@@ -60,7 +59,7 @@ export default function Footer() {
         aria-hidden="true"
       >
         <div
-          className="aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+          className="aspect-[1155/678] w-[72.1875rem] bg-gradient-to-tr from-[#1F1801] to-[#FCB92D] opacity-30"
           style={{
             clipPath:
               "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)",
