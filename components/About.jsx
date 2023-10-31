@@ -21,13 +21,13 @@ const features = [
   {
     name: "Mitra Profesional",
     description:
-      "Kami menghadirkan Mitra Spesialis terpercaya, melalui seleksi yang ketat dan bersertifikat yang akan melayani dengan ramah",
+      "Kami menghadirkan Mitra Spesialis terpercaya, melalui seleksi yang ketat dan bersertifikat yang akan melayani Kamu dengan ramah.",
     icon: UserIcon,
   },
   {
     name: "Jaminan Kualitas",
     description:
-      "Mitra melakukan pekerjaan sesuai aturan dan panduan dengan cermat, tepat, dan hati-hati untuk menjaga kualitas. ",
+      "Mitra bekerja sesuai aturan dan panduan dengan tepat serta cermat untuk mendapatkan hasil terbaik dalam menjaga kualitas.",
     icon: CheckIcon,
   },
 ];
