@@ -4,39 +4,15 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
+  const name = searchParams.get("name");
+  const newName = name?.replace(" City", "").replace(" Regency", "");
 
-  const city = searchParams.get("city");
-  const service = searchParams.get("service");
-  const vehicleSize = searchParams.get("vehicleSize");
-  console.log("VEHICLE_SIZE: ", vehicleSize);
-
-  const where_vehicleSize = {
-    city,
-    service,
-    vehicleSize,
-  };
-
-  const where = {
-    city,
-    service,
-  };
-
-  const data = await prisma.ServiceSpecialist.findMany({
-    // where: vehicleSize === "" ? where : where_vehicleSize,
-    where: where,
-    select: {
-      id: true,
-      price: true,
-      city: true,
-      service: true,
-      vehicleSize: true,
-      cities: {
-        select: {
-          id: true,
-          name: true,
-        },
+  const data = await prisma.Cities.findFirst({
+    where: {
+      name: {
+        endsWith: newName,
+        mode: "insensitive",
       },
-      specialists: true,
     },
   });
   if (!data) {
@@ -49,9 +25,16 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const { title, content, image } = await request.json();
-  const data = await prisma.ServiceSpecialist.create({
-    data: { title, content, image },
+  const { price, service, city, vehicleModel } = await request.json();
+
+  const data = await prisma.event.create({
+    data: {
+      price,
+      service,
+      city,
+      vehicleModel,
+      status: true,
+    },
   });
   revalidatePath(data);
   return NextResponse.json({
@@ -66,7 +49,7 @@ export async function DELETE(request) {
   const id = searchParams.get("id");
 
   try {
-    await prisma.ServiceSpecialist.delete({
+    await prisma.event.delete({
       where: { id },
     });
     return NextResponse.json({

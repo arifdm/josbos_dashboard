@@ -21,22 +21,25 @@ export async function GET(request) {
     service,
   };
 
-  const data = await prisma.ServiceSpecialist.findMany({
-    // where: vehicleSize === "" ? where : where_vehicleSize,
-    where: where,
+  const data = await prisma.specialist.findMany({
     select: {
-      id: true,
-      price: true,
-      city: true,
-      service: true,
-      vehicleSize: true,
-      cities: {
-        select: {
-          id: true,
-          name: true,
-        },
+      name: true,
+      serviceSpecialist: {
+        where: vehicleSize ? where_vehicleSize : where,
+        // select: {
+        //   id: true,
+        //   price: true,
+        //   city: true,
+        //   service: true,
+        //   vehicleSize: true,
+        //   cities: {
+        //     select: {
+        //       id: true,
+        //       name: true,
+        //     },
+        //   },
+        // },
       },
-      specialists: true,
     },
   });
   if (!data) {

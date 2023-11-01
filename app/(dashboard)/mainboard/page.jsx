@@ -7,10 +7,7 @@ const Mainboard = async () => {
 
   return (
     <div className="bg-white">
-      <div>Mainboard</div>
-      {/* <div>
-        User: {session?.user?.name}, {session?.user?.email}
-      </div> */}
+      <div className="text-xl font-semibold mb-5">Dashboard</div>
     </div>
   );
 };

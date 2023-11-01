@@ -61,10 +61,10 @@ export default function NavHome({ status }) {
               Log in <span aria-hidden="true">&rarr;</span>
             </Link>
           ) : (
-            <div className="border-blue-500 border-solid border-rounded px-3 py-2">
+            <div className="border-yellow-500 border-solid border-rounded px-3 py-2">
               <Link
                 href="/mainboard"
-                className="bg-transparent text-sm font-semibold hover:bg-blue-500 text-blue-600 hover:text-white py-1 px-4 border border-blue-500 hover:border-transparent rounded"
+                className="bg-transparent text-sm font-semibold hover:bg-yellow-500 text-yellow-500 hover:text-white py-1 px-4 border border-yellow-500 hover:border-transparent rounded"
               >
                 Dashboard
               </Link>
@@ -122,10 +122,10 @@ export default function NavHome({ status }) {
                     Log in
                   </Link>
                 ) : (
-                  <div className="border-blue-500 border-solid border-rounded px-3 py-2">
+                  <div className="border-yellow-500 border-solid border-rounded px-3 py-2">
                     <Link
                       href="/mainboard"
-                      className="bg-transparent text-sm font-semibold hover:bg-blue-600 text-blue-600 hover:text-white py-1 px-4 border border-blue-600 hover:border-transparent rounded"
+                      className="bg-transparent text-sm font-semibold hover:bg-yellow-600 text-yellow-600 hover:text-white py-1 px-4 border border-yellow-600 hover:border-transparent rounded"
                     >
                       Dashboard
                     </Link>
