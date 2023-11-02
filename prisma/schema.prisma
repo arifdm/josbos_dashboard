@@ -67,17 +67,20 @@ model Promo {
 }
 
 model Transaction {
-  id          String    @id @default(uuid())
+  id          String                   @id @default(uuid())
   address     String?
-  latitude    String?   @db.VarChar(255)
-  longitude   String?   @db.VarChar(255)
+  latitude    String?                  @db.VarChar(20)
+  longitude   String?                  @db.VarChar(20)
   amount      Int?
   discount    Int?
   total       Int?
   note        String?
+  orderMethod String?                  @db.VarChar(100)
+  orderDate   DateTime?
   serviceDate DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  status      enum_transactions_status @default(pending)
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
 
   promo  String? @default(uuid())
   promos Promo?  @relation(fields: [promo], references: [id])
@@ -90,6 +93,9 @@ model Transaction {
 
   serviceSpecialist  String?            @default(uuid())
   serviceSpecialists ServiceSpecialist? @relation(fields: [serviceSpecialist], references: [id])
+
+  vehicleModel  String?       @default(uuid())
+  vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
 }
 
 model Category {
@@ -116,20 +122,19 @@ model Service {
 
   category   String   @default(uuid())
   categories Category @relation(fields: [category], references: [id])
-  // vehicleModel  String?       @default(uuid())
-  // vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
 
   serviceSpecialists ServiceSpecialist[]
   servicePricings    ServicePricing[]
+  vehicleModels      VehicleModel[]
 }
 
 model Specialist {
   id        String                   @id @default(uuid())
-  name      String?                  @db.VarChar(255)
+  name      String?                  @db.VarChar(100)
   address   String?
-  latitude  String?                  @db.VarChar(255)
-  longitude String?                  @db.VarChar(255)
-  phone     String?                  @db.VarChar(255)
+  latitude  String?                  @db.VarChar(20)
+  longitude String?                  @db.VarChar(20)
+  phone     String?                  @db.VarChar(50)
   photo     String?
   balances  Int?
   status    enum_specialists_status? @default(offline)
@@ -184,7 +189,7 @@ model ServiceSpecialist {
 
 model VehicleSize {
   id        String   @id @default(uuid())
-  name      String?  @db.VarChar(255)
+  name      String?  @db.VarChar(100)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -224,8 +229,9 @@ model VehicleBrand {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  type   String         @default(uuid())
-  types  VehicleType    @relation(fields: [type], references: [id])
+  type  String      @default(uuid())
+  types VehicleType @relation(fields: [type], references: [id])
+
   models VehicleModel[]
 }
 
@@ -238,12 +244,14 @@ model VehicleModel {
 
   brand  String       @default(uuid())
   brands VehicleBrand @relation(fields: [brand], references: [id])
-  // types  VehicleType?  @relation(fields: [type], references: [id])
 
-  // services       Service[]
-  // ServiceSpecialists ServiceSpecialist[]
   vehicleSize  String?
   vehicleSizes VehicleSize? @relation(fields: [vehicleSize], references: [id])
+
+  Service   Service? @relation(fields: [serviceId], references: [id])
+  serviceId String?
+
+  transactions Transaction[]
 }
 
 enum enum_admins_role {
@@ -278,10 +286,10 @@ enum enum_specialists_status {
 enum enum_transactions_status {
   pending
   taken
-  unpaid
-  paid
   ontheway
+  unpaid
   process
+  paid
   completed
   canceled
 }
