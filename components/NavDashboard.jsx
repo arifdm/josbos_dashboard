@@ -151,7 +151,7 @@ export default function NavDashboard() {
                         width={70}
                         height={70}
                         src={session?.user?.image}
-                        alt="Moantri Logo"
+                        alt="Logo"
                       />
                     ) : (
                       <UserCircleIcon

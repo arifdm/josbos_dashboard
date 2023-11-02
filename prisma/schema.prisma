@@ -96,6 +96,23 @@ model Transaction {
 
   vehicleModel  String?       @default(uuid())
   vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
+
+  takeOnTransactions TakeOnTransaction[]
+}
+
+model TakeOnTransaction {
+  id        String   @id @default(uuid())
+  amount    Int?
+  status    Boolean? @default(true)
+  selected  Boolean? @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  transaction  String?      @default(uuid())
+  transactions Transaction? @relation(fields: [transaction], references: [id])
+
+  specialist  String?     @default(uuid())
+  specialists Specialist? @relation(fields: [specialist], references: [id])
 }
 
 model Category {
@@ -145,7 +162,8 @@ model Specialist {
   city   String? @default(uuid())
   cities Cities? @relation(fields: [city], references: [id])
 
-  serviceSpecialist ServiceSpecialist[]
+  serviceSpecialist  ServiceSpecialist[]
+  takeOnTransactions TakeOnTransaction[]
 }
 
 model ServicePricing {
