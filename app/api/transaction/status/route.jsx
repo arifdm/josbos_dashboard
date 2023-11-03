@@ -47,9 +47,15 @@ export async function GET(request) {
       total: true,
       orderDate: true,
       status: true,
+      orderMethod: true,
       vehicleModels: {
         select: {
           name: true,
+          brands: {
+            select: {
+              name: true,
+            },
+          },
         },
       },
       servicePricings: true,

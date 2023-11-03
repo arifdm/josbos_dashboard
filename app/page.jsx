@@ -9,6 +9,7 @@ import Hero from "@/components/Hero";
 import NavHome from "@/components/NavHome";
 import UI from "@/components/UI";
 import Footer from "@/components/Footer";
+import Service from "@/components/Service";
 
 const Home = () => {
   // const router = useRouter();
@@ -23,6 +24,7 @@ const Home = () => {
       <NavHome status={status} />
       <Hero session={session} status={status} />
       <About />
+      <Service />
       <Footer />
     </div>
   );

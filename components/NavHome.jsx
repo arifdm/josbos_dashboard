@@ -8,9 +8,9 @@ export default function NavHome({ status }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigation = [
     { name: "Home", href: "#" },
-    { name: "About Us", href: "#about" },
-    { name: "Help", href: "#ui" },
-    { name: "Contact Us", href: "#footer" },
+    { name: "Tentang Kami", href: "#about" },
+    { name: "Layanan", href: "#service" },
+    { name: "Hubungi", href: "#footer" },
   ];
 
   return (
