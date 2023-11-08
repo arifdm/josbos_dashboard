@@ -13,10 +13,10 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const { name, email } = await request.json();
+  const { name, email, status } = await request.json();
   // console.log("BODY: ", name, email);
   const dataUser = await prisma.admin.create({
-    data: { name, email },
+    data: { name, email, status },
   });
 
   return NextResponse.json({

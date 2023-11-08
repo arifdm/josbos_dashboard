@@ -1,6 +1,7 @@
 import { generateToken } from "@/libs/utils";
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcrypt";
 
 export async function GET(request) {
   const data = await prisma.user.findMany();
@@ -14,23 +15,49 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const { name, email } = await request.json();
+  const { name, phone, password, email, referral } = await request.json();
   // console.log("BODY: ", name, email);
 
-  const dataUser = await prisma.user.create({
-    data: { name, email },
-  });
+  if (!name || !phone || !password) {
+    return NextResponse.json({
+      status: false,
+      error: "Silakan masukkan data yang diminta...!",
+    });
+  }
 
-  // GENERATE TOKEN ACCESS
-  const tokenAccess = generateToken({
-    user: { id: dataUser.id, email: dataUser.email },
+  const userPhone = await prisma.user.findFirst({
+    where: { phone },
+  });
+  if (userPhone) {
+    return NextResponse.json({
+      status: false,
+      error: "No HP sudah terdaftar...!",
+    });
+  }
+
+  const userEmail = await prisma.user.findFirst({
+    where: { email },
+  });
+  if (userEmail) {
+    return NextResponse.json({
+      status: false,
+      error: "Email sudah terdaftar...!",
+    });
+  }
+
+  // GENERATE HASH
+  let salt, hash;
+  salt = await bcrypt.genSalt(10);
+  hash = await bcrypt.hash(password, salt);
+
+  const dataUser = await prisma.user.create({
+    data: { name, phone, email, password: hash, referral },
   });
 
   return NextResponse.json({
     status: true,
     message: "Entry successfully created",
     data: dataUser,
-    tokenAccess,
   });
 }
 

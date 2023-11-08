@@ -34,7 +34,7 @@ const authOptions = {
             await axios.post(
               // "https://josbos-dashboard.vercel.app/api/auth/admin",
               "http://localhost:3000/api/auth/admin",
-              { name, email, status: true }
+              { name, email, status: "inactive" }
             );
           }
           return true;
@@ -43,7 +43,7 @@ const authOptions = {
           return false;
         }
       }
-      return true;
+      // return true;
     },
   },
 

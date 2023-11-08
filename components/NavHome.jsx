@@ -3,8 +3,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import prisma from "@/prisma/prisma";
 
-export default function NavHome({ status }) {
+export default async function NavHome({ session, status }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigation = [
     { name: "Home", href: "#" },
@@ -12,6 +13,8 @@ export default function NavHome({ status }) {
     { name: "Layanan", href: "#service" },
     { name: "Hubungi", href: "#footer" },
   ];
+
+  console.log("SESSION: ", session);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">

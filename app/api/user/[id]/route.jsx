@@ -1,7 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/prisma";
-import { getServerSession } from "next-auth";
-// import { authOptions } from "./../../auth/[...nextauth]/route";
+import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
   // const accessToken = request.headers.get("Authorization");
@@ -13,12 +11,8 @@ export async function GET(request, { params }) {
   //   });
   // }
 
-  // const session = await getServerSession(request, authOptions);
-  // const session = await getServerSession(request, authOptions);
-  // console.log("SESSION: ", session);
-
   const data = await prisma.user.findFirst({
-    where: { id: params.id },
+    where: { id: params?.id },
   });
   if (!data) {
     return NextResponse.json({

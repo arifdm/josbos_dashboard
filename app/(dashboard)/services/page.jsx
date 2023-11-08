@@ -28,7 +28,7 @@ export const revalidate = 1;
 
 const Services = async () => {
   const data = await getData();
-  console.log("RES_: ", data);
+  // console.log("RES_: ", data);
 
   return (
     <div className="bg-white">
