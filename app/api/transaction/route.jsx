@@ -38,14 +38,20 @@ export async function POST(request) {
       latitude,
       longitude,
       note,
-      orderMethod,
       promo,
       servicePrice,
-      serviceSpecialist,
       total,
       user,
       orderDate,
       vehicleModel,
+      takeOnTransactions: {
+        create: {
+          orderMethod,
+        },
+      },
+    },
+    include: {
+      takeOnTransactions: true,
     },
   });
   revalidatePath(data);

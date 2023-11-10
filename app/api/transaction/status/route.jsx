@@ -28,8 +28,8 @@ export async function GET(request) {
                 "process",
                 "unpaid",
                 "paid",
-                // "completed",
-                // "canceled",
+                "completed",
+                "canceled",
               ],
             }
           : status,
@@ -58,24 +58,20 @@ export async function GET(request) {
           },
         },
       },
-      servicePricings: true,
-      serviceSpecialists: {
+      servicePricings: {
         select: {
+          city: true,
           price: true,
           services: {
             select: {
+              id: true,
               name: true,
-              categories: true,
-            },
-          },
-          specialists: {
-            select: {
-              name: true,
-              photo: true,
-              phone: true,
-              latitude: true,
-              longitude: true,
-              rating: true,
+              categories: {
+                select: {
+                  id: true,
+                  name: true,
+                },
+              },
             },
           },
         },

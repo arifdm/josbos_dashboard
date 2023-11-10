@@ -10,20 +10,11 @@ export async function GET(request) {
   const vehicleSize = searchParams.get("vehicleSize");
   console.log("VEHICLE_SIZE: ", vehicleSize);
 
-  const where_vehicleSize = {
-    city,
-    service,
-    vehicleSize,
-  };
-
-  const where = {
-    city,
-    service,
-  };
-
-  const data = await prisma.ServiceSpecialist.findMany({
-    // where: vehicleSize === "" ? where : where_vehicleSize,
-    where: where,
+  const data = await prisma.ServicePriceOnSpecialist.findMany({
+    where: {
+      city,
+      service,
+    },
     select: {
       id: true,
       price: true,
@@ -46,37 +37,4 @@ export async function GET(request) {
     });
   }
   return NextResponse.json({ status: true, data });
-}
-
-export async function POST(request) {
-  const { title, content, image } = await request.json();
-  const data = await prisma.ServiceSpecialist.create({
-    data: { title, content, image },
-  });
-  revalidatePath(data);
-  return NextResponse.json({
-    status: true,
-    message: "Entry successfully created",
-    data: data,
-  });
-}
-
-export async function DELETE(request) {
-  const searchParams = request.nextUrl.searchParams;
-  const id = searchParams.get("id");
-
-  try {
-    await prisma.ServiceSpecialist.delete({
-      where: { id },
-    });
-    return NextResponse.json({
-      status: true,
-      message: "Delete successfully",
-    });
-  } catch (error) {
-    return NextResponse.json({
-      status: false,
-      error: "Delete failed",
-    });
-  }
 }

@@ -69,20 +69,18 @@ model Promo {
 }
 
 model Transaction {
-  id          String                   @id @default(uuid())
-  address     String?
-  latitude    String?                  @db.VarChar(20)
-  longitude   String?                  @db.VarChar(20)
-  amount      Int?
-  discount    Int?
-  total       Int?
-  note        String?
-  orderMethod String?                  @db.VarChar(100)
-  orderDate   DateTime?
-  serviceDate DateTime?
-  status      enum_transactions_status @default(pending)
-  createdAt   DateTime                 @default(now())
-  updatedAt   DateTime                 @updatedAt
+  id        String                   @id @default(uuid())
+  address   String?
+  latitude  String?                  @db.VarChar(20)
+  longitude String?                  @db.VarChar(20)
+  amount    Int?
+  discount  Int?
+  total     Int?
+  note      String?
+  orderDate DateTime?
+  status    enum_transactions_status @default(pending)
+  createdAt DateTime                 @default(now())
+  updatedAt DateTime                 @updatedAt
 
   promo  String? @default(uuid())
   promos Promo?  @relation(fields: [promo], references: [id])
@@ -93,9 +91,6 @@ model Transaction {
   servicePrice    String?         @default(uuid())
   servicePricings ServicePricing? @relation(fields: [servicePrice], references: [id])
 
-  serviceSpecialist  String?            @default(uuid())
-  serviceSpecialists ServiceSpecialist? @relation(fields: [serviceSpecialist], references: [id])
-
   vehicleModel  String?       @default(uuid())
   vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
 
@@ -103,18 +98,25 @@ model Transaction {
 }
 
 model TakeOnTransaction {
-  id        String   @id @default(uuid())
-  amount    Int?
-  status    Boolean? @default(true)
-  selected  Boolean? @default(false)
+  id          String   @id @default(uuid())
+  orderMethod String?  @db.VarChar(100)
+  amountBids  Int?
+  status      Boolean? @default(true)
+
+  selected    Boolean?  @default(false)
+  serviceDate DateTime?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  transaction  String?      @default(uuid())
-  transactions Transaction? @relation(fields: [transaction], references: [id])
+  transaction  String      @default(uuid())
+  transactions Transaction @relation(fields: [transaction], references: [id])
 
   specialist  String?     @default(uuid())
   specialists Specialist? @relation(fields: [specialist], references: [id])
+
+  servicePriceOnSpecialist  String?                   @default(uuid())
+  servicePriceOnSpecialists ServicePriceOnSpecialist? @relation(fields: [servicePriceOnSpecialist], references: [id])
 }
 
 model Category {
@@ -142,9 +144,9 @@ model Service {
   category   String   @default(uuid())
   categories Category @relation(fields: [category], references: [id])
 
-  serviceSpecialists ServiceSpecialist[]
-  servicePricings    ServicePricing[]
-  vehicleModels      VehicleModel[]
+  servicePriceOnSpecialists ServicePriceOnSpecialist[]
+  servicePricings           ServicePricing[]
+  vehicleModels             VehicleModel[]
 }
 
 model Specialist {
@@ -164,8 +166,8 @@ model Specialist {
   city   String? @default(uuid())
   cities Cities? @relation(fields: [city], references: [id])
 
-  serviceSpecialist  ServiceSpecialist[]
-  takeOnTransactions TakeOnTransaction[]
+  servicePriceOnSpecialist ServicePriceOnSpecialist[]
+  takeOnTransactions       TakeOnTransaction[]
 }
 
 model ServicePricing {
@@ -186,7 +188,7 @@ model ServicePricing {
   transactions Transaction[]
 }
 
-model ServiceSpecialist {
+model ServicePriceOnSpecialist {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -204,7 +206,7 @@ model ServiceSpecialist {
   vehicleSize  String?      @default(uuid())
   vehicleSizes VehicleSize? @relation(fields: [vehicleSize], references: [id])
 
-  transactions Transaction[]
+  takeOnTransactions TakeOnTransaction[]
 }
 
 model VehicleSize {
@@ -213,8 +215,8 @@ model VehicleSize {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  servicePricings    ServicePricing[]
-  serviceSpecialists ServiceSpecialist[]
+  servicePricings           ServicePricing[]
+  servicePriceOnSpecialists ServicePriceOnSpecialist[]
 
   vehicleModels VehicleModel[]
 }
@@ -227,9 +229,9 @@ model Cities {
   updatedAt DateTime @updatedAt
   deleted   Boolean  @default(false)
 
-  servicePricings    ServicePricing[]
-  serviceSpecialists ServiceSpecialist[]
-  specialists        Specialist[]
+  servicePricings           ServicePricing[]
+  servicePriceOnSpecialists ServicePriceOnSpecialist[]
+  specialists               Specialist[]
 }
 
 model VehicleType {
