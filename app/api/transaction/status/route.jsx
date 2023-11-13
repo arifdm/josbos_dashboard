@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
-  const status = searchParams.get("status");
+  const status = searchParams.get("selected");
   const user = searchParams.get("user");
 
   const data = await prisma.transaction.findFirst({
@@ -13,18 +13,17 @@ export async function GET(request) {
       status:
         status === "process"
           ? {
-              in: ["pending", "taken", "ontheway", "process", "unpaid"],
+              in: ["pending", "taken", "process", "unpaid", "paid"],
             }
           : status === "completed"
           ? {
-              in: ["paid", "completed"],
+              in: ["completed"],
             }
           : status === "all"
           ? {
               in: [
                 "pending",
                 "taken",
-                "ontheway",
                 "process",
                 "unpaid",
                 "paid",
@@ -47,7 +46,6 @@ export async function GET(request) {
       total: true,
       orderDate: true,
       status: true,
-      orderMethod: true,
       vehicleModels: {
         select: {
           name: true,
@@ -70,6 +68,50 @@ export async function GET(request) {
                 select: {
                   id: true,
                   name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      bankAccounts: {
+        select: {
+          id: true,
+          category: true,
+          isOnline: true,
+          name: true,
+          number: true,
+        },
+      },
+      takeOnTransactions: {
+        select: {
+          id: true,
+          orderMethod: true,
+          amountBids: true,
+          selected: true,
+          serviceDate: true,
+          specialists: {
+            select: {
+              id: true,
+              name: true,
+              latitude: true,
+              longitude: true,
+              photo: true,
+              rating: true,
+            },
+          },
+          servicePriceOnSpecialists: {
+            select: {
+              id: true,
+              price: true,
+              specialists: {
+                select: {
+                  id: true,
+                  name: true,
+                  latitude: true,
+                  longitude: true,
+                  photo: true,
+                  rating: true,
                 },
               },
             },

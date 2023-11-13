@@ -11,7 +11,7 @@ export async function GET(request, { params }) {
   //   });
   // }
 
-  const data = await prisma.transaction.findFirst({
+  const data = await prisma.bankAccount.findFirst({
     where: { id: params?.id },
   });
   if (!data) {
@@ -26,15 +26,9 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   const { title, content, image } = await request.json();
   try {
-    const data = await prisma.transaction.update({
-      where: {
-        id: params?.id,
-      },
-      data: {
-        title,
-        content,
-        image,
-      },
+    const data = await prisma.bankAccount.update({
+      where: { id: params?.id },
+      data: { title, content, image },
     });
     return NextResponse.json({
       status: true,
