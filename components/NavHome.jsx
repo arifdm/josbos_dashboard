@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import prisma from "@/prisma/prisma";
+import { useState } from "react";
 
-export default async function NavHome({ session, status }) {
+export default function NavHome({ session, status }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigation = [
     { name: "Home", href: "#" },
