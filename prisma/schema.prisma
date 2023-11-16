@@ -256,14 +256,15 @@ model VehicleModel {
 }
 
 model BankAccount {
-  id        String            @id @default(uuid())
-  category  enum_account_type @default(e_wallet)
-  name      String            @db.VarChar(100)
-  number    String?           @db.VarChar(50)
-  isOnline  Boolean           @default(true)
-  status    Boolean?          @default(true)
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  id          String            @id @default(uuid())
+  category    enum_account_type @default(e_wallet)
+  brandName   String            @db.VarChar(100)
+  accountName String            @db.VarChar(100)
+  number      String?           @db.VarChar(50)
+  isOnline    Boolean           @default(true)
+  status      Boolean?          @default(true)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 
   specialist  String?     @default(uuid())
   specialists Specialist? @relation(fields: [specialist], references: [id])

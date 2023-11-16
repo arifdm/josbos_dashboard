@@ -8,15 +8,31 @@ export async function PUT(request, { params }) {
 
   const { specialist, serviceDate, selected } = await request.json();
 
+  const getID = await prisma.takeOnTransaction.findFirst({
+    where: { transaction: id },
+  });
+
+  if (!getID) {
+    return NextResponse.json({
+      status: false,
+      error: "ID transaction not found",
+    });
+  }
+
   try {
-    const data = await prisma.takeOnTransaction.update({
-      where: { id },
+    await prisma.transaction.update({
+      where: { id: id },
+      data: { status: "taken" },
+    });
+
+    await prisma.takeOnTransaction.update({
+      where: { id: getID.id },
       data: { specialist, serviceDate, selected },
     });
+
     return NextResponse.json({
       status: true,
       message: "Update successfully",
-      data,
     });
   } catch (error) {
     return NextResponse.json({

@@ -4,10 +4,10 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
-  const status = searchParams.get("selected");
+  const status = searchParams.get("status");
   const user = searchParams.get("user");
 
-  const data = await prisma.transaction.findFirst({
+  const data = await prisma.transaction.findMany({
     where: {
       user,
       status:
@@ -91,6 +91,7 @@ export async function GET(request) {
           amountBids: true,
           selected: true,
           serviceDate: true,
+          rating: true,
           specialists: {
             select: {
               id: true,

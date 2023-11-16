@@ -21,15 +21,17 @@ export async function POST(request) {
     latitude,
     longitude,
     note,
-    orderMethod,
+    orderMethod, // TakeOnTransaction
     promo,
     servicePrice,
-    serviceSpecialist,
+    servicePriceOnSpecialist, // TakeOnTransaction
     total,
     user,
     orderDate,
     vehicleModel,
+    payment,
   } = await request.json();
+
   const data = await prisma.transaction.create({
     data: {
       address,
@@ -44,9 +46,14 @@ export async function POST(request) {
       user,
       orderDate,
       vehicleModel,
+      payment,
+      status: servicePriceOnSpecialist ? "taken" : "pending",
       takeOnTransactions: {
         create: {
           orderMethod,
+          servicePriceOnSpecialist,
+          selected: servicePriceOnSpecialist ? true : false,
+          specialist: null,
         },
       },
     },

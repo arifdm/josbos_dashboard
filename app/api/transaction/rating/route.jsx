@@ -10,11 +10,11 @@ export async function PUT(request, { params }) {
   console.log("TRANSACTION: ", id);
   console.log("BODY: ", rating, comment);
 
-  const dataTOT = await prisma.takeOnTransaction.findFirst({
+  const getID = await prisma.takeOnTransaction.findFirst({
     where: { transaction: id },
   });
 
-  if (!dataTOT) {
+  if (!getID) {
     return NextResponse.json({
       status: false,
       error: "ID not found",
@@ -23,7 +23,7 @@ export async function PUT(request, { params }) {
 
   try {
     const data = await prisma.takeOnTransaction.update({
-      where: { id: dataTOT?.id },
+      where: { id: getID.id },
       data: {
         rating: parseInt(rating),
         ratingComment: comment,

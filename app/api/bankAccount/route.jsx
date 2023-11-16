@@ -3,7 +3,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
-  const data = await prisma.bankAccount.findMany();
+  const data = await prisma.bankAccount.findMany({
+    select: {
+      id: true,
+      category: true,
+      accountName: true,
+      brandName: true,
+      number: true,
+      isOnline: true,
+    },
+    where: {
+      user: null,
+      specialist: null,
+    },
+  });
   if (!data) {
     return NextResponse.json({
       status: false,
