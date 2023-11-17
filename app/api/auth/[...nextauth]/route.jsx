@@ -27,23 +27,20 @@ const authOptions = {
         try {
           const resCheck = await axios.get(
             // `https://josbos-dashboard.vercel.app/api/auth/admin/check?email=${email}`
-            // `http://localhost:3000/api/auth/admin/check?email=${email}`
-            `/app/api/auth/admin/check?email=${email}`
+            `http://localhost:3000/api/auth/admin/check?email=${email}`
           );
           console.log("CHECK: ", resCheck.data.status);
-          if (!resCheck || resCheck.data.status === false) {
+          if (!resCheck) {
             await axios.post(
               // "https://josbos-dashboard.vercel.app/api/auth/admin",
-              // "http://localhost:3000/api/auth/admin",
-              "/app/api/auth/admin",
+              "http://localhost:3000/api/auth/admin",
               { name, email, status: "inactive" }
             );
             return false;
-          } else {
-            return true;
           }
+          return true;
         } catch (error) {
-          console.log(error);
+          console.log("ERROR_AUTH: ", error);
           return false;
         }
       }

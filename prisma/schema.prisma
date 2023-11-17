@@ -145,7 +145,7 @@ model Service {
   categories                Category                   @relation(fields: [category], references: [id])
   servicePriceOnSpecialists ServicePriceOnSpecialist[]
   servicePricings           ServicePricing[]
-  vehicleModels             VehicleModel[]
+  //vehicleModels             VehicleModel[]
 }
 
 model Specialist {
@@ -248,11 +248,13 @@ model VehicleModel {
   updatedAt    DateTime      @updatedAt
   brand        String        @default(uuid())
   vehicleSize  String?
-  serviceId    String?
   transactions Transaction[]
   brands       VehicleBrand  @relation(fields: [brand], references: [id])
-  Service      Service?      @relation(fields: [serviceId], references: [id])
-  vehicleSizes VehicleSize?  @relation(fields: [vehicleSize], references: [id])
+
+  // serviceId    String?
+  // Service      Service?      @relation(fields: [serviceId], references: [id])
+
+  vehicleSizes VehicleSize? @relation(fields: [vehicleSize], references: [id])
 }
 
 model BankAccount {

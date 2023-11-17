@@ -1,8 +1,8 @@
-import { Suspense } from "react";
+// import { Suspense } from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/libs/NextAuthProvider";
-import Loading from "./loading";
+// import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +17,8 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <NextAuthProvider>
           <main className="h-screen justify-center items-center bg-white">
-            <Suspense fallback={<Loading />}>{children}</Suspense>
+            {/* <Suspense fallback={<Loading />}>{children}</Suspense> */}
+            {children}
           </main>
         </NextAuthProvider>
       </body>
