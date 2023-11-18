@@ -1,9 +1,12 @@
 import { generateToken } from "@/libs/utils";
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
 
 export async function GET(request) {
+  console.log("RESPONSE: ", NextRequest);
+
   const data = await prisma.user.findMany();
   if (!data) {
     return NextResponse.json({

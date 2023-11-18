@@ -24,11 +24,11 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const { name, email, phone, ktp, otp, tokenFcm } = await request.json();
+  const { name, email, address, ktp, otp, tokenFcm } = await request.json();
   try {
     const data = await prisma.user.update({
       where: { id: params.id },
-      data: { name, email, phone, ktp, otp, tokenFcm },
+      data: { name, email, address, ktp, otp, tokenFcm },
     });
     return NextResponse.json({
       status: true,
