@@ -28,7 +28,7 @@ export async function POST(request) {
 
   // GENERATE TOKEN ACCESS
   const tokenAccess = generateToken({
-    user: { id: data.id, phone: data.phone },
+    data: { id: data.id, phone: data.phone },
   });
 
   return NextResponse.json({

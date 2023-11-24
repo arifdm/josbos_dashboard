@@ -5,9 +5,6 @@ import jwt from "jsonwebtoken";
 
 export async function GET(request, { params }) {
   const accessToken = request.headers.get("Authorization");
-  const searchParams = request.nextUrl.searchParams;
-  const status = searchParams.get("status");
-  // console.log("TOKEN: ", accessToken);
 
   if (!accessToken) {
     return NextResponse.json({
@@ -25,37 +22,29 @@ export async function GET(request, { params }) {
         error: "AccessToken tidak valid...!",
       });
     }
-    // 725c54e6-4776-40c6-8445-ccd8548c3dd5
 
     const specialist = await prisma.specialist.findUnique({
       where: { id: decoded.id },
       select: { id: true },
     });
+    // console.log("SPECIALIST: ", specialist);
 
-    console.log("SPECIALIST: ", specialist);
-
-    // if (!decoded) {
-    //   return NextResponse.json({
-    //     status: false,
-    //     error: "Data not found",
-    //   });
-    // }
+    const serviceSpecialist = await prisma.servicePriceOnSpecialist.findMany({
+      where: { specialist: specialist.id },
+      select: { service: true },
+    });
+    // console.log("SERVICE_SPECIALIST: ", serviceSpecialist);
 
     const data = await prisma.transaction.findMany({
       where: {
-        takeOnTransactions: {
-          some: {
-            specialists: {
-              id: "725c54e6-4776-40c6-8445-ccd8548c3dd5",
+        servicePricings: {
+          services: {
+            id: {
+              in: serviceSpecialist.map((item) => item.service),
             },
           },
         },
-        status:
-          status === "process"
-            ? { in: ["taken", "process", "unpaid", "paid"] }
-            : status === "completed"
-            ? { in: ["completed"] }
-            : status,
+        status: "pending",
       },
       select: {
         id: true,

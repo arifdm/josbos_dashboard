@@ -21,22 +21,21 @@ model Admin {
 }
 
 model User {
-  id           String       @id @default(uuid())
-  email        String?      @unique @db.VarChar(100)
-  name         String       @db.VarChar(50)
-  phone        String       @db.VarChar(20)
-  address      String?      @db.VarChar(150)
-  city         String?      @db.VarChar(50)
-  ktp          String?      @db.VarChar(20)
-  photo        String?
-  otp          String?      @db.VarChar(10)
-  tokenFCM     String?      @db.VarChar(255)
-  refreshToken String?      @db.VarChar(255)
-  password     String?      @db.VarChar(100)
-  status       enum_status? @default(active)
-  referral     String?      @db.VarChar(100)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id        String       @id @default(uuid())
+  email     String?      @unique @db.VarChar(100)
+  name      String       @db.VarChar(50)
+  phone     String       @db.VarChar(20)
+  address   String?      @db.VarChar(150)
+  city      String?      @db.VarChar(50)
+  ktp       String?      @db.VarChar(20)
+  photo     String?
+  otp       String?      @db.VarChar(10)
+  tokenFCM  String?      @db.VarChar(255)
+  password  String?      @db.VarChar(100)
+  status    enum_status? @default(active)
+  referral  String?      @db.VarChar(100)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 
   bankAccounts BankAccount[]
   transactions Transaction[]
@@ -152,24 +151,23 @@ model Service {
 }
 
 model Specialist {
-  id           String                   @id @default(uuid())
-  name         String                   @db.VarChar(100)
-  address      String?
-  latitude     String?                  @db.VarChar(20)
-  longitude    String?                  @db.VarChar(20)
-  phone        String                   @db.VarChar(50)
-  email        String?                  @db.VarChar(100)
-  ktp          String?                  @db.VarChar(20)
-  photo        String?
-  otp          String?                  @db.VarChar(10)
-  tokenFCM     String?                  @db.VarChar(255)
-  refreshToken String?                  @db.VarChar(255)
-  password     String?                  @db.VarChar(100)
-  status       enum_specialists_status? @default(offline)
-  balances     Int?
-  rating       Int?                     @default(0)
-  createdAt    DateTime                 @default(now())
-  updatedAt    DateTime                 @updatedAt
+  id        String                   @id @default(uuid())
+  name      String                   @db.VarChar(100)
+  address   String?
+  latitude  String?                  @db.VarChar(20)
+  longitude String?                  @db.VarChar(20)
+  phone     String                   @db.VarChar(50)
+  email     String?                  @db.VarChar(100)
+  ktp       String?                  @db.VarChar(20)
+  photo     String?
+  otp       String?                  @db.VarChar(10)
+  tokenFCM  String?                  @db.VarChar(255)
+  password  String?                  @db.VarChar(100)
+  status    enum_specialists_status? @default(offline)
+  balances  Int?
+  rating    Int?                     @default(0)
+  createdAt DateTime                 @default(now())
+  updatedAt DateTime                 @updatedAt
 
   city   String? @default(uuid())
   cities Cities? @relation(fields: [city], references: [id])

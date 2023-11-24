@@ -19,7 +19,7 @@ export async function POST(request) {
     });
   }
 
-  if (!(await bcrypt.compare(password, dataUser.password))) {
+  if (!bcrypt.compare(password, dataUser.password)) {
     return NextResponse.json({
       status: false,
       error: "Data login tidak valid...!",
@@ -28,7 +28,7 @@ export async function POST(request) {
 
   // GENERATE TOKEN ACCESS
   const tokenAccess = generateToken({
-    user: { id: dataUser.id, phone: dataUser.phone },
+    data: { id: dataUser.id, phone: dataUser.phone },
   });
 
   return NextResponse.json({
