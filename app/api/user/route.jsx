@@ -1,7 +1,7 @@
-import { generateToken } from "@/libs/utils";
-import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "@/prisma/prisma";
+import { generateToken } from "@/libs/utils";
 import bcrypt from "bcrypt";
 
 export async function GET(request) {

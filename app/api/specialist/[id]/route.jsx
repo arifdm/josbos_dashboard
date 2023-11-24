@@ -4,14 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET(request, { params }) {
   // const accessToken = request.headers.get("Authorization");
 
-  // if (!accessToken) {
-  //   return NextResponse.json({
-  //     status: false,
-  //     error: "Authentication token required!",
-  //   });
-  // }
-
-  const data = await prisma.promo.findFirst({
+  const data = await prisma.specialist.findUnique({
     where: { id: params?.id },
   });
   if (!data) {
@@ -24,11 +17,32 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const { title, content, image } = await request.json();
+  const { name, email, address, photo, latitude, longitude, status, rating } =
+    await request.json();
+
+  const data = await prisma.specialist.findUnique({
+    where: { id: params?.id },
+  });
+  if (!data) {
+    return NextResponse.json({
+      status: false,
+      error: "Data not found",
+    });
+  }
+
   try {
-    const data = await prisma.promo.update({
+    const data = await prisma.specialist.update({
       where: { id: params?.id },
-      data: { title, content, image },
+      data: {
+        name,
+        email,
+        address,
+        photo,
+        latitude,
+        longitude,
+        status,
+        rating,
+      },
     });
     return NextResponse.json({
       status: true,

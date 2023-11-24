@@ -18,6 +18,7 @@ export async function GET(request) {
     select: {
       id: true,
       price: true,
+      priceDescription: true,
       city: true,
       service: true,
       vehicleSize: true,
