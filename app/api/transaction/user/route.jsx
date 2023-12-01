@@ -33,6 +33,7 @@ export async function GET(request) {
     }
 
     const data = await prisma.transaction.findMany({
+      orderBy: { createdAt: "desc" },
       where: {
         user: decoded.id,
         status:

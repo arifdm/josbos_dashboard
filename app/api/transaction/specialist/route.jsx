@@ -46,7 +46,14 @@ export async function GET(request, { params }) {
         takeOnTransactions: {
           some: {
             specialists: {
-              id: decoded.id,
+              id: decoded?.id,
+            },
+          },
+        },
+        takeOnTransactions: {
+          some: {
+            servicePriceOnSpecialists: {
+              specialist: decoded?.id,
             },
           },
         },

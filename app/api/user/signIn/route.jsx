@@ -19,7 +19,7 @@ export async function POST(request) {
     });
   }
 
-  if (data?.password) {
+  if (dataUser?.password) {
     bcrypt.compare(password, dataUser?.password).then((match) => {
       if (!match) {
         return NextResponse.json({
