@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/prisma/prisma";
-import { generateToken } from "@/libs/utils";
 import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
 export async function GET(request) {
   const data = await prisma.specialist.findMany();
@@ -62,6 +61,87 @@ export async function POST(request) {
     message: "Entry successfully created",
     data: dataUser,
   });
+}
+
+export async function PUT(request, { params }) {
+  const accessToken = request.headers.get("Authorization");
+
+  const {
+    name,
+    email,
+    address,
+    photo,
+    latitude,
+    longitude,
+    status,
+    rating,
+    ktp,
+    tokenFCM,
+  } = await request.json();
+
+  if (!accessToken) {
+    return NextResponse.json({
+      status: false,
+      error: "Silakan masukkan token...!",
+    });
+  } else {
+    let decoded;
+    try {
+      const bearer = accessToken.replace("Bearer ", "");
+      decoded = await jwt.verify(bearer, process.env.JWT_SECRET);
+    } catch (error) {
+      return NextResponse.json({
+        status: false,
+        error: "AccessToken tidak valid...!",
+      });
+    }
+
+    if (decoded.role !== "specialist") {
+      return NextResponse.json({
+        status: false,
+        error: "Anda tidak memiliki akses...!",
+      });
+    }
+
+    // const data = await prisma.specialist.findUnique({
+    //   where: { id: params?.id },
+    // });
+
+    // if (!data) {
+    //   return NextResponse.json({
+    //     status: false,
+    //     error: "Data not found",
+    //   });
+    // }
+
+    try {
+      const data = await prisma.specialist.update({
+        where: { id: decoded.id },
+        data: {
+          name,
+          email,
+          address,
+          photo,
+          latitude,
+          longitude,
+          status,
+          rating,
+          ktp,
+          tokenFCM,
+        },
+      });
+      return NextResponse.json({
+        status: true,
+        message: "Update successfully",
+        data,
+      });
+    } catch (error) {
+      return NextResponse.json({
+        status: false,
+        error: "Update failed",
+      });
+    }
+  }
 }
 
 export async function DELETE(request) {

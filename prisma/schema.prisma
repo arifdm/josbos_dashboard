@@ -99,19 +99,22 @@ model Transaction {
   bankAccounts BankAccount? @relation(fields: [payment], references: [id])
 
   takeOnTransactions TakeOnTransaction[]
+  saldoSpecialists   SaldoSpecialist[]
 }
 
 model TakeOnTransaction {
-  id            String    @id @default(uuid())
-  status        Boolean?  @default(true)
-  selected      Boolean?  @default(false)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  orderMethod   String?   @db.VarChar(100)
-  amountBids    Int?
-  rating        Int?
-  ratingComment String?   @db.VarChar(250)
-  serviceDate   DateTime?
+  id             String    @id @default(uuid())
+  status         Boolean?  @default(true)
+  selected       Boolean?  @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  orderMethod    String?   @db.VarChar(100)
+  amountBids     Int?
+  partnerRevenue Int?
+  feeOrder       Int?
+  rating         Int?
+  ratingComment  String?   @db.VarChar(250)
+  serviceDate    DateTime?
 
   specialist  String?     @default(uuid())
   specialists Specialist? @relation(fields: [specialist], references: [id])
@@ -175,6 +178,7 @@ model Specialist {
   servicePriceOnSpecialist ServicePriceOnSpecialist[]
   takeOnTransactions       TakeOnTransaction[]
   bankAccounts             BankAccount[]
+  saldoSpecialists         SaldoSpecialist[]
 }
 
 model ServicePricing {
@@ -271,15 +275,15 @@ model VehicleModel {
 }
 
 model BankAccount {
-  id          String            @id @default(uuid())
-  category    enum_account_type @default(e_wallet)
-  brandName   String            @db.VarChar(100)
-  accountName String            @db.VarChar(100)
-  number      String?           @db.VarChar(50)
-  isOnline    Boolean           @default(true)
-  status      Boolean?          @default(true)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  id          String             @id @default(uuid())
+  category    enum_account_type?
+  brandName   String             @db.VarChar(100)
+  accountName String             @db.VarChar(100)
+  number      String?            @db.VarChar(50)
+  isOnline    Boolean            @default(true)
+  status      Boolean?           @default(true)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
 
   specialist  String?     @default(uuid())
   specialists Specialist? @relation(fields: [specialist], references: [id])
@@ -287,6 +291,23 @@ model BankAccount {
   users       User?       @relation(fields: [user], references: [id])
 
   transactions Transaction[]
+}
+
+model SaldoSpecialist {
+  id        String           @id @default(uuid())
+  note      String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  status    Boolean?         @default(false)
+  type      enum_saldo_type?
+  amount    Int?
+  saldo     Int?
+
+  specialist  String     @default(uuid())
+  specialists Specialist @relation(fields: [specialist], references: [id])
+
+  transaction  String?      @default(uuid())
+  transactions Transaction? @relation(fields: [transaction], references: [id])
 }
 
 enum enum_admins_role {
@@ -310,6 +331,11 @@ enum enum_account_type {
 enum enum_promo_type {
   amount
   percent
+}
+
+enum enum_saldo_type {
+  increase
+  decrease
 }
 
 enum enum_size {

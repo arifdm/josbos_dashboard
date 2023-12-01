@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 export async function GET(request, { params }) {
   const accessToken = request.headers.get("Authorization");
+
   const searchParams = request.nextUrl.searchParams;
   const status = searchParams.get("status");
   // console.log("TOKEN: ", accessToken);
@@ -22,54 +23,58 @@ export async function GET(request, { params }) {
     } catch (error) {
       return NextResponse.json({
         status: false,
-        error: "AccessToken tidak valid...!",
+        error: "Access Token tidak valid...!",
       });
     }
-    // 725c54e6-4776-40c6-8445-ccd8548c3dd5
 
-    const specialist = await prisma.specialist.findUnique({
-      where: { id: decoded.id },
-      select: { id: true },
-    });
+    if (decoded.role !== "specialist") {
+      return NextResponse.json({
+        status: false,
+        error: "Anda tidak memiliki akses...!",
+      });
+    }
 
-    console.log("SPECIALIST: ", specialist);
-
-    // if (!decoded) {
-    //   return NextResponse.json({
-    //     status: false,
-    //     error: "Data not found",
-    //   });
-    // }
+    // const specialist = await prisma.specialist.findUnique({
+    //   where: { id: decoded.id },
+    //   select: { id: true },
+    // });
+    // console.log("SPECIALIST: ", specialist);
 
     const data = await prisma.transaction.findMany({
+      orderBy: { createdAt: "desc" },
       where: {
         takeOnTransactions: {
           some: {
             specialists: {
-              id: "725c54e6-4776-40c6-8445-ccd8548c3dd5",
+              id: decoded.id,
             },
           },
         },
         status:
           status === "process"
-            ? { in: ["taken", "process", "unpaid", "paid"] }
+            ? { in: ["taken", "process", "unpaid"] }
             : status === "completed"
-            ? { in: ["completed"] }
+            ? { in: ["paid", "completed"] }
             : status,
       },
       select: {
         id: true,
-        user: true,
         address: true,
         amount: true,
         discount: true,
         latitude: true,
         longitude: true,
         note: true,
-        promos: true,
+        // promos: true,
         total: true,
         orderDate: true,
         status: true,
+        users: {
+          select: {
+            name: true,
+            phone: true,
+          },
+        },
         vehicleModels: {
           select: {
             name: true,
@@ -96,16 +101,16 @@ export async function GET(request, { params }) {
             },
           },
         },
-        bankAccounts: {
-          select: {
-            id: true,
-            category: true,
-            isOnline: true,
-            accountName: true,
-            brandName: true,
-            number: true,
-          },
-        },
+        // bankAccounts: {
+        //   select: {
+        //     id: true,
+        //     category: true,
+        //     isOnline: true,
+        //     accountName: true,
+        //     brandName: true,
+        //     number: true,
+        //   },
+        // },
         takeOnTransactions: {
           select: {
             id: true,

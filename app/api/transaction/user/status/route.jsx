@@ -6,7 +6,8 @@ export async function GET(request) {
   const accessToken = request.headers.get("Authorization");
 
   const searchParams = request.nextUrl.searchParams;
-  const status = searchParams.get("status");
+  const status = searchParams.get("selected");
+  // const user = searchParams.get("user");
 
   if (!accessToken) {
     return NextResponse.json({
@@ -32,7 +33,7 @@ export async function GET(request) {
       });
     }
 
-    const data = await prisma.transaction.findMany({
+    const data = await prisma.transaction.findFirst({
       where: {
         user: decoded.id,
         status:
@@ -104,7 +105,6 @@ export async function GET(request) {
             amountBids: true,
             selected: true,
             serviceDate: true,
-            rating: true,
             specialists: {
               select: {
                 id: true,
@@ -147,6 +147,7 @@ export async function GET(request) {
         },
       },
     });
+
     if (!data) {
       return NextResponse.json({
         status: false,
@@ -154,5 +155,55 @@ export async function GET(request) {
       });
     }
     return NextResponse.json({ status: true, data });
+  }
+}
+
+export async function PUT(request, { params }) {
+  const accessToken = request.headers.get("Authorization");
+
+  const searchParams = request.nextUrl.searchParams;
+  const id = searchParams.get("id");
+  const { status } = await request.json();
+
+  if (!accessToken) {
+    return NextResponse.json({
+      status: false,
+      error: "Silakan masukkan token...!",
+    });
+  } else {
+    let decoded;
+    try {
+      const bearer = accessToken.replace("Bearer ", "");
+      decoded = await jwt.verify(bearer, process.env.JWT_SECRET);
+    } catch (error) {
+      return NextResponse.json({
+        status: false,
+        error: "AccessToken tidak valid...!",
+      });
+    }
+
+    if (decoded.role !== "user") {
+      return NextResponse.json({
+        status: false,
+        error: "Anda tidak memiliki akses...!",
+      });
+    }
+
+    try {
+      const data = await prisma.transaction.update({
+        where: { id },
+        data: { status },
+      });
+      return NextResponse.json({
+        status: true,
+        message: "Update successfully",
+        data,
+      });
+    } catch (error) {
+      return NextResponse.json({
+        status: false,
+        error: "Update failed",
+      });
+    }
   }
 }

@@ -1,6 +1,7 @@
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import jwt from "jsonwebtoken";
 
 export async function GET(request) {
   const data = await prisma.transaction.findMany();
@@ -14,59 +15,94 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const {
-    address,
-    amount,
-    discount,
-    latitude,
-    longitude,
-    note,
-    orderMethod, // TakeOnTransaction
-    promo,
-    servicePrice,
-    servicePriceOnSpecialist, // TakeOnTransaction
-    total,
-    user,
-    orderDate,
-    vehicleModel,
-    payment,
-  } = await request.json();
+  const accessToken = request.headers.get("Authorization");
 
-  const data = await prisma.transaction.create({
-    data: {
-      address,
-      amount,
-      discount,
-      latitude,
-      longitude,
-      note,
-      promo,
-      servicePrice,
-      total,
-      user,
-      orderDate,
-      vehicleModel,
-      payment,
-      status: servicePriceOnSpecialist ? "taken" : "pending",
-      takeOnTransactions: {
-        create: {
-          orderMethod,
-          servicePriceOnSpecialist,
-          selected: servicePriceOnSpecialist ? true : false,
-          specialist: null,
+  if (!accessToken) {
+    return NextResponse.json({
+      status: false,
+      error: "Silakan masukkan token...!",
+    });
+  } else {
+    let decoded;
+    try {
+      const bearer = accessToken.replace("Bearer ", "");
+      decoded = await jwt.verify(bearer, process.env.JWT_SECRET);
+    } catch (error) {
+      return NextResponse.json({
+        status: false,
+        error: "AccessToken tidak valid...!",
+      });
+    }
+
+    if (decoded.role !== "user") {
+      return NextResponse.json({
+        status: false,
+        error: "Anda tidak memiliki akses...!",
+      });
+    }
+
+    try {
+      const {
+        address,
+        amount,
+        discount,
+        latitude,
+        longitude,
+        note,
+        orderMethod, // TakeOnTransaction
+        promo,
+        servicePrice,
+        servicePriceOnSpecialist, // TakeOnTransaction
+        total,
+        user,
+        orderDate,
+        vehicleModel,
+        payment,
+      } = await request.json();
+
+      const data = await prisma.transaction.create({
+        data: {
+          address,
+          amount,
+          discount,
+          latitude,
+          longitude,
+          note,
+          promo,
+          servicePrice,
+          total,
+          user,
+          orderDate,
+          vehicleModel,
+          payment,
+          status: servicePriceOnSpecialist ? "taken" : "pending",
+          takeOnTransactions: {
+            create: {
+              orderMethod,
+              servicePriceOnSpecialist,
+              selected: servicePriceOnSpecialist ? true : false,
+              specialist: null,
+            },
+          },
         },
-      },
-    },
-    include: {
-      takeOnTransactions: true,
-    },
-  });
-  revalidatePath(data);
-  return NextResponse.json({
-    status: true,
-    message: "Entry successfully created",
-    data: data,
-  });
+        include: {
+          takeOnTransactions: true,
+        },
+      });
+
+      revalidatePath(data);
+      return NextResponse.json({
+        status: true,
+        message: "Create successfully",
+        data: data,
+      });
+    } catch (error) {
+      return NextResponse.json({
+        status: false,
+        error: "Create failed",
+      });
+    }
+  }
 }
 
 export async function DELETE(request) {

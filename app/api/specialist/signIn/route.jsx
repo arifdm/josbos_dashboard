@@ -10,7 +10,7 @@ export async function POST(request) {
   const data = await prisma.specialist.findFirst({
     where: { phone },
   });
-  console.log("DATA: ", data);
+  // console.log("DATA: ", data);
 
   if (!data) {
     return NextResponse.json({
@@ -19,22 +19,29 @@ export async function POST(request) {
     });
   }
 
-  if (!bcrypt.compare(password, data.password)) {
-    return NextResponse.json({
-      status: false,
-      error: "Data login tidak valid...!",
+  if (data?.password) {
+    bcrypt.compare(password, data?.password).then((match) => {
+      if (!match) {
+        return NextResponse.json({
+          status: false,
+          error: "Data login tidak valid...!",
+        });
+      }
     });
   }
 
-  // GENERATE TOKEN ACCESS
   const tokenAccess = generateToken({
-    data: { id: data.id, phone: data.phone },
+    data: {
+      id: data.id,
+      phone: data.phone,
+      role: "specialist",
+    },
   });
 
   return NextResponse.json({
     status: true,
     message: "Login successfully",
-    data: data,
+    data,
     tokenAccess,
   });
 }
