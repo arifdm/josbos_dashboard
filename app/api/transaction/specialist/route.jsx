@@ -43,20 +43,26 @@ export async function GET(request, { params }) {
     const data = await prisma.transaction.findMany({
       orderBy: { createdAt: "desc" },
       where: {
-        takeOnTransactions: {
-          some: {
-            specialists: {
-              id: decoded?.id,
+        OR: [
+          {
+            takeOnTransactions: {
+              some: {
+                specialists: {
+                  id: decoded?.id,
+                },
+              },
             },
           },
-        },
-        takeOnTransactions: {
-          some: {
-            servicePriceOnSpecialists: {
-              specialist: decoded?.id,
+          {
+            takeOnTransactions: {
+              some: {
+                servicePriceOnSpecialists: {
+                  specialist: decoded?.id,
+                },
+              },
             },
           },
-        },
+        ],
         status:
           status === "process"
             ? { in: ["taken", "process", "unpaid"] }
@@ -125,6 +131,8 @@ export async function GET(request, { params }) {
             amountBids: true,
             selected: true,
             serviceDate: true,
+            rating: true,
+            partnerRevenue: true,
             specialists: {
               select: {
                 id: true,

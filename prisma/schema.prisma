@@ -201,13 +201,15 @@ model ServicePriceOnSpecialist {
   updatedAt        DateTime @updatedAt
   price            Int
   priceDescription String?  @db.VarChar(200)
-  specialist       String   @default(uuid())
+  maxDistance      Int?
 
   city   String @default(uuid())
   cities Cities @relation(fields: [city], references: [id])
 
-  service     String     @default(uuid())
-  services    Service    @relation(fields: [service], references: [id])
+  service  String  @default(uuid())
+  services Service @relation(fields: [service], references: [id])
+
+  specialist  String     @default(uuid())
   specialists Specialist @relation(fields: [specialist], references: [id])
 
   vehicleSize        String?             @default(uuid())

@@ -19,29 +19,31 @@ export async function POST(request) {
     });
   }
 
-  if (data?.password) {
-    bcrypt.compare(password, data?.password).then((match) => {
-      if (!match) {
-        return NextResponse.json({
-          status: false,
-          error: "Data login tidak valid...!",
-        });
-      }
-    });
+  try {
+    const match = await bcrypt.compare(password, data?.password);
+    console.log("RES_COMPARE: ", match);
+
+    if (match) {
+      const tokenAccess = generateToken({
+        data: {
+          id: data.id,
+          phone: data.phone,
+          role: "specialist",
+        },
+      });
+      return NextResponse.json({
+        status: true,
+        message: "Login successfully",
+        data,
+        tokenAccess,
+      });
+    } else {
+      return NextResponse.json({
+        status: false,
+        error: "Data login tidak valid...!",
+      });
+    }
+  } catch (error) {
+    console.log("ERROR: ", error);
   }
-
-  const tokenAccess = generateToken({
-    data: {
-      id: data.id,
-      phone: data.phone,
-      role: "specialist",
-    },
-  });
-
-  return NextResponse.json({
-    status: true,
-    message: "Login successfully",
-    data,
-    tokenAccess,
-  });
 }

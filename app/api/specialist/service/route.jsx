@@ -4,49 +4,101 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
+  const getService = searchParams.get("service");
+  const getVehicleSize = searchParams.get("vehicleSize");
 
-  const city = searchParams.get("city");
-  const service = searchParams.get("service");
-  const vehicleSize = searchParams.get("vehicleSize");
-  console.log("VEHICLE_SIZE: ", vehicleSize);
+  const latitude = searchParams.get("latitude");
+  const longitude = searchParams.get("longitude");
 
-  const where_vehicleSize = {
-    city,
-    service,
-    vehicleSize,
-  };
+  // const specialists =
+  //   await prisma.$queryRaw`SELECT id, 6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION )))) as distance FROM "public"."Specialist" where (6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION ))))) < 10 AND status = 'online'`;
 
-  const where = {
-    city,
-    service,
-  };
+  // console.log("DISTANCE_SPECIALIST: ", specialists);
 
-  const data = await prisma.specialist.findMany({
-    select: {
-      name: true,
-      serviceSpecialist: {
-        where: vehicleSize ? where_vehicleSize : where,
-        // select: {
-        //   id: true,
-        //   price: true,
-        //   city: true,
-        //   service: true,
-        //   vehicleSize: true,
-        //   cities: {
-        //     select: {
-        //       id: true,
-        //       name: true,
-        //     },
-        //   },
-        // },
+  function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2 - lat1); // deg2rad below
+    var dLon = deg2rad(lon2 - lon1);
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c; // Distance in km
+    return d;
+  }
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+
+  const xprisma = prisma.$extends({
+    result: {
+      specialist: {
+        radius: {
+          // the dependencies
+          needs: { latitude: true, longitude: true },
+          compute(specialist) {
+            // the computation logic
+            return getDistanceFromLatLonInKm(
+              latitude,
+              longitude,
+              specialist.latitude,
+              specialist.longitude
+            );
+          },
+        },
       },
     },
   });
+
+  const data = await xprisma.$transaction([
+    xprisma.ServicePriceOnSpecialist.findMany({
+      where: {
+        service: getService ? getService : {},
+        vehicleSize: getVehicleSize ? getVehicleSize : {},
+        // maxDistance: {
+        //   lte: 8,
+        // },
+      },
+      select: {
+        id: true,
+        price: true,
+        priceDescription: true,
+        city: true,
+        service: true,
+        vehicleSize: true,
+        maxDistance: true,
+        cities: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        specialists: {
+          select: {
+            id: true,
+            name: true,
+            latitude: true,
+            longitude: true,
+            phone: true,
+            photo: true,
+            rating: true,
+            status: true,
+            radius: true,
+          },
+        },
+      },
+    }),
+  ]);
+
   if (!data) {
     return NextResponse.json({
       status: false,
       error: "Data not found",
     });
   }
-  return NextResponse.json({ status: true, data });
+  return NextResponse.json({ status: true, data: data.shift() });
 }

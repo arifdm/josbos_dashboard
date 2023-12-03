@@ -4,16 +4,15 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
   const searchParams = request.nextUrl.searchParams;
-
-  const city = searchParams.get("city");
-  const service = searchParams.get("service");
-  const vehicleSize = searchParams.get("vehicleSize");
-  console.log("VEHICLE_SIZE: ", vehicleSize);
+  const getCity = searchParams.get("city");
+  const getService = searchParams.get("service");
+  const getVehicleSize = searchParams.get("vehicleSize");
 
   const data = await prisma.ServicePriceOnSpecialist.findMany({
     where: {
-      city,
-      service,
+      city: getCity ? getCity : {},
+      service: getService ? getService : {},
+      vehicleSize: getVehicleSize ? getVehicleSize : {},
     },
     select: {
       id: true,
@@ -22,13 +21,25 @@ export async function GET(request) {
       city: true,
       service: true,
       vehicleSize: true,
+      maxDistance: true,
       cities: {
         select: {
           id: true,
           name: true,
         },
       },
-      specialists: true,
+      specialists: {
+        select: {
+          id: true,
+          name: true,
+          latitude: true,
+          longitude: true,
+          phone: true,
+          photo: true,
+          rating: true,
+          status: true,
+        },
+      },
     },
   });
   if (!data) {
