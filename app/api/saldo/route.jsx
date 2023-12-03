@@ -32,7 +32,10 @@ export async function GET(request, { params }) {
     }
 
     const data = await prisma.saldoSpecialist.findMany({
-      where: { specialist: decoded.id },
+      where: {
+        specialist: decoded.id,
+        status: true,
+      },
       orderBy: { createdAt: "asc" },
     });
 
@@ -74,6 +77,8 @@ export async function POST(request) {
         error: "Anda tidak memiliki akses...!",
       });
     }
+
+    // AKAN DIPINDAHKAN KE DASHBOARD, MENU APPROVE DEPOSIT
 
     const lastSaldo = await prisma.saldoSpecialist.findFirst({
       where: { specialist: decoded.id },

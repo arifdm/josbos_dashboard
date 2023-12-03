@@ -11,7 +11,7 @@ export async function GET(request) {
   const longitude = searchParams.get("longitude");
 
   // const specialists =
-  //   await prisma.$queryRaw`SELECT id, 6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION )))) as distance FROM "public"."Specialist" where (6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION ))))) < 10 AND status = 'online'`;
+  // await prisma.$queryRaw`SELECT id, 6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION )))) as distance FROM "public"."Specialist" where (6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION ))))) < 10 AND status = 'online'`;
 
   // console.log("DISTANCE_SPECIALIST: ", specialists);
 
@@ -59,9 +59,6 @@ export async function GET(request) {
       where: {
         service: getService ? getService : {},
         vehicleSize: getVehicleSize ? getVehicleSize : {},
-        // maxDistance: {
-        //   lte: 8,
-        // },
       },
       select: {
         id: true,
@@ -94,11 +91,16 @@ export async function GET(request) {
     }),
   ]);
 
-  if (!data) {
+  const newData = data
+    .shift()
+    .filter((item) => item.maxDistance >= item.specialists?.radius);
+  // console.log("DATA: ", newData);
+
+  if (!newData) {
     return NextResponse.json({
       status: false,
       error: "Data not found",
     });
   }
-  return NextResponse.json({ status: true, data: data.shift() });
+  return NextResponse.json({ status: true, data: newData });
 }
