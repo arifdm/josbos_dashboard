@@ -26,7 +26,7 @@ export async function POST(request) {
         data: {
           id: dataUser.id,
           phone: dataUser.phone,
-          role: "specialist",
+          role: "user",
         },
       });
       return NextResponse.json({
