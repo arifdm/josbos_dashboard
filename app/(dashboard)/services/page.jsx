@@ -7,6 +7,11 @@ import DeletePage from "./deletePage";
 
 const getData = async () => {
   const res = await prisma.service.findMany({
+    orderBy: {
+      categories: {
+        name: "asc",
+      },
+    },
     select: {
       id: true,
       name: true,
@@ -74,7 +79,7 @@ const Services = async () => {
                       <td className="whitespace-nowrap px-6 py-4">
                         {item.categories.name}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap px-6 py-4 font-bold">
                         {item.name}
                       </td>
                       <td>

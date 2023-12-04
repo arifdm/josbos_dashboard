@@ -46,7 +46,7 @@ export default function Example() {
           </div>
           <div className="relative mt-16 h-80 lg:mt-8">
             <img
-              className="absolute left-0 top-0 w-[65rem] max-w-none"
+              className="absolute left-0 top-[-150px] lg:top-0 w-[50rem] lg:w-[70rem] max-w-none"
               src="/images/bmw-3-sedan-cover-779x447.png"
               alt="Car"
               width={1824}
