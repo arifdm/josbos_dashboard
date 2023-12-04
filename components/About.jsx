@@ -9,7 +9,7 @@ const features = [
   {
     name: "Kemudahan Pesan",
     description:
-      "Download, daftar, dan langsung pesan dengan cara yang sangat mudah. Pilih salah satu cara dari 4 metode yang disediakan.",
+      "Download, daftar, dan langsung pesan dengan cara yang sangat mudah. Pilih salah satu cara dari 3 metode yang disediakan.",
     icon: DevicePhoneMobileIcon,
   },
   {
@@ -45,7 +45,7 @@ export default function Example() {
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
             Dengan aplikasi yang dirancang dengan sangat baik untuk memudahkan
-            Pengguna saat melakukan pemesanan dengan 4 pilihan cara pesan
+            Pengguna saat melakukan pemesanan dengan 3 pilihan cara pesan
             sehingga mendapatkan layanan yang berkualitas dengan tarif yang
             hemat dan pas.
           </p>

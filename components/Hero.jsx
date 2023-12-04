@@ -31,9 +31,9 @@ export default function Example() {
               Gunakan Josbos sekarang
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-300">
-              Josbos adalah aplikasi yang menghadirkan layanan perawatan,
-              perbaikan dan kondisi darurat kendaraan, dipesan secara online
-              datang di lokasi yang Kamu dipesan.
+              Josbos adalah aplikasi yang menghadirkan layanan perawatan dan
+              perbaikan kendaraan Kamu, yang dipesan secara online kapan saja di
+              mana saja.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
               <a
