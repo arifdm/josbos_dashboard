@@ -46,12 +46,12 @@ export async function PUT(request, { params }) {
         });
         // console.log("DATA_TAKEN: ", takenID);
         // const partnerRevenue = dataTrans.amount - (dataTrans.amount * 20) / 100;
-        const feeOrder = (dataTrans.total * 20) / 100 - dataTrans.discount;
+        const feeOrder = (dataTrans.amount * 20) / 100 - dataTrans.discount;
 
         await prisma.takeOnTransaction.update({
           where: { id: takenID.id },
           data: {
-            partnerRevenue: dataTrans.total,
+            partnerRevenue: dataTrans.amount,
             feeOrder,
           },
         });
