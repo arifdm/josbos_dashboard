@@ -38,19 +38,21 @@ export async function PUT(request, { params }) {
         where: { id },
         data: { status },
       });
+      // console.log("DATA_TRANS: ", dataTrans);
 
       if (status === "paid") {
         const takenID = await prisma.takeOnTransaction.findFirst({
           where: { transaction: id },
         });
-
-        const totalRevenue = dataTrans.amount - (dataTrans.amount * 20) / 100;
+        // console.log("DATA_TAKEN: ", takenID);
+        // const partnerRevenue = dataTrans.amount - (dataTrans.amount * 20) / 100;
+        const feeOrder = (dataTrans.amount * 20) / 100 - dataTrans.discount;
 
         await prisma.takeOnTransaction.update({
           where: { id: takenID.id },
           data: {
-            partnerRevenue: totalRevenue,
-            feeOrder: (dataTrans.amount * 20) / 100 - dataTrans.discount,
+            partnerRevenue: dataTrans.amount,
+            feeOrder,
           },
         });
 
@@ -60,15 +62,16 @@ export async function PUT(request, { params }) {
           select: { saldo: true },
           take: 1,
         });
-        // console.log("RES_CREATE_SALDO: ", item);
+        // console.log("SALDO_AKHIR: ", lastSaldo?.saldo);
+
         const totalSaldo = lastSaldo ? lastSaldo?.saldo : 0;
 
         await prisma.saldoSpecialist.create({
           data: {
-            note: "Penghasilan Pesanan",
+            note: "Transaksi",
             type: "decrease", // saldo berkurang
-            amount: totalRevenue,
-            saldo: totalSaldo - totalRevenue ? totalSaldo - totalRevenue : 0,
+            amount: feeOrder,
+            saldo: totalSaldo - feeOrder,
             status: true,
             specialist: decoded.id,
             transaction: id,
