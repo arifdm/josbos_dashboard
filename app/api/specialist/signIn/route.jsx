@@ -31,6 +31,9 @@ export async function POST(request) {
           role: "specialist",
         },
       });
+
+      delete data.password;
+
       return NextResponse.json({
         status: true,
         message: "Login successfully",

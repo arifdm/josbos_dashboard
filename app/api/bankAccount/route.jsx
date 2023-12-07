@@ -4,14 +4,6 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
   const data = await prisma.bankAccount.findMany({
-    select: {
-      id: true,
-      category: true,
-      accountName: true,
-      brandName: true,
-      number: true,
-      isOnline: true,
-    },
     where: {
       user: null,
       specialist: null,

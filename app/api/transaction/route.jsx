@@ -41,6 +41,27 @@ export async function POST(request) {
       });
     }
 
+    // let diskon = 0;
+    // if (promo) {
+    //   const dataPromo = await prisma.promo.findFirst({
+    //     where: { id: promo },
+    //   });
+    //   diskon = dataPromo.discount;
+    // }
+
+    // let newAmount = 0;
+    // if (orderMethod === "Random Mitra" || orderMethod === "Lakukan Penawaran") {
+    //   const dataService = await prisma.servicePricing.findFirst({
+    //     where: { id: servicePrice },
+    //   });
+    //   newAmount = dataService.price;
+    // } else if (orderMethod === "Pilih Mitra Langsung") {
+    //   const dataService = await prisma.servicePriceOnSpecialist.findFirst({
+    //     where: { id: servicePriceOnSpecialist },
+    //   });
+    //   newAmount = dataService.price;
+    // }
+
     try {
       const {
         address,

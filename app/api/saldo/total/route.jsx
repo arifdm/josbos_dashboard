@@ -1,9 +1,11 @@
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import jwt from "jsonwebtoken";
 
-export async function GET(request) {
+export async function GET(request, { params }) {
   const accessToken = request.headers.get("Authorization");
+  // console.log("TOKEN: ", accessToken);
 
   if (!accessToken) {
     return NextResponse.json({
@@ -29,32 +31,20 @@ export async function GET(request) {
       });
     }
 
-    const data = await prisma.ServicePriceOnSpecialist.findMany({
+    const data = await prisma.saldoSpecialist.findFirst({
+      orderBy: { createdAt: "desc" },
       where: {
         specialist: decoded.id,
-      },
-      select: {
-        id: true,
-        price: true,
-        priceDescription: true,
-        city: true,
-        service: true,
-        vehicleSize: true,
-        maxDistance: true,
-        cities: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+        status: true,
       },
     });
+
     if (!data) {
       return NextResponse.json({
         status: false,
         error: "Data not found",
       });
     }
-    return NextResponse.json({ status: true, data });
+    return NextResponse.json({ status: true, saldo: data.saldo });
   }
 }

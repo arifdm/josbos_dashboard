@@ -203,8 +203,8 @@ model ServicePriceOnSpecialist {
   priceDescription String?  @db.VarChar(200)
   maxDistance      Int?
 
-  city   String @default(uuid())
-  cities Cities @relation(fields: [city], references: [id])
+  city   String? @default(uuid())
+  cities Cities? @relation(fields: [city], references: [id])
 
   service  String  @default(uuid())
   services Service @relation(fields: [service], references: [id])
