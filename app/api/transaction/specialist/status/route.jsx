@@ -37,8 +37,57 @@ export async function PUT(request, { params }) {
       const dataTrans = await prisma.transaction.update({
         where: { id },
         data: { status },
+        select: {
+          amount: true,
+          discount: true,
+          servicePricings: {
+            select: {
+              services: {
+                select: {
+                  name: true,
+                  categories: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          vehicleModels: {
+            select: {
+              name: true,
+              brands: {
+                select: { name: true },
+              },
+            },
+          },
+          takeOnTransactions: {
+            select: {
+              servicePriceOnSpecialists: {
+                select: {
+                  services: {
+                    select: {
+                      name: true,
+                      categories: {
+                        select: {
+                          name: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
-      // console.log("DATA_TRANS: ", dataTrans);
+
+      const description = dataTrans.servicePricings
+        ? `${dataTrans.servicePricings.services.categories.name}, ${dataTrans.servicePricings.services.name} (${dataTrans.vehicleModels.brands.name} ${dataTrans.vehicleModels.name})`
+        : `${dataTrans.takeOnTransactions[0].servicePriceOnSpecialists.services.categories.name}, ${dataTrans.takeOnTransactions[0].servicePriceOnSpecialists.services.name} (${dataTrans.vehicleModels.brands.name} ${dataTrans.vehicleModels.name})`;
+
+      console.log("DESC_TRANS: ", description);
 
       if (status === "paid") {
         const takenID = await prisma.takeOnTransaction.findFirst({
@@ -68,7 +117,7 @@ export async function PUT(request, { params }) {
 
         await prisma.saldoSpecialist.create({
           data: {
-            note: "Transaksi",
+            note: description,
             type: "decrease", // saldo berkurang
             amount: feeOrder,
             saldo: totalSaldo - feeOrder,
