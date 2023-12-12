@@ -164,7 +164,7 @@ export async function PUT(request, { params }) {
 
   const searchParams = request.nextUrl.searchParams;
   const id = searchParams.get("id");
-  const { status } = await request.json();
+  const { status, alasanBatal } = await request.json();
 
   if (!accessToken) {
     return NextResponse.json({
@@ -193,7 +193,10 @@ export async function PUT(request, { params }) {
     try {
       const data = await prisma.transaction.update({
         where: { id },
-        data: { status },
+        data: {
+          status,
+          alasanBatal,
+        },
       });
       return NextResponse.json({
         status: true,
