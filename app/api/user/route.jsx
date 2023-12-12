@@ -4,16 +4,36 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export async function GET(request) {
-  console.log("RESPONSE: ", NextRequest);
+  const accessToken = request.headers.get("Authorization");
 
-  const data = await prisma.user.findMany();
-  if (!data) {
+  if (!accessToken) {
     return NextResponse.json({
       status: false,
-      error: "Data not found",
+      error: "Silakan masukkan token...!",
     });
+  } else {
+    let decoded;
+    try {
+      const bearer = accessToken.replace("Bearer ", "");
+      decoded = await jwt.verify(bearer, process.env.JWT_SECRET);
+    } catch (error) {
+      return NextResponse.json({
+        status: false,
+        error: "Access Token tidak valid...!",
+      });
+    }
+
+    const data = await prisma.user.findMany();
+    if (!data) {
+      delete data[0].password;
+
+      return NextResponse.json({
+        status: false,
+        error: "Data not found",
+      });
+    }
+    return NextResponse.json({ status: true, data });
   }
-  return NextResponse.json({ status: true, data });
 }
 
 export async function POST(request) {

@@ -7,23 +7,33 @@ import { useState } from "react";
 const AddPage = () => {
   const router = useRouter();
 
+  const [error, setError] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
+
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    await axios.post("/api/promo", { title, content, image });
-    setIsLoading(false);
-    setTitle("");
-    setContent("");
-    setImage("");
 
-    router.refresh();
-    setIsOpen(false);
+    if (!title || !content || !image) {
+      setError("Silakan masukkan data");
+      return;
+    } else {
+      setError("");
+      setIsLoading(true);
+      await axios.post("/api/promo", { title, content, image });
+      setIsLoading(false);
+
+      setTitle("");
+      setContent("");
+      setImage("");
+
+      router.refresh();
+      setIsOpen(false);
+    }
   };
 
   const handleModal = () => {
@@ -37,8 +47,11 @@ const AddPage = () => {
       </button>
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add New Article</h3>
-          <form onSubmit={handleSubmit}>
+          <h3 className="font-bold text-lg">Add New Promo</h3>
+          <form onSubmit={handleSubmit} className="mt-5">
+            {error && (
+              <div className="alert alert-error shadow-lg mb-2">{error}</div>
+            )}
             <div className="form-control w-full">
               <label className="label font-bold">Title</label>
               <input
@@ -46,7 +59,7 @@ const AddPage = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="input input-bordered"
-                placeholder="Article Name"
+                placeholder="Name"
               />
             </div>
             <div className="form-control w-full">
