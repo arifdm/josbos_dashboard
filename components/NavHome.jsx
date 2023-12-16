@@ -12,7 +12,7 @@ export default function NavHome({ session, status }) {
     { name: "Tentang Kami", href: "#about" },
     { name: "Layanan", href: "#service" },
     { name: "Hubungi", href: "#footer" },
-    { name: "Kebijakan Privasi", href: "/privacy" },
+    { name: "Kebijakan & Privasi", href: "/privacy" },
   ];
 
   console.log("SESSION: ", session);

@@ -136,7 +136,7 @@ export default function Privacy() {
             <p className="font-bold text-md mb-2 mt-8">Kontak</p>
             Apabila Anda ingin mengajukan pertanyaan mengenai pemrosesan Data
             Anda atau pertanyaan lainnya sehubungan dengan Kebijakan ini,
-            silakan menghubungi kami melalui email: policy@josbos.com
+            silakan menghubungi kami melalui email: contact@josbos.com
           </p>
         </div>
       </div>
