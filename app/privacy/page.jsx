@@ -9,7 +9,7 @@ export default function Privacy() {
     <div className="bg-white">
       {/* <NavHome /> */}
 
-      <div className="mx-auto max-w-4xl py-9 lg:px-8">
+      <div className="mx-auto max-w-4xl py-9 px-8">
         <Link href="/">
           <Image
             className="h-8 w-auto"
@@ -20,7 +20,7 @@ export default function Privacy() {
           />
         </Link>
         <div className="mx-auto max-w-4xl mt-10 py-6">
-          <h2 className="text-base font-semibold leading-7 text-yellow-500 lg:text-center">
+          <h2 className="text-base font-semibold leading-7 text-yellow-500 text-center">
             Privacy Policy
           </h2>
           <p className="mt-2 text-3xl font-bold text-gray-700 text-center">
