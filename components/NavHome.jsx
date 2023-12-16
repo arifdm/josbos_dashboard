@@ -8,10 +8,11 @@ import { useState } from "react";
 export default function NavHome({ session, status }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigation = [
-    { name: "Home", href: "#" },
+    { name: "Home", href: "./" },
     { name: "Tentang Kami", href: "#about" },
     { name: "Layanan", href: "#service" },
     { name: "Hubungi", href: "#footer" },
+    { name: "Kebijakan Privasi", href: "/privacy" },
   ];
 
   console.log("SESSION: ", session);
@@ -23,7 +24,7 @@ export default function NavHome({ session, status }) {
         aria-label="Global"
       >
         <div className="flex lg:flex-1">
-          <Link href="#" className="-m-1.5 p-1.5">
+          <Link href="./" className="-m-1.5 p-1.5">
             <span className="sr-only">Josbos</span>
             <Image
               className="h-8 w-auto"

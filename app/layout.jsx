@@ -17,7 +17,6 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <NextAuthProvider>
           <main className="h-screen justify-center items-center bg-white">
-            {/* <Suspense fallback={<Loading />}>{children}</Suspense> */}
             {children}
           </main>
         </NextAuthProvider>

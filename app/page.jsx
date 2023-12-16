@@ -15,7 +15,7 @@ const Home = () => {
   const [user, setUser] = useState("");
   // const router = useRouter();
   const { status, data: session } = useSession();
-  console.log("SESSION_USER: ", session?.user?.email);
+  // console.log("SESSION_USER: ", session?.user?.email);
   // if (status === "unauthenticated") {
   //   redirect("/api/auth/signin");
   // }
