@@ -25,7 +25,8 @@ export async function POST(request) {
       const tokenAccess = generateToken({
         data: {
           id: dataUser.id,
-          phone: dataUser.phone,
+          phone: dataUser?.phone,
+          email: dataUser?.email,
           role: "user",
         },
       });

@@ -18,10 +18,11 @@ export async function GET(request) {
     });
 
     // Update OTP for user
-    await prisma.user.update({
+    const resUpdate = await prisma.user.update({
       where: { id: data.id },
       data: { otp },
     });
+    // console.log("RES: ", resUpdate);
 
     // Send Email OTP
     return NextResponse.json({ status: true, data });

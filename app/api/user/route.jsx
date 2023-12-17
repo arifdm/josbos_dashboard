@@ -37,7 +37,8 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const { name, phone, password, email, referral } = await request.json();
+  const { name, phone, password, email, photo, referral } =
+    await request.json();
   // console.log("BODY: ", name, email);
 
   if (!name || !phone || !password) {
@@ -73,7 +74,7 @@ export async function POST(request) {
   hash = await bcrypt.hash(password, salt);
 
   const dataUser = await prisma.user.create({
-    data: { name, phone, email, password: hash, referral },
+    data: { name, phone, email, password: hash, photo, referral },
   });
 
   return NextResponse.json({
