@@ -1,3 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
+
 export default function Example() {
   return (
     <div className="bg-white">
@@ -36,12 +39,28 @@ export default function Example() {
               mana saja.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-              <a
+              <Link
                 href="#about"
-                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                alt="Get Information"
+                className="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 Get Information
-              </a>
+              </Link>
+              <Link
+                href="https://play.google.com/store/apps/details?id=com.josbos.consumer"
+                alt="Google Play"
+                className="rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
+              >
+                <div className="flex flex-row items-center">
+                  <Image
+                    src="/GooglePlay.png"
+                    width={25}
+                    height={25}
+                    alt="Google Play"
+                  />
+                  <p className="ml-1">Google Play</p>
+                </div>
+              </Link>
             </div>
           </div>
           <div className="relative mt-16 h-80 lg:mt-8">

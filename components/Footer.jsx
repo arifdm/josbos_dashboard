@@ -69,7 +69,7 @@ export default function Footer() {
           />
         </div>
       </div>
-      <div className="mx-auto max-w-6xl px-8 mt-12">
+      <div className="mx-auto max-w-6xl px-6 lg:px-8 mt-12 color-white">
         <Link href="/privacy">Privacy Policy</Link>
       </div>
     </div>
