@@ -63,7 +63,7 @@ export default function Example() {
               </Link>
             </div>
           </div>
-          <div className="relative mt-16 h-80 lg:mt-8">
+          <div className="relative mt-16 h-80 lg:mt-8 -z-10">
             <img
               className="absolute left-0 top-[-150px] lg:top-0 w-[50rem] lg:w-[70rem] max-w-none"
               src="/images/bmw-3-sedan-cover-779x447.png"
