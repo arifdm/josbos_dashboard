@@ -1,6 +1,6 @@
+import Loading from "@/app/loading";
 import NavDashboard from "@/components/NavDashboard";
 import { Suspense } from "react";
-import Loading from "./loading";
 
 export const metadata = {
   title: "Vehicles",
