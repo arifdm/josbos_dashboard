@@ -34,7 +34,7 @@ export async function GET(request, { params }) {
     const data = await prisma.saldoSpecialist.findMany({
       where: {
         specialist: decoded.id,
-        status: true,
+        // status: true,
       },
       orderBy: { createdAt: "asc" },
     });
