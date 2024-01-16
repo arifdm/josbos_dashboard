@@ -39,7 +39,7 @@ const Home = () => {
   console.log("USER: ", user);
 
   return (
-    <div className="bg-white">
+    <div className="bg-white mx-auto max-w-7xl">
       <NavHome session={session} status={status} />
       <Hero session={session} status={status} />
       <About />

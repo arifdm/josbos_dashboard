@@ -19,9 +19,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <NextAuthProvider>
           <main className="h-screen justify-center items-center bg-white">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8 my-10">
-              <Suspense fallback={<Loading />}>{children}</Suspense>
-            </div>
+            <Suspense fallback={<Loading />}>{children}</Suspense>
           </main>
         </NextAuthProvider>
       </body>
