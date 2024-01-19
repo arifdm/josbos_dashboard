@@ -26,9 +26,7 @@ const Home = () => {
 
   const getUser = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/api/user/${session?.user?.email}`
-      );
+      const res = await axios.get(`/api/user/${session?.user?.email}`);
       console.log("RES: ", res.data);
       setUser(res.data);
     } catch (error) {
