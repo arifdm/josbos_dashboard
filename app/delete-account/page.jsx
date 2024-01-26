@@ -15,7 +15,9 @@ export default function DeleteAccount() {
   const router = useRouter();
   const [agreed, setAgreed] = useState(false);
 
-  const handleDelete = () => {
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    console.log("AGREE", agreed);
     router.push("/");
   };
 
@@ -71,7 +73,7 @@ export default function DeleteAccount() {
             {agreed ? (
               <button
                 type="submit"
-                onClick={handleDelete()}
+                onClick={handleDelete}
                 className="block w-full rounded-md bg-yellow-500 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
               >
                 Hapus Sekarang
