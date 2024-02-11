@@ -4,6 +4,7 @@ import "./globals.css";
 import NextAuthProvider from "@/libs/NextAuthProvider";
 import { Suspense } from "react";
 import Loading from "./loading";
+import Menu from "@/components/Menu";
 // import Loading from "./loading";
 
 const inter = Inter({ subsets: ["latin"] });

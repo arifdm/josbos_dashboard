@@ -32,7 +32,7 @@ const AddPage = () => {
 
   return (
     <div>
-      <button className="btn btn-success btn-md" onClick={handleModal}>
+      <button className="btn btn-success btn-sm" onClick={handleModal}>
         Add New
       </button>
       <div className={isOpen ? "modal modal-open" : "modal"}>

@@ -84,11 +84,18 @@ const Services = async () => {
                       </td>
                       <td>
                         <div className="full flex justify-center gap-2 align-middle">
-                          <Link href={`/services/price?id=${item.id}`}>
-                            <button className="btn btn-warning btn-sm">
+                          <div
+                            className={
+                              "btn btn-sm " +
+                              (item._count.servicePricings
+                                ? "btn-warning"
+                                : "btn-outline btn-warning")
+                            }
+                          >
+                            <Link href={`/services/price?id=${item.id}`}>
                               {item._count.servicePricings}
-                            </button>
-                          </Link>
+                            </Link>
+                          </div>
                         </div>
                       </td>
                       <td>

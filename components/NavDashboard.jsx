@@ -115,7 +115,7 @@ export default function NavDashboard() {
 
               {/* Logo */}
               <div className="ml-4 flex lg:ml-0">
-                <Link href="./">
+                <Link href="/mainboard">
                   <Image
                     className="h-8 w-auto rounded max-w-full align-middle border-none"
                     width={80}
@@ -127,7 +127,7 @@ export default function NavDashboard() {
               </div>
 
               {/* Flyout menus */}
-              <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
+              {/* <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
                 <div className="flex h-full space-x-8">
                   {navigation.pages.map((page) => (
                     <Link
@@ -139,7 +139,7 @@ export default function NavDashboard() {
                     </Link>
                   ))}
                 </div>
-              </Popover.Group>
+              </Popover.Group> */}
 
               <div className="ml-auto flex items-center">
                 {/* Cart */}

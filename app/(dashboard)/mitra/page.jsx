@@ -18,7 +18,9 @@ export default async function Users() {
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-5">Users</div>
+      <div className="text-xl font-semibold mb-5">
+        Mitra Bengkel (Spesialis)
+      </div>
       <div className=" w-full grid grid-cols-2">
         <div className="mb-2">
           <AddPage />
@@ -43,6 +45,9 @@ export default async function Users() {
                     <th scope="col" className="px-6 py-4">
                       Phone
                     </th>
+                    <th scope="col" className="px-6 py-4">
+                      Layanan
+                    </th>
                     <th scope="col" className="px-6 py-4 text-center">
                       Action
                     </th>
@@ -65,6 +70,15 @@ export default async function Users() {
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
                         {item?.phone}
+                      </td>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <div
+                          className={"btn btn-sm " + "btn-outline btn-warning"}
+                        >
+                          <Link href={`/services/price?id=${item.id}`}>
+                            Open
+                          </Link>
+                        </div>
                       </td>
                       <td>
                         <div className="full flex justify-center gap-2 align-middle">
