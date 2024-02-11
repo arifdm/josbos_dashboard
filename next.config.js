@@ -9,6 +9,7 @@ const nextConfig = {
       "placehold.jp",
       "images.unsplash.com",
       "i.dummyjson.com",
+      "josbos-dashboard.vercel.app",
     ],
     formats: ["image/webp"],
   },
