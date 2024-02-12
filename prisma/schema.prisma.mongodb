@@ -3,19 +3,17 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
-  // url       = env("POSTGRES_PRISMA_URL")
-  // directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model Admin {
-  id        String            @id @default(uuid())
-  email     String            @unique @db.VarChar(100)
-  name      String?           @db.VarChar(50)
-  username  String?           @db.VarChar(50)
-  password  String?           @db.VarChar(100)
-  phone     String?           @unique @db.VarChar(20)
+  id        String            @id @default(auto()) @map("_id") @db.ObjectId
+  email     String            @unique
+  name      String?
+  username  String?
+  password  String?
+  phone     String?           @unique
   role      enum_admins_role? @default(admin)
   status    enum_status?      @default(active)
   createdAt DateTime          @default(now())
@@ -23,19 +21,19 @@ model Admin {
 }
 
 model User {
-  id        String       @id @default(uuid())
-  email     String?      @unique @db.VarChar(100)
-  name      String       @db.VarChar(50)
-  phone     String       @db.VarChar(20)
-  address   String?      @db.VarChar(150)
-  city      String?      @db.VarChar(50)
-  ktp       String?      @db.VarChar(20)
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  email     String?      @unique
+  name      String
+  phone     String
+  address   String?
+  city      String?
+  ktp       String?
   photo     String?
-  otp       String?      @db.VarChar(10)
-  tokenFCM  String?      @db.VarChar(255)
-  password  String?      @db.VarChar(100)
+  otp       String?
+  tokenFCM  String?
+  password  String?
   status    enum_status? @default(active)
-  referral  String?      @db.VarChar(100)
+  referral  String?
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
@@ -44,10 +42,10 @@ model User {
 }
 
 model Article {
-  id        String      @id @default(uuid())
-  title     String?     @db.VarChar(255)
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  title     String?
   content   String?
-  image     String?     @db.VarChar(255)
+  image     String?
   rating    Int         @default(0)
   status    enum_status @default(active)
   createdAt DateTime    @default(now())
@@ -55,11 +53,11 @@ model Article {
 }
 
 model Promo {
-  id           String           @id @default(uuid())
-  title        String?          @db.VarChar(255)
+  id           String           @id @default(auto()) @map("_id") @db.ObjectId
+  title        String?
   content      String?
-  image        String?          @db.VarChar(255)
-  code         String?          @db.VarChar(255)
+  image        String?
+  code         String?
   type         enum_promo_type?
   discount     Int?
   limitCount   Int?
@@ -71,10 +69,10 @@ model Promo {
 }
 
 model Transaction {
-  id          String                   @id @default(uuid())
+  id          String                   @id @default(auto()) @map("_id") @db.ObjectId
   address     String?
-  latitude    String?                  @db.VarChar(20)
-  longitude   String?                  @db.VarChar(20)
+  latitude    String?
+  longitude   String?
   amount      Int?
   discount    Int?
   total       Int?
@@ -83,21 +81,21 @@ model Transaction {
   updatedAt   DateTime                 @updatedAt
   orderDate   DateTime?
   status      enum_transactions_status @default(pending)
-  alasanBatal String?                  @db.VarChar(255)
+  alasanBatal String?
 
-  promo  String? @default(uuid())
+  promo  String? @db.ObjectId
   promos Promo?  @relation(fields: [promo], references: [id])
 
-  servicePrice    String?         @default(uuid())
+  servicePrice    String?         @db.ObjectId
   servicePricings ServicePricing? @relation(fields: [servicePrice], references: [id])
 
-  user  String? @default(uuid())
+  user  String? @db.ObjectId
   users User?   @relation(fields: [user], references: [id])
 
-  vehicleModel  String?       @default(uuid())
+  vehicleModel  String?       @db.ObjectId
   vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
 
-  payment      String?      @default(uuid())
+  payment      String?      @db.ObjectId
   bankAccounts BankAccount? @relation(fields: [payment], references: [id])
 
   takeOnTransactions TakeOnTransaction[]
@@ -105,33 +103,33 @@ model Transaction {
 }
 
 model TakeOnTransaction {
-  id             String    @id @default(uuid())
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
   status         Boolean?  @default(true)
   selected       Boolean?  @default(false)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
-  orderMethod    String?   @db.VarChar(100)
+  orderMethod    String?
   amountBids     Int?
   partnerRevenue Int?
   feeOrder       Int?
   rating         Int?
-  ratingComment  String?   @db.VarChar(250)
+  ratingComment  String?
   serviceDate    DateTime?
 
-  specialist  String?     @default(uuid())
+  specialist  String?     @db.ObjectId
   specialists Specialist? @relation(fields: [specialist], references: [id])
 
-  servicePriceOnSpecialist  String?                   @default(uuid())
+  servicePriceOnSpecialist  String?                   @db.ObjectId
   servicePriceOnSpecialists ServicePriceOnSpecialist? @relation(fields: [servicePriceOnSpecialist], references: [id])
 
-  transaction  String      @default(uuid())
+  transaction  String      @db.ObjectId
   transactions Transaction @relation(fields: [transaction], references: [id])
 }
 
 model Category {
-  id        String    @id @default(uuid())
-  name      String?   @db.VarChar(255)
-  icon      String?   @db.VarChar(255)
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  icon      String?
   orderFee  Int?
   status    Boolean?  @default(true)
   createdAt DateTime  @default(now())
@@ -140,15 +138,15 @@ model Category {
 }
 
 model Service {
-  id                        String                     @id @default(uuid())
-  name                      String                     @db.VarChar(255)
+  id                        String                     @id @default(auto()) @map("_id") @db.ObjectId
+  name                      String
   description               String?
-  icon                      String?                    @db.VarChar(255)
+  icon                      String?
   status                    Boolean?                   @default(true)
   orderMethod               Json?
   createdAt                 DateTime                   @default(now())
   updatedAt                 DateTime                   @updatedAt
-  category                  String                     @default(uuid())
+  category                  String                     @db.ObjectId
   categories                Category                   @relation(fields: [category], references: [id])
   servicePriceOnSpecialists ServicePriceOnSpecialist[]
   servicePricings           ServicePricing[]
@@ -156,25 +154,25 @@ model Service {
 }
 
 model Specialist {
-  id        String                   @id @default(uuid())
-  name      String                   @db.VarChar(100)
+  id        String                   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
   address   String?
-  latitude  String?                  @db.VarChar(20)
-  longitude String?                  @db.VarChar(20)
-  phone     String                   @db.VarChar(50)
-  email     String?                  @db.VarChar(100)
-  ktp       String?                  @db.VarChar(20)
+  latitude  String?
+  longitude String?
+  phone     String
+  email     String?
+  ktp       String?
   photo     String?
-  otp       String?                  @db.VarChar(10)
-  tokenFCM  String?                  @db.VarChar(255)
-  password  String?                  @db.VarChar(100)
+  otp       String?
+  tokenFCM  String?
+  password  String?
   status    enum_specialists_status? @default(offline)
   balances  Int?
   rating    Int?                     @default(0)
   createdAt DateTime                 @default(now())
   updatedAt DateTime                 @updatedAt
 
-  city   String? @default(uuid())
+  city   String? @db.ObjectId
   cities Cities? @relation(fields: [city], references: [id])
 
   servicePriceOnSpecialist ServicePriceOnSpecialist[]
@@ -184,13 +182,13 @@ model Specialist {
 }
 
 model ServicePricing {
-  id           String        @id @default(uuid())
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   price        Int
-  service      String        @default(uuid())
-  city         String        @default(uuid())
-  vehicleSize  String?       @default(uuid())
+  service      String        @db.ObjectId
+  city         String        @db.ObjectId
+  vehicleSize  String?       @db.ObjectId
   cities       Cities        @relation(fields: [city], references: [id])
   services     Service       @relation(fields: [service], references: [id])
   vehicleSizes VehicleSize?  @relation(fields: [vehicleSize], references: [id])
@@ -198,30 +196,30 @@ model ServicePricing {
 }
 
 model ServicePriceOnSpecialist {
-  id               String   @id @default(uuid())
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   price            Int
-  priceDescription String?  @db.VarChar(200)
+  priceDescription String?
   maxDistance      Int?
 
-  city   String? @default(uuid())
+  city   String? @db.ObjectId
   cities Cities? @relation(fields: [city], references: [id])
 
-  service  String  @default(uuid())
+  service  String  @db.ObjectId
   services Service @relation(fields: [service], references: [id])
 
-  specialist  String     @default(uuid())
+  specialist  String     @db.ObjectId
   specialists Specialist @relation(fields: [specialist], references: [id])
 
-  vehicleSize        String?             @default(uuid())
+  vehicleSize        String?             @db.ObjectId
   vehicleSizes       VehicleSize?        @relation(fields: [vehicleSize], references: [id])
   takeOnTransactions TakeOnTransaction[]
 }
 
 model VehicleSize {
-  id                        String                     @id @default(uuid())
-  name                      String?                    @db.VarChar(100)
+  id                        String                     @id @default(auto()) @map("_id") @db.ObjectId
+  name                      String?
   createdAt                 DateTime                   @default(now())
   updatedAt                 DateTime                   @updatedAt
   servicePriceOnSpecialists ServicePriceOnSpecialist[]
@@ -230,8 +228,8 @@ model VehicleSize {
 }
 
 model Cities {
-  id                        String                     @id @default(uuid())
-  name                      String?                    @db.VarChar(255)
+  id                        String                     @id @default(auto()) @map("_id") @db.ObjectId
+  name                      String?
   status                    Boolean?                   @default(true)
   createdAt                 DateTime                   @default(now())
   updatedAt                 DateTime                   @updatedAt
@@ -242,8 +240,8 @@ model Cities {
 }
 
 model VehicleType {
-  id        String         @id @default(uuid())
-  name      String?        @db.VarChar(255)
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
   status    Boolean?       @default(true)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
@@ -251,23 +249,23 @@ model VehicleType {
 }
 
 model VehicleBrand {
-  id        String         @id @default(uuid())
-  name      String?        @db.VarChar(255)
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
   status    Boolean?       @default(true)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
-  type      String         @default(uuid())
+  type      String         @db.ObjectId
   types     VehicleType    @relation(fields: [type], references: [id])
   models    VehicleModel[]
 }
 
 model VehicleModel {
-  id           String        @id @default(uuid())
-  name         String?       @db.VarChar(255)
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String?
   status       Boolean?      @default(true)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
-  brand        String        @default(uuid())
+  brand        String        @db.ObjectId
   vehicleSize  String?
   transactions Transaction[]
   brands       VehicleBrand  @relation(fields: [brand], references: [id])
@@ -279,26 +277,26 @@ model VehicleModel {
 }
 
 model BankAccount {
-  id          String             @id @default(uuid())
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
   category    enum_account_type?
-  brandName   String             @db.VarChar(100)
-  accountName String             @db.VarChar(100)
-  number      String?            @db.VarChar(50)
+  brandName   String
+  accountName String
+  number      String?
   isOnline    Boolean            @default(true)
   status      Boolean?           @default(true)
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 
-  specialist  String?     @default(uuid())
+  specialist  String?     @db.ObjectId
   specialists Specialist? @relation(fields: [specialist], references: [id])
-  user        String?     @default(uuid())
+  user        String?     @db.ObjectId
   users       User?       @relation(fields: [user], references: [id])
 
   transactions Transaction[]
 }
 
 model SaldoSpecialist {
-  id        String           @id @default(uuid())
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
   note      String?
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
@@ -307,10 +305,10 @@ model SaldoSpecialist {
   amount    Int?
   saldo     Int?
 
-  specialist  String     @default(uuid())
+  specialist  String     @db.ObjectId
   specialists Specialist @relation(fields: [specialist], references: [id])
 
-  transaction  String?      @default(uuid())
+  transaction  String?      @db.ObjectId
   transactions Transaction? @relation(fields: [transaction], references: [id])
 }
 
