@@ -29,9 +29,12 @@ const UpdatePage = ({ article }) => {
 
   return (
     <div>
-      <button className="btn btn-info btn-sm" onClick={handleModal}>
+      <div
+        className="py-1.5 bg-gradient-to-b from-amber-400 to-amber-500 text-white rounded-md cursor-pointer text-center w-14 text-xs hover:from-amber-300 hover:to-amber-400"
+        onClick={handleModal}
+      >
         Edit
-      </button>
+      </div>
 
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">

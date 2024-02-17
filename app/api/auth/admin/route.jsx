@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request) {
   const data = await prisma.admin.findMany();
-  if (!data) {
+  if (data.length === 0) {
     return NextResponse.json({
       status: false,
       message: "Data not found",

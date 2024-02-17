@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
   const data = await prisma.promo.findMany();
-  if (!data) {
+  if (data.length === 0) {
     return NextResponse.json({
       status: false,
       error: "Data not found",

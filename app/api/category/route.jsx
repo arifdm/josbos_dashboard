@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
 export async function GET(request) {
-  const data = await prisma.Category.findMany({
+  const data = await prisma.category.findMany({
     include: {
       services: true,
     },
@@ -11,7 +11,8 @@ export async function GET(request) {
       createdAt: "asc",
     },
   });
-  if (!data) {
+
+  if (data.length === 0) {
     return NextResponse.json({
       status: false,
       error: "Data not found",

@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export async function GET(request) {
   const data = await prisma.specialist.findMany();
-  if (!data) {
+  if (data.length === 0) {
     return NextResponse.json({
       status: false,
       error: "Data not found",

@@ -26,7 +26,7 @@ export async function GET(request) {
       },
     },
   });
-  if (!data) {
+  if (data.length === 0) {
     return NextResponse.json({
       status: false,
       error: "Data not found",

@@ -24,7 +24,7 @@ export async function GET(request) {
     }
 
     const data = await prisma.user.findMany();
-    if (!data) {
+    if (data.length === 0) {
       delete data[0].password;
 
       return NextResponse.json({

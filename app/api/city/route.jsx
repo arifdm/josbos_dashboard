@@ -7,7 +7,7 @@ export async function GET(request) {
   const name = searchParams.get("name");
   const newName = name?.replace(" City", "").replace(" Regency", "");
 
-  const data = await prisma.Cities.findFirst({
+  const data = await prisma.cities.findFirst({
     where: {
       name: {
         endsWith: newName,

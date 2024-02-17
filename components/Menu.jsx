@@ -22,7 +22,7 @@ export default function Menu() {
           <a href="/users">Users</a>
         </li>
         <li>
-          <a href="/mitra">Mitra</a>
+          <a href="/mitra">Mitra Spesialis</a>
         </li>
       </ul>
       <div className="font-bold mt-6">Master</div>

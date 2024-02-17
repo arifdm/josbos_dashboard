@@ -96,7 +96,7 @@ export async function GET(request) {
     .filter((item) => item.maxDistance >= item.specialists?.radius);
   // console.log("DATA: ", newData);
 
-  if (!newData) {
+  if (newData.length === 0) {
     return NextResponse.json({
       status: false,
       error: "Data not found",

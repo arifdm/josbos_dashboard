@@ -175,7 +175,7 @@ export async function GET(request, { params }) {
         },
       },
     });
-    if (!data) {
+    if (data.length === 0) {
       return NextResponse.json({
         status: false,
         error: "Data not found",

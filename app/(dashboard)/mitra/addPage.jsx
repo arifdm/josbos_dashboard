@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const AddUser = () => {
+export default function AddPage() {
   const router = useRouter();
 
   const [title, setTitle] = useState("");
@@ -32,9 +32,12 @@ const AddUser = () => {
 
   return (
     <div>
-      <button className="btn btn-success btn-sm" onClick={handleModal}>
-        Add New
-      </button>
+      <div
+        className="px-4 py-1.5 bg-gradient-to-b from-emerald-400 to-emerald-500 text-white rounded-md cursor-pointer text-center w-24 text-sm hover:from-emerald-300 hover:to-emerald-400"
+        onClick={handleModal}
+      >
+        Tambah
+      </div>
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Add New User</h3>
@@ -88,6 +91,4 @@ const AddUser = () => {
       </div>
     </div>
   );
-};
-
-export default AddUser;
+}

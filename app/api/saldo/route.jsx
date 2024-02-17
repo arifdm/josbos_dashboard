@@ -39,7 +39,7 @@ export async function GET(request, { params }) {
       orderBy: { createdAt: "asc" },
     });
 
-    if (!data) {
+    if (data.length === 0) {
       return NextResponse.json({
         status: false,
         error: "Data not found",

@@ -14,6 +14,7 @@ export async function GET(request, { params }) {
     },
     where: { id: params?.id },
   });
+
   if (!data) {
     return NextResponse.json({
       status: false,

@@ -23,7 +23,10 @@ const DeletePage = ({ article }) => {
 
   return (
     <div>
-      <button className="btn btn-error btn-sm" onClick={handleModal}>
+      <button
+        className="py-1.5 bg-gradient-to-b from-red-400 to-red-500 text-white rounded-md cursor-pointer text-center w-14 text-xs hover:from-red-300 hover:to-red-400"
+        onClick={handleModal}
+      >
         Delete
       </button>
 

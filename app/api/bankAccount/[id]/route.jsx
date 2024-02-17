@@ -22,8 +22,8 @@ export async function PUT(request, { params }) {
   const user = searchParams.get("user");
 
   const { brandName, accountName, number } = await request.json();
-  console.log("ID: ", params?.id);
-  console.log("BODY: ", brandName, accountName, number);
+  // console.log("ID: ", params?.id);
+  // console.log("BODY: ", brandName, accountName, number);
 
   if (!accessToken) {
     return NextResponse.json({
