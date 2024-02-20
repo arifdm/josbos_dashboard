@@ -26,16 +26,15 @@ const authOptions = {
       if (account?.provider === "google") {
         try {
           const resCheck = await axios.get(
-            // `https://josbos-dashboard.vercel.app/api/auth/admin/check?email=${email}`
-            `http://localhost:3000/api/auth/admin/check?email=${email}`
+            `${process.env.NEXTAUTH_URL}api/auth/admin/check?email=${email}`
           );
           console.log("CHECK: ", resCheck.data.status);
           if (!resCheck) {
-            await axios.post(
-              // "https://josbos-dashboard.vercel.app/api/auth/admin",
-              "http://localhost:3000/api/auth/admin",
-              { name, email, status: "inactive" }
-            );
+            await axios.post(`${process.env.NEXTAUTH_URL}api/auth/admin`, {
+              name,
+              email,
+              status: "inactive",
+            });
             return false;
           }
           return true;
