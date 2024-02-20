@@ -21,18 +21,16 @@ const Home = () => {
   // }
 
   useEffect(() => {
-    getUser();
-  }, []);
-
-  const getUser = async () => {
-    try {
-      const res = await axios.get(`/api/user/${session?.user?.email}`);
-      console.log("RES: ", res.data);
-      setUser(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    async () => {
+      try {
+        const res = await axios.get(`/api/user/${session?.user?.email}`);
+        console.log("RES: ", res.data);
+        setUser(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  }, [session?.user?.email]);
 
   console.log("USER: ", user);
 

@@ -3,63 +3,51 @@
 import { ArrowLeftIcon, CheckIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import Link from "next/link";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-// import { useParams } from "next/navigation";
+// import {
+//   useParams,
+//   useSearchParams,
+//   usePathname,
+//   useRouter,
+// } from "next/navigation";
+import AddPage from "./addPage";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { useQuery } from "@tanstack/react-query";
 
-export default function Service() {
-  // const params = useParams();
+const getGetLayanan = async (id) => {
+  const { data } = await axios.get(`/fetch/service/${id}`);
+  return data.data;
+};
 
-  const pathname = usePathname();
-  const router = useRouter();
-  // console.log("PATHNAME: ", pathname);
-  // console.log("PATHNAME: ", pathname.split("/").pop());
-  // console.log("ROUTER: ", router);
+// export const revalidate = 1;
+export default function Service({ params }) {
+  // const searchParams = useSearchParams();
+  const id = params.service;
 
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-  console.log("ID: ", id);
+  console.log("PARAMS: ", params.service);
 
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ["service-mitra"],
+    queryFn: () => getGetLayanan(id),
+  });
 
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      const { data } = await axios.get(`/fetch/mitra/${id}`);
-      setData(data.data);
-    };
-    getData().then(() => setLoading(false));
-  }, [id]);
-
-  console.log("DATA: ", data);
+  // console.log("DATA: ", data);
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-5 inline-flex items-center">
+      <div className="text-xl font-semibold mb-7 inline-flex items-center">
         <Link href="/mitra">
           <ArrowLeftIcon className="h-4 w-4 text-grey-500" />
         </Link>
         <span className="ml-3">Layanan Mitra</span>
       </div>
-      {/* <div className="w-full grid grid-cols-2 gap-3">
-        <div>Kiri</div>
-        <div className="flex justify-end">
-          <Link href={`/mitra/${id}/edit`}>
-            <div className="px-4 py-1.5 bg-gradient-to-b from-indigo-400 to-indigo-500 text-white rounded-md cursor-pointer text-center w-38 text-sm hover:from-indigo-300 hover:to-indigo-400">
-              Tambah Layanan
-            </div>
-          </Link>
-        </div>
-      </div> */}
-      <div className="px-4 py-1.5 bg-gradient-to-b from-emerald-400 to-emerald-500 text-white rounded-md cursor-pointer text-center w-40 text-sm hover:from-emerald-300 hover:to-emerald-400">
-        Tambah Layanan
-      </div>
-      <div className="flex flex-col">
+
+      {data?.length > 0 && <AddPage id={id} />}
+
+      <div className="flex flex-col mt-2">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-            {loading && <div className="mt-5">Loading...</div>}
-            {data.length > 0 && (
+            {loading && <LoadingSpinner />}
+            {data?.length > 0 && (
               <div className="overflow-hidden">
                 <table className="min-w-full text-left text-sm font-light">
                   <thead className="border-b font-medium dark:border-neutral-200">
@@ -76,8 +64,14 @@ export default function Service() {
                       <th scope="col" className="px-6 py-4">
                         Kota
                       </th>
-                      <th scope="col" className="px-6 py-4">
+                      <th scope="col" className="px-6 py-4 text-center">
+                        Ukuran
+                      </th>
+                      <th scope="col" className="px-6 py-4 text-center">
                         Tarif
+                      </th>
+                      <th scope="col" className="px-6 py-4 text-center">
+                        Jarak
                       </th>
                       <th scope="col" className="px-6 py-4 text-center">
                         Action
@@ -94,7 +88,7 @@ export default function Service() {
                           {index + 1}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
-                          {item.services.categories.name}
+                          {item.services.categories?.name}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
                           {item.services.name}
@@ -102,13 +96,15 @@ export default function Service() {
                         <td className="whitespace-nowrap px-6 py-4">
                           {item?.cities.name}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4">
-                          {item.price}
+                        <td className="text-center py-4">
+                          {item.vehicleSizes?.name}
+                        </td>
+                        <td className="text-right py-4 pr-5">{item.price}</td>
+                        <td className="text-center py-4">
+                          {item.maxDistance} Km
                         </td>
                         <td className="full flex justify-center py-4">
-                          <Link href={`/mitra/service?id=${item.id}`}>
-                            <CheckIcon className="h-4 w-4 text-grey-500" />
-                          </Link>
+                          <CheckIcon className="h-4 w-4 text-grey-500" />
                         </td>
                       </tr>
                     ))}
