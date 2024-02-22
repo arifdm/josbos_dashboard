@@ -1,5 +1,6 @@
 "use client";
 
+import { PlusIcon } from "@heroicons/react/20/solid";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -32,9 +33,13 @@ const AddPage = () => {
 
   return (
     <div>
-      <button className="btn btn-success btn-sm" onClick={handleModal}>
-        Add New
-      </button>
+      <div
+        onClick={handleModal}
+        className="px-4 py-1.5 bg-gradient-to-b from-emerald-400 to-emerald-500 text-white rounded-md cursor-pointer text-center w-28 text-sm hover:from-emerald-300 hover:to-emerald-400"
+      >
+        <PlusIcon className="w-4 h-4 inline-block" /> Tambah
+      </div>
+
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Add New Article</h3>

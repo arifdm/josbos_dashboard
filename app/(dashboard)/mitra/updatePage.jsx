@@ -1,5 +1,11 @@
 "use client";
 
+import {
+  ArchiveBoxIcon,
+  ArchiveBoxXMarkIcon,
+  CheckIcon,
+} from "@heroicons/react/20/solid";
+import { PencilIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -30,12 +36,11 @@ const UpdatePage = ({ article }) => {
   return (
     <div>
       <div
-        className="py-1.5 bg-gradient-to-b from-amber-400 to-amber-500 text-white rounded-md cursor-pointer text-center w-14 text-xs hover:from-amber-300 hover:to-amber-400"
         onClick={handleModal}
+        className="p-2 bg-slate-100 rounded-sm hover:bg-orange-200 cursor-pointer"
       >
-        Edit
+        <PencilIcon className="h-3 w-3 text-gray-500" />
       </div>
-
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Update {article.title}</h3>

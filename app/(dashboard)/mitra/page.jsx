@@ -10,34 +10,40 @@ import { EyeIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { useQuery } from "@tanstack/react-query";
+import { WindowIcon } from "@heroicons/react/24/outline";
+
+const getMitra = async () => {
+  const { data } = await axios.get(`/fetch/specialist`);
+  return data.data;
+};
 
 export default function Users() {
-  const [loading, setLoading] = useState(false);
   const [searchItem, setSearchItem] = useState("");
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState(users);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+  const { data, isLoading: loading } = useQuery({
+    queryKey: ["mitra"],
+    queryFn: () => getMitra(),
+  });
 
   useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      const { data } = await axios.get(`/fetch/specialist`);
-      setUsers(data.data);
-      setFilteredUsers(data.data);
-    };
-    getData().then(() => setLoading(false));
-  }, []);
+    setFilteredUsers(data);
+  }, [data]);
 
   const handleSearch = (e) => {
     const searchTerm = e.target.value;
     setSearchItem(searchTerm);
 
-    const filteredItems = users.filter((user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredItems = data.filter(
+      (user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.phone.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     setFilteredUsers(filteredItems);
   };
-  // console.log("DATA: ", users);
+  console.log("DATA: ", data);
   // console.log("FILTER: ", filteredUsers);
 
   return (
@@ -45,12 +51,7 @@ export default function Users() {
       <div className="text-xl font-semibold mb-7">Mitra Spesialis</div>
       <div className="w-full grid grid-cols-2 gap-3">
         <div>
-          {/* <input
-            type="text"
-            placeholder="Cari Mitra Spesialis"
-            className="border border-neutral-200 bg-slate-50 px-3 py-1.5 rounded-md text-sm w-3/4 focus:ring-blue-500 focus:border-blue-500"
-          /> */}
-          {users?.length > 0 && (
+          {filteredUsers?.length > 0 && (
             <form className="max-w-sm">
               <div className="relative">
                 <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -75,8 +76,8 @@ export default function Users() {
                   value={searchItem}
                   onChange={handleSearch}
                   id="default-search"
-                  className="block w-full px-3 py-1.5 ps-10 text-sm text-neutral-500 border border-neutral-300 rounded-lg bg-neutral-50 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Cari Mitra Spesialis..."
+                  className="block w-full px-3 py-1.5 ps-10 text-sm text-neutral-500 border border-neutral-300 rounded-lg bg-white focus:bg-neutral-100 focus:outline-none"
+                  placeholder="Cari Nama/HP..."
                   required
                 />
               </div>
@@ -89,7 +90,7 @@ export default function Users() {
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
             {loading && <LoadingSpinner />}
-            {users?.length > 0 && (
+            {filteredUsers?.length > 0 && (
               <div className="overflow-hidden">
                 <table className="min-w-full text-left text-sm font-light">
                   <thead className="border-b font-medium dark:border-neutral-200">
@@ -98,13 +99,16 @@ export default function Users() {
                         #
                       </th>
                       <th scope="col" className="px-6 py-4">
-                        Name
+                        Nama
                       </th>
                       <th scope="col" className="px-6 py-4">
                         Email
                       </th>
                       <th scope="col" className="px-6 py-4">
-                        Phone
+                        HP
+                      </th>
+                      <th scope="col" className="px-6 py-4">
+                        Kota
                       </th>
                       <th scope="col" className="full flex justify-center py-4">
                         Layanan
@@ -118,7 +122,7 @@ export default function Users() {
                     {filteredUsers?.map((item, index) => (
                       <tr
                         key={index}
-                        className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-200 dark:hover:bg-neutral-200"
+                        className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-150 dark:hover:bg-neutral-150"
                       >
                         <td className="whitespace-nowrap px-6 py-4 font-medium">
                           {index + 1}
@@ -132,9 +136,14 @@ export default function Users() {
                         <td className="whitespace-nowrap px-6 py-4">
                           {item?.phone}
                         </td>
+                        <td className="whitespace-nowrap px-6 py-4">
+                          {item?.cities?.name}
+                        </td>
                         <td className="full flex justify-center py-4">
                           <Link href={`/mitra/${item.id}`}>
-                            <EyeIcon className="h-4 w-4 text-grey-500" />
+                            <div className="p-2 bg-slate-100 rounded-sm hover:bg-sky-200 cursor-pointer">
+                              <WindowIcon className="h-3 w-3 text-grey-500" />
+                            </div>
                           </Link>
                         </td>
                         <td>

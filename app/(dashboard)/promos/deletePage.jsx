@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { ArchiveBoxIcon } from "@heroicons/react/24/outline";
 
 const DeletePage = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,9 +24,12 @@ const DeletePage = ({ data }) => {
 
   return (
     <div>
-      <button className="btn btn-error btn-sm" onClick={handleModal}>
-        Delete
-      </button>
+      <div
+        onClick={handleModal}
+        className="p-2 bg-slate-100 rounded-sm hover:bg-red-200 cursor-pointer"
+      >
+        <ArchiveBoxIcon className="h-3 w-3 text-gray-500" />
+      </div>
 
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">

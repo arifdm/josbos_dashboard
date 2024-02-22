@@ -5,7 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { redirect, useRouter } from "next/navigation";
 // import { useRouter } from "next/router";
-import { toast } from "react-toastify";
+import { PlusIcon } from "@heroicons/react/24/solid";
 
 const createService = async (body) => {
   const { data } = await axios.post(`/fetch/service/${body?.id}`, body);
@@ -19,7 +19,6 @@ const AddPage = ({ id }) => {
   const [keterangan, setKeterangan] = useState("");
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [city, setCity] = useState([]);
   const [vehicleSize, setVehicleSize] = useState([]);
@@ -28,6 +27,7 @@ const AddPage = ({ id }) => {
   const [selectCategories, setSelectCategories] = useState(null);
   const [selectServices, setSelectServices] = useState(null);
   const [ukuran, setUkuran] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
@@ -53,16 +53,14 @@ const AddPage = ({ id }) => {
 
   const mutation = useMutation({
     mutationFn: createService,
-    onSuccess: (res) => {
-      console.log("RES: ", res);
-      toast("Layanan telah berhasil ditambahkan");
+    onSuccess: () => {
+      setLoading(false);
       QueryClient.invalidateQueries({ queryKey: ["service-mitra"] });
-      // router.push(`/mitra/service?id=${id}`);
-      // redirect(`/mitra/service?id=${id}`);
     },
   });
 
   const handleSubmit = () => {
+    setLoading(true);
     mutation.mutate({
       id: id,
       city: selectCity,
@@ -112,7 +110,7 @@ const AddPage = ({ id }) => {
         onClick={handleModal}
         className="px-4 py-1.5 bg-gradient-to-b from-emerald-400 to-emerald-500 text-white rounded-md cursor-pointer text-center w-28 text-sm hover:from-emerald-300 hover:to-emerald-400"
       >
-        Tambah
+        <PlusIcon className="w-4 h-4 inline-block" /> Tambah
       </div>
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
@@ -235,13 +233,13 @@ const AddPage = ({ id }) => {
             </div>
 
             <div className="modal-action">
-              {!isLoading ? (
-                <button type="submit" className="btn btn-sm btn-primary">
-                  Simpan
-                </button>
-              ) : (
+              {loading ? (
                 <button type="button" className="btn btn-sm loading">
                   Loading...
+                </button>
+              ) : (
+                <button type="submit" className="btn btn-sm btn-primary">
+                  Simpan
                 </button>
               )}
             </div>

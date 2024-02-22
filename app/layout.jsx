@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
           <NextAuthProvider>
             <main className="h-screen justify-center items-center bg-white">
               <Suspense fallback={<Loading />}>{children}</Suspense>
-              <ToastContainer />
+              <ToastContainer autoClose={4000} position="top-center" />
             </main>
           </NextAuthProvider>
         </ReactQueryProvider>

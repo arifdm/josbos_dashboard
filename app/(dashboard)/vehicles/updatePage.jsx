@@ -1,5 +1,6 @@
 "use client";
 
+import { PencilIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -29,9 +30,12 @@ const UpdateArticle = ({ article }) => {
 
   return (
     <div>
-      <button className="btn btn-info btn-sm" onClick={handleModal}>
-        Edit
-      </button>
+      <div
+        onClick={handleModal}
+        className="p-2 bg-slate-100 rounded-sm hover:bg-orange-200 cursor-pointer"
+      >
+        <PencilIcon className="h-3 w-3 text-gray-500" />
+      </div>
 
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">

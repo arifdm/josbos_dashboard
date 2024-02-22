@@ -1,25 +1,58 @@
-import Link from "next/link";
-import prisma from "@/prisma/prisma";
-import Image from "next/image";
-import UpdatePage from "./updatePage";
-import DeletePage from "./deletePage";
-import AddPage from "./addPage";
-// import { useSession } from "next-auth/react";
+"use client";
 
-const getData = async () => {
-  const res = await prisma.article.findMany();
-  return res;
-};
+import { useEffect, useState } from "react";
+const indonesia = require("indonesia-cities-regencies");
 
-export const revalidate = 1;
+export default function Users() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPge, SetPostsPerPage] = useState(20);
 
-const Articles = async () => {
-  const articles = await getData();
-  // console.log("RES_ARTICLE: ", articles);
+  useEffect(() => {
+    const kota = indonesia.getAll();
+    setPosts(kota);
+  }, []);
+  // console.log("KOTA: ", indonesia.getAll());
+
+  const indexOfLastPost = currentPage * postsPerPge;
+  const indexOfFirstPost = indexOfLastPost - postsPerPge;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  const handlePagination = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const Pagination = ({
+    postsPerPage,
+    length,
+    handlePagination,
+    currentPage,
+  }) => {
+    let paginationNumber = [];
+    for (let i = 1; i <= Math.ceil(length / postsPerPage); i++) {
+      paginationNumber.push(i);
+    }
+    return (
+      <div className="flex gap-1">
+        {paginationNumber.map((data) => (
+          <button
+            key={data}
+            onClick={() => handlePagination(data)}
+            className={`${
+              currentPage === data ? "active" : ""
+            } px-2 py-1 bg-slate-200 rounded-sm`}
+          >
+            {data}
+          </button>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-7">Articles</div>
+      <div className="text-xl font-semibold mb-7">Kota/Kabupaten Indonesia</div>
       <div className="w-full grid grid-cols-2 gap-3">
         <div>
           <form className="max-w-sm">
@@ -45,15 +78,13 @@ const Articles = async () => {
                 type="search"
                 id="default-search"
                 className="block w-full px-3 py-1.5 ps-10 text-sm text-neutral-500 border border-neutral-300 rounded-lg bg-white focus:bg-neutral-100 focus:outline-none"
-                placeholder="Cari Kategori/Layanan..."
+                placeholder="Cari Kota/Kabupaten..."
                 required
               />
             </div>
           </form>
         </div>
-        <div className="flex justify-end">
-          <AddPage />
-        </div>
+        <div className="flex justify-end">{/* <AddPage /> */}</div>
       </div>
       <div className="flex flex-col mt-2">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -66,53 +97,50 @@ const Articles = async () => {
                       #
                     </th>
                     <th scope="col" className="px-6 py-4">
-                      Image
+                      Pulau
                     </th>
                     <th scope="col" className="px-6 py-4">
-                      Title
+                      Privinsi
                     </th>
-                    <th scope="col" className="px-6 py-4 text-center">
-                      Action
+                    <th scope="col" className="px-6 py-4">
+                      Kota/Kabupaten
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {articles?.map((item, index) => (
+                  {currentPosts?.map((item, index) => (
                     <tr
                       key={index}
                       className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-150 dark:hover:bg-neutral-150"
                     >
                       <td className="whitespace-nowrap px-6 py-4 font-medium">
-                        {index + 1}
+                        {postsPerPge * (currentPage - 1) + index + 1}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        <Image
-                          className="rounded-lg overflow-hidden"
-                          src={item.image}
-                          alt=""
-                          width={100}
-                          height={100}
-                        />
+                        {item.island}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4">
-                        {item.title}
+                        {item.province}
                       </td>
-                      <td>
-                        <div className="full flex justify-center gap-2 align-middle">
-                          <UpdatePage article={item} />
-                          <DeletePage article={item} />
-                        </div>
+                      <td className="whitespace-nowrap px-6 py-4">
+                        <div className="font-medium">{item?.name}</div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+              <div className="mt-8">
+                <Pagination
+                  length={posts.length}
+                  postsPerPage={postsPerPge}
+                  handlePagination={handlePagination}
+                  currentPage={currentPage}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default Articles;
+}

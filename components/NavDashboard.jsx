@@ -16,12 +16,12 @@ import Image from "next/image";
 const navigation = {
   pages: [
     { name: "Dashboard", href: "/mainboard" },
-    { name: "Articles", href: "/articles" },
-    { name: "Promos", href: "/promos" },
-    { name: "Vehicles", href: "/vehicles" },
-    { name: "Services & Prices", href: "/services" },
+    { name: "Artikel", href: "/articles" },
+    { name: "Promo", href: "/promos" },
     { name: "Pemesan", href: "/users" },
-    { name: "Mitra", href: "/mitra" },
+    { name: "Mitra Spesialis", href: "/mitra" },
+    { name: "Kendaraan", href: "/vehicles" },
+    { name: "Layanan & Tarif", href: "/services" },
   ],
 };
 
@@ -168,7 +168,7 @@ export default function NavDashboard() {
                 <div className="ml-4 flow-root lg:ml-6">
                   <button
                     onClick={async () => await signOut()}
-                    className="text-red-500 hover:text-gray-700 text-sm font-bold"
+                    className="text-red-500 hover:text-gray-700 text-sm font-normal border border-red-500 rounded-full px-4 py-1 hover:border-gray-700"
                   >
                     Sign Out
                   </button>
