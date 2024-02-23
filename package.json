@@ -31,6 +31,7 @@
     "indonesia-cities-regencies": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "mailersend": "^2.2.0",
+    "moment": "^2.30.1",
     "next": "^13.5.5-canary.2",
     "next-auth": "^4.23.1",
     "otp-generator": "^4.0.1",

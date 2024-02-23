@@ -62,22 +62,22 @@ const Promos = async () => {
               <table className="min-w-full text-left text-sm font-light">
                 <thead className="border-b font-medium dark:border-neutral-200">
                   <tr>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="px-2 py-4">
                       #
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Image
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Title
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Diskon
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Kode Promo
                     </th>
-                    <th scope="col" className="px-6 py-4 text-center">
+                    <th scope="col" className="py-4 text-center">
                       Action
                     </th>
                   </tr>
@@ -88,10 +88,10 @@ const Promos = async () => {
                       key={index}
                       className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-150 dark:hover:bg-neutral-150"
                     >
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
+                      <td className="whitespace-nowrap px-2 py-4 font-medium">
                         {index + 1}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap py-4">
                         <Image
                           className="rounded-lg overflow-hidden"
                           src={item.image}
@@ -100,10 +100,8 @@ const Promos = async () => {
                           height={100}
                         />
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {item.title}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap py-4">{item.title}</td>
+                      <td className="whitespace-nowrap py-4">
                         <span className="font-medium text-xl">
                           {item.type === "percent"
                             ? item.discount + "%"

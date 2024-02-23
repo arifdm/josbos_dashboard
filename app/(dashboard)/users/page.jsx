@@ -4,6 +4,7 @@ import Image from "next/image";
 import AddPage from "./addPage";
 import UpdatePage from "./updatePage";
 import DeletePage from "./deletePage";
+import moment from "moment";
 
 const getUser = async () => {
   const res = await prisma.user.findMany();
@@ -61,19 +62,22 @@ export default async function Users() {
               <table className="min-w-full text-left text-sm font-light">
                 <thead className="border-b font-medium dark:border-neutral-200">
                   <tr>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="px-2 py-4">
                       #
                     </th>
-                    <th scope="col" className="px-6 py-4">
-                      Name
+                    <th scope="col" className="py-4">
+                      Tgl Daftar
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
+                      Nama
+                    </th>
+                    <th scope="col" className="py-4">
                       Email
                     </th>
-                    <th scope="col" className="px-6 py-4">
-                      Phone
+                    <th scope="col" className="py-4">
+                      HP
                     </th>
-                    <th scope="col" className="px-6 py-4 text-center">
+                    <th scope="col" className="py-4 text-center">
                       Action
                     </th>
                   </tr>
@@ -84,18 +88,17 @@ export default async function Users() {
                       key={index}
                       className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-150 dark:hover:bg-neutral-150"
                     >
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
+                      <td className="whitespace-nowrap px-1 py-4">
                         {index + 1}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap py-4">
+                        {moment(item.createdAt).format("DD/MM/YYYY hh:mm")}
+                      </td>
+                      <td className="whitespace-nowrap py-4 font-bold">
                         {item.name}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {item.email}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {item?.phone}
-                      </td>
+                      <td className="whitespace-nowrap py-4">{item.email}</td>
+                      <td className="whitespace-nowrap py-4">{item?.phone}</td>
                       <td>
                         <div className="full flex justify-center gap-2 align-middle">
                           <UpdatePage article={item} />

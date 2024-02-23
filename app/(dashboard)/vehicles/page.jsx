@@ -80,22 +80,22 @@ const Vehicles = async () => {
               <table className="min-w-full text-left text-sm font-light">
                 <thead className="border-b font-medium dark:border-neutral-200">
                   <tr>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="px-2 py-4">
                       #
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Vehicle
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Brand
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Model
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Size
                     </th>
-                    <th scope="col" className="px-1 py-4 text-center">
+                    <th scope="col" className="py-4 text-center">
                       Action
                     </th>
                   </tr>
@@ -106,19 +106,19 @@ const Vehicles = async () => {
                       key={index}
                       className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-150 dark:hover:bg-neutral-150"
                     >
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
+                      <td className="whitespace-nowrap px-2 py-4">
                         {index + 1}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap py-4">
                         {item.brands.types.name}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap py-4">
                         {item.brands.name}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap py-4 font-bold">
                         {item.name}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap py-4">
                         {item?.vehicleSizes?.name}
                       </td>
                       <td>

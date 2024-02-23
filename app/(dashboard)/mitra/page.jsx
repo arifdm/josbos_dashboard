@@ -12,6 +12,7 @@ import axios from "axios";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useQuery } from "@tanstack/react-query";
 import { WindowIcon } from "@heroicons/react/24/outline";
+import moment from "moment";
 
 const getMitra = async () => {
   const { data } = await axios.get(`/fetch/specialist`);
@@ -95,25 +96,28 @@ export default function Users() {
                 <table className="min-w-full text-left text-sm font-light">
                   <thead className="border-b font-medium dark:border-neutral-200">
                     <tr>
-                      <th scope="col" className="px-6 py-4">
+                      <th scope="col" className="px-2 py-4">
                         #
                       </th>
-                      <th scope="col" className="px-6 py-4">
+                      <th scope="col" className="py-4">
+                        Tgl Daftar
+                      </th>
+                      <th scope="col" className="py-4">
                         Nama
                       </th>
-                      <th scope="col" className="px-6 py-4">
+                      <th scope="col" className="py-4">
                         Email
                       </th>
-                      <th scope="col" className="px-6 py-4">
+                      <th scope="col" className="py-4">
                         HP
                       </th>
-                      <th scope="col" className="px-6 py-4">
+                      <th scope="col" className="py-4">
                         Kota
                       </th>
                       <th scope="col" className="full flex justify-center py-4">
                         Layanan
                       </th>
-                      <th scope="col" className="px-6 py-4 text-center">
+                      <th scope="col" className="py-4 text-center">
                         Action
                       </th>
                     </tr>
@@ -124,19 +128,20 @@ export default function Users() {
                         key={index}
                         className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-150 dark:hover:bg-neutral-150"
                       >
-                        <td className="whitespace-nowrap px-6 py-4 font-medium">
+                        <td className="whitespace-nowrap px-2 py-4">
                           {index + 1}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4">
+                        <td className="whitespace-nowrap py-4">
+                          {moment(item.createdAt).format("DD/MM/YYYY hh:mm")}
+                        </td>
+                        <td className="whitespace-nowrap py-4 font-bold">
                           {item.name}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4">
-                          {item.email}
-                        </td>
-                        <td className="whitespace-nowrap px-6 py-4">
+                        <td className="whitespace-nowrap py-4">{item.email}</td>
+                        <td className="whitespace-nowrap py-4">
                           {item?.phone}
                         </td>
-                        <td className="whitespace-nowrap px-6 py-4">
+                        <td className="whitespace-nowrap py-4">
                           {item?.cities?.name}
                         </td>
                         <td className="full flex justify-center py-4">

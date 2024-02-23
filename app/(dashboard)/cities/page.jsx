@@ -5,7 +5,6 @@ const indonesia = require("indonesia-cities-regencies");
 
 export default function Users() {
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPge, SetPostsPerPage] = useState(20);
 
@@ -14,6 +13,8 @@ export default function Users() {
     setPosts(kota);
   }, []);
   // console.log("KOTA: ", indonesia.getAll());
+  console.log("CURRENT_PAGE: ", currentPage);
+  console.log("PER_PAGE: ", postsPerPge);
 
   const indexOfLastPost = currentPage * postsPerPge;
   const indexOfFirstPost = indexOfLastPost - postsPerPge;
@@ -34,14 +35,14 @@ export default function Users() {
       paginationNumber.push(i);
     }
     return (
-      <div className="flex gap-1">
+      <div className="flex gap-1 text-sm">
         {paginationNumber.map((data) => (
           <button
             key={data}
             onClick={() => handlePagination(data)}
             className={`${
-              currentPage === data ? "active" : ""
-            } px-2 py-1 bg-slate-200 rounded-sm`}
+              currentPage === data ? "bg-slate-500" : ""
+            } w-7 py-2 bg-slate-200 rounded-sm`}
           >
             {data}
           </button>
@@ -84,7 +85,21 @@ export default function Users() {
             </div>
           </form>
         </div>
-        <div className="flex justify-end">{/* <AddPage /> */}</div>
+        <div className="flex justify-end">
+          <select
+            onChange={(e) => SetPostsPerPage(e.target.value)}
+            className="border border-neutral-300 rounded-lg text-sm px-3 py-1.5 bg-white focus:outline-none"
+          >
+            <option disabled selected>
+              Jum Baris
+            </option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">250</option>
+            <option value="500">500</option>
+          </select>
+        </div>
       </div>
       <div className="flex flex-col mt-2">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -93,16 +108,16 @@ export default function Users() {
               <table className="min-w-full text-left text-sm font-light">
                 <thead className="border-b font-medium dark:border-neutral-200">
                   <tr>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="px-2 py-4">
                       #
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Pulau
                     </th>
-                    <th scope="col" className="px-6 py-4">
-                      Privinsi
+                    <th scope="col" className="py-4">
+                      Provinsi
                     </th>
-                    <th scope="col" className="px-6 py-4">
+                    <th scope="col" className="py-4">
                       Kota/Kabupaten
                     </th>
                   </tr>
@@ -113,17 +128,15 @@ export default function Users() {
                       key={index}
                       className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-150 dark:hover:bg-neutral-150"
                     >
-                      <td className="whitespace-nowrap px-6 py-4 font-medium">
+                      <td className="whitespace-nowrap px-1 py-4">
                         {postsPerPge * (currentPage - 1) + index + 1}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {item.island}
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
+                      <td className="whitespace-nowrap py-4">{item.island}</td>
+                      <td className="whitespace-nowrap py-4">
                         {item.province}
                       </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        <div className="font-medium">{item?.name}</div>
+                      <td className="whitespace-nowrap py-4 font-bold">
+                        {item?.name}
                       </td>
                     </tr>
                   ))}
