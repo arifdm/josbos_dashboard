@@ -3,16 +3,17 @@
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+// import { redirect, useRouter } from "next/navigation";
 // import { useRouter } from "next/router";
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { toast } from "react-toastify";
 
 const createService = async (body) => {
   const { data } = await axios.post(`/fetch/service/${body?.id}`, body);
   return data.data;
 };
 const AddPage = ({ id }) => {
-  const router = useRouter();
+  // const router = useRouter();
 
   const [jarak, setJarak] = useState("");
   const [tarif, setTarif] = useState("");
@@ -54,13 +55,13 @@ const AddPage = ({ id }) => {
   const mutation = useMutation({
     mutationFn: createService,
     onSuccess: () => {
-      setLoading(false);
+      // setLoading(false);
       QueryClient.invalidateQueries({ queryKey: ["service-mitra"] });
     },
   });
 
   const handleSubmit = () => {
-    setLoading(true);
+    // setLoading(true);
     mutation.mutate({
       id: id,
       city: selectCity,
@@ -71,6 +72,8 @@ const AddPage = ({ id }) => {
       priceDescription: keterangan,
     });
   };
+
+  mutation.isSuccess && console.log("IS_SUCCESS");
 
   const handleModal = () => {
     setIsOpen(!isOpen);
@@ -233,7 +236,7 @@ const AddPage = ({ id }) => {
             </div>
 
             <div className="modal-action">
-              {loading ? (
+              {mutation.isPending ? (
                 <button type="button" className="btn btn-sm loading">
                   Loading...
                 </button>

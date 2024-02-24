@@ -17,6 +17,11 @@ export async function GET(request) {
           name: true,
         },
       },
+      servicePriceOnSpecialist: {
+        select: {
+          id: true,
+        },
+      },
     },
   });
 

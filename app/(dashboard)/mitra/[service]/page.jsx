@@ -28,7 +28,7 @@ export default function Service({ params }) {
   const [searchItem, setSearchItem] = useState("");
   const [filterData, setFilterData] = useState([]);
 
-  const { data, isLoading: loading } = useQuery({
+  const { data, isPending: loading } = useQuery({
     queryKey: ["service-mitra"],
     queryFn: () => getGetLayanan(id),
   });

@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 export default function Menu() {
   const pathname = usePathname();
   return (
-    <div className="w-1/6 bg-slate-200 hidden lg:block h-screen px-4 py-8 text-sm">
+    <div className="w-1/6 bg-slate-200 hidden lg:block px-4 py-8 text-sm max-h-full min-h-screen">
       <div className="font-bold mt-2 mx-1">
         <Link href="/mainboard">Dashboard</Link>
       </div>

@@ -23,7 +23,7 @@ export default function Users() {
   const [searchItem, setSearchItem] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  const { data, isLoading: loading } = useQuery({
+  const { data, isPending: loading } = useQuery({
     queryKey: ["mitra"],
     queryFn: () => getMitra(),
   });
