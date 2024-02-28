@@ -1,9 +1,31 @@
-// "use client";
-// import { useSession } from "next-auth/react";
+"use client";
 
-const Mainboard = async () => {
-  // const { status, data: session } = await useSession();
-  // console.log("SESSION: ", status, session);
+import { signOut, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
+const Mainboard = () => {
+  const { status, data: session } = useSession();
+  const email = session?.user?.email.toString();
+
+  const { data: admin } = useQuery({
+    queryKey: ["admin"],
+    queryFn: () => axios.get(`/api/auth/admin/check?email=${email}`),
+    refetchOnWindowFocus: "always",
+  });
+
+  useEffect(() => {
+    // console.log("DATA_MAIN_BOARD: ", admin?.data?.data);
+    if (admin?.data?.data?.status === "inactive") {
+      toast.error(
+        "Akun belum aktif sehingga tidak dapat mengakses dashboard...!"
+      );
+      // router.push("/");
+      signOut({ callbackUrl: "/" });
+    }
+  }, [admin?.data?.data]);
 
   return (
     <div className="bg-white">

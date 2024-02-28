@@ -122,6 +122,7 @@ export default function NavDashboard() {
                     height={80}
                     src="/logoDashboard.png"
                     alt="Logo"
+                    priority
                   />
                 </Link>
               </div>

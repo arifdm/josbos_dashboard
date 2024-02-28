@@ -1,5 +1,6 @@
 "use client";
 
+import Search from "@/components/UI/Search";
 import { useEffect, useState } from "react";
 const indonesia = require("indonesia-cities-regencies");
 
@@ -13,8 +14,8 @@ export default function Users() {
     setPosts(kota);
   }, []);
   // console.log("KOTA: ", indonesia.getAll());
-  console.log("CURRENT_PAGE: ", currentPage);
-  console.log("PER_PAGE: ", postsPerPge);
+  // console.log("CURRENT_PAGE: ", currentPage);
+  // console.log("PER_PAGE: ", postsPerPge);
 
   const indexOfLastPost = currentPage * postsPerPge;
   const indexOfFirstPost = indexOfLastPost - postsPerPge;
@@ -35,7 +36,7 @@ export default function Users() {
       paginationNumber.push(i);
     }
     return (
-      <div className="flex gap-1 text-sm">
+      <div className="flex gap-1.5 text-sm">
         {paginationNumber.map((data) => (
           <button
             key={data}
@@ -55,36 +56,7 @@ export default function Users() {
     <div className="bg-white">
       <div className="text-xl font-semibold mb-7">Kota/Kabupaten Indonesia</div>
       <div className="w-full grid grid-cols-2 gap-3">
-        <div>
-          <form className="max-w-sm">
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg
-                  className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </div>
-              <input
-                type="search"
-                id="default-search"
-                className="block w-full px-3 py-1.5 ps-10 text-sm text-neutral-500 border border-neutral-300 rounded-lg bg-white focus:bg-neutral-100 focus:outline-none"
-                placeholder="Cari Kota/Kabupaten..."
-                required
-              />
-            </div>
-          </form>
-        </div>
+        <Search placeholder="Cari kota/kabupaten..." />
         <div className="flex justify-end">
           <select
             onChange={(e) => SetPostsPerPage(e.target.value)}

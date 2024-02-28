@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import prisma from "@/prisma/prisma";
 import { useState } from "react";
 
 export default function NavHome({ session, status }) {

@@ -14,6 +14,7 @@ import { usePathname } from "next/navigation";
 
 export default function Menu() {
   const pathname = usePathname();
+
   return (
     <div className="w-1/6 bg-slate-200 hidden lg:block px-4 py-8 text-sm max-h-full min-h-screen">
       <div className="font-bold mt-2 mx-1">
@@ -25,7 +26,9 @@ export default function Menu() {
           <Link href="/articles">
             <div
               className={`text-slate-400 px-2 rounded-md cursor-pointer hover:bg-slate-300 ${
-                pathname === "/articles" ? "bg-slate-300" : ""
+                pathname === "/articles"
+                  ? "bg-slate-300"
+                  : "transition duration-400 ease-in-out"
               }`}
             >
               <NewspaperIcon className="w-5 h-5 inline-block mr-2" />
@@ -37,7 +40,9 @@ export default function Menu() {
           <Link href="/promos">
             <div
               className={`text-slate-400 px-2 rounded-md cursor-pointer hover:bg-slate-300 ${
-                pathname === "/promos" ? "bg-slate-300" : ""
+                pathname === "/promos"
+                  ? "bg-slate-300"
+                  : "transition duration-400 ease-in-out"
               }`}
             >
               <BookmarkIcon className="w-5 h-5 inline-block mr-2" />
@@ -52,7 +57,9 @@ export default function Menu() {
           <Link href="/users">
             <div
               className={`text-slate-400 px-2 rounded-md cursor-pointer hover:bg-slate-300 ${
-                pathname === "/users" ? "bg-slate-300" : ""
+                pathname === "/users"
+                  ? "bg-slate-300"
+                  : "transition duration-400 ease-in-out"
               }`}
             >
               <UsersIcon className="w-5 h-5 inline-block mr-2" />
@@ -64,7 +71,9 @@ export default function Menu() {
           <Link href="/mitra">
             <div
               className={`text-slate-400 px-2 rounded-md cursor-pointer hover:bg-slate-300 ${
-                pathname === "/mitra" ? "bg-slate-300" : ""
+                pathname === "/mitra"
+                  ? "bg-slate-300"
+                  : "transition duration-400 ease-in-out"
               }`}
             >
               <UserGroupIcon className="w-5 h-5 inline-block mr-2" />
@@ -79,7 +88,9 @@ export default function Menu() {
           <Link href="/cities">
             <div
               className={`text-slate-400 px-2 rounded-md cursor-pointer hover:bg-slate-300 ${
-                pathname === "/cities" ? "bg-slate-300" : ""
+                pathname === "/cities"
+                  ? "bg-slate-300"
+                  : "transition duration-400 ease-in-out"
               }`}
             >
               <BuildingOffice2Icon className="w-5 h-5 inline-block mr-2" />
@@ -91,7 +102,9 @@ export default function Menu() {
           <Link href="/vehicles">
             <div
               className={`text-slate-400 px-2 rounded-md cursor-pointer hover:bg-slate-300 ${
-                pathname === "/vehicles" ? "bg-slate-300" : ""
+                pathname === "/vehicles"
+                  ? "bg-slate-300"
+                  : "transition duration-400 ease-in-out"
               }`}
             >
               <TruckIcon className="w-5 h-5 inline-block mr-2" />
@@ -103,7 +116,9 @@ export default function Menu() {
           <Link href="/services">
             <div
               className={`text-slate-400 px-2 rounded-md cursor-pointer hover:bg-slate-300 ${
-                pathname === "/services" ? "bg-slate-300" : ""
+                pathname === "/services"
+                  ? "bg-slate-300"
+                  : "transition duration-400 ease-in-out"
               }`}
             >
               <RectangleGroupIcon className="w-5 h-5 inline-block mr-2" />

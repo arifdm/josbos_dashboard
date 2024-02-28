@@ -17,9 +17,9 @@ export async function GET(request) {
           name: true,
         },
       },
-      servicePriceOnSpecialist: {
+      _count: {
         select: {
-          id: true,
+          servicePriceOnSpecialist: true,
         },
       },
     },

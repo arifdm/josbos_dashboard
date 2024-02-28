@@ -1,17 +1,14 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import Credentials from "next-auth/providers/credentials";
-
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { compare } from "bcrypt";
-import prisma from "@/prisma/prisma";
 import axios from "axios";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import { signOut } from "next-auth/react";
 
 const authOptions = {
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
   callbacks: {
@@ -28,35 +25,43 @@ const authOptions = {
           const resCheck = await axios.get(
             `${process.env.NEXTAUTH_URL}api/auth/admin/check?email=${email}`
           );
-          console.log("CHECK: ", resCheck.data.status);
-          if (!resCheck) {
+          console.log("RES_CHECK: ", resCheck.data);
+
+          if (resCheck.data.status === false) {
             await axios.post(`${process.env.NEXTAUTH_URL}api/auth/admin`, {
               name,
               email,
               status: "inactive",
             });
-            return false;
           }
           return true;
         } catch (error) {
           console.log("ERROR_AUTH: ", error);
           return false;
         }
+      } else {
+        return false;
       }
       // return true;
     },
+
+    // async redirect({ url, baseUrl }) {
+    //   if (url.startsWith("/")) return `${baseUrl}${url}`;
+    //   else if (new URL(url).origin === baseUrl) return url;
+    //   return baseUrl;
+    // },
   },
 
-  // pages: {
-  //   signIn: "/auth",
-  // },
-  // debug: process.env.NODE_ENV === "development",
-  // adapter: PrismaAdapter(prisma),
-  // session: { strategy: "jwt" },
-  // jwt: {
-  //   secret: process.env.NEXTAUTH_JWT_SECRET,
-  // },
-  // secret: process.env.NEXTAUTH_SECRET,
+  async jwt({ token, account, profile }) {
+    // Persist the OAuth access_token and or the user id to the token right after signin
+    console.log("JWT: ", { token, account, profile });
+
+    if (account) {
+      token.accessToken = account.access_token;
+      token.id = profile.id;
+    }
+    return token;
+  },
 };
 
 const handler = NextAuth(authOptions);

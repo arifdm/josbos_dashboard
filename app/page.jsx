@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import About from "@/components/About";
 import Footer from "@/components/Footer";
@@ -13,12 +13,12 @@ import { useEffect, useState } from "react";
 
 const Home = () => {
   const [user, setUser] = useState("");
-  // const router = useRouter();
+  const router = useRouter();
   const { status, data: session } = useSession();
   // console.log("SESSION_USER: ", session?.user?.email);
-  // if (status === "unauthenticated") {
-  //   redirect("/api/auth/signin");
-  // }
+  if (status === "authenticated") {
+    router.push("/mainboard");
+  }
 
   useEffect(() => {
     async () => {
