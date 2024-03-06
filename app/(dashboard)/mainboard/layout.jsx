@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import NavDashboard from "@/components/NavDashboard";
 import Loading from "@/app/loading";
-import Menu from "@/components/Menu";
+import Sidebar from "@/components/Sidebar";
 
 export const metadata = {
   title: "Maindboard",
@@ -17,7 +17,7 @@ export default function MainboardLayout({ children }) {
         <Suspense fallback={<Loading />}>{children}</Suspense>
       </div> */}
       <div className="mx-auto max-w-7xl flex flex-row">
-        <Menu />
+        <Sidebar />
         <div className="w-full px-6 py-8 lg:w-5/6">
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </div>

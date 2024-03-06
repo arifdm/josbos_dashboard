@@ -16,10 +16,14 @@ import Image from "next/image";
 const navigation = {
   pages: [
     { name: "Dashboard", href: "/mainboard" },
+    { name: "Pesanan Masuk", href: "/pesananMasuk" },
+    { name: "Pesanan Dibatalkan", href: "/pesananDibatalkan" },
+    { name: "Pesanan Selesai", href: "/pesananSelesai" },
+    { name: "User Pemesan", href: "/users" },
+    { name: "Mitra Spesialis", href: "/mitra" },
     { name: "Artikel", href: "/articles" },
     { name: "Promo", href: "/promos" },
-    { name: "Pemesan", href: "/users" },
-    { name: "Mitra Spesialis", href: "/mitra" },
+    { name: "Kota", href: "/cities" },
     { name: "Kendaraan", href: "/vehicles" },
     { name: "Layanan & Tarif", href: "/services" },
   ],
@@ -105,7 +109,7 @@ export default function NavDashboard() {
             <div className="flex h-16 items-center">
               <button
                 type="button"
-                className="relative rounded-md bg-yellow-400 p-2 text-white lg:hidden"
+                className="relative rounded-md p-2 text-white lg:hidden"
                 onClick={() => setOpen(true)}
               >
                 <span className="absolute -inset-0.5" />
@@ -126,21 +130,6 @@ export default function NavDashboard() {
                   />
                 </Link>
               </div>
-
-              {/* Flyout menus */}
-              {/* <Popover.Group className="hidden lg:ml-8 lg:block lg:self-stretch">
-                <div className="flex h-full space-x-8">
-                  {navigation.pages.map((page) => (
-                    <Link
-                      key={page.name}
-                      href={page.href}
-                      className="flex items-center text-sm font-medium text-gray-700 hover:text-indigo-700"
-                    >
-                      {page.name}
-                    </Link>
-                  ))}
-                </div>
-              </Popover.Group> */}
 
               <div className="ml-auto flex items-center">
                 {/* Cart */}
@@ -163,7 +152,6 @@ export default function NavDashboard() {
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-indigo-700">
                       {session?.user?.name}
                     </span>
-                    <span className="sr-only">items in cart, view bag</span>
                   </Link>
                 </div>
                 <div className="ml-4 flow-root lg:ml-6">

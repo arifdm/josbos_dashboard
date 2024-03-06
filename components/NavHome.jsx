@@ -13,8 +13,7 @@ export default function NavHome({ session, status }) {
     { name: "Hubungi", href: "#footer" },
     { name: "Kebijakan & Privasi", href: "/privacy" },
   ];
-
-  console.log("SESSION: ", session);
+  // console.log("SESSION: ", session);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50">

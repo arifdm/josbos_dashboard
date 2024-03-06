@@ -1,9 +1,11 @@
 "use client";
 
+import { ButtonUpdate } from "@/components/UI/TableAction";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { TbPencil } from "react-icons/tb";
 
 const UpdatePage = ({ article }) => {
   const router = useRouter();
@@ -30,13 +32,7 @@ const UpdatePage = ({ article }) => {
 
   return (
     <div>
-      <div
-        onClick={handleModal}
-        className="p-2 bg-slate-100 rounded-sm hover:bg-orange-200 cursor-pointer"
-      >
-        <PencilIcon className="h-3 w-3 text-gray-500" />
-      </div>
-
+      <ButtonUpdate onClick={handleModal} />
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
           <h3 className="font-bold text-lg">Update {article.title}</h3>

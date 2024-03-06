@@ -6,6 +6,9 @@ import UpdatePage from "./updatePage";
 import DeletePage from "./deletePage";
 import moment from "moment";
 import Search from "@/components/UI/Search";
+import { Suspense } from "react";
+import Loading from "@/app/loading";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const getUser = async () => {
   const res = await prisma.user.findMany();
@@ -23,9 +26,7 @@ export default async function Users() {
       <div className="text-xl font-semibold mb-7">Pemesan</div>
       <div className="w-full grid grid-cols-2 gap-3">
         <Search value="" placeholder="Cari pemesan..." />
-        <div className="flex justify-end">
-          <AddPage />
-        </div>
+        <div className="flex justify-end"></div>
       </div>
       <div className="flex flex-col mt-2">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

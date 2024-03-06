@@ -2,19 +2,12 @@
 
 import React from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-// import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function ReactQueryProvider({ children }) {
   const [client] = React.useState(new QueryClient());
 
-  return (
-    <QueryClientProvider client={client}>
-      {/* <ReactQueryStreamedHydration></ReactQueryStreamedHydration> */}
-      {children}
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
-    </QueryClientProvider>
-  );
+  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 }
 
 export default ReactQueryProvider;

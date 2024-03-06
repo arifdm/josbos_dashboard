@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Search({ value, placeholder, onChange }) {
   return (
     <div>
@@ -25,7 +23,7 @@ export default function Search({ value, placeholder, onChange }) {
           <input
             type="search"
             value={value}
-            className="block w-full px-3 py-1.5 ps-10 text-sm text-neutral-500 border border-neutral-300 rounded-lg bg-white focus:bg-neutral-100 focus:outline-none"
+            className="block w-full px-3 py-1.5 ps-10 text-sm text-neutral-500 border border-neutral-300 rounded-lg bg-white focus:bg-neutral-100 focus:outline-none placeholder-gray-300"
             placeholder={placeholder}
             onChange={onChange}
             required

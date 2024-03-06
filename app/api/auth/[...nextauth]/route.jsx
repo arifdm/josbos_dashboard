@@ -1,8 +1,6 @@
 import axios from "axios";
 import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { signOut } from "next-auth/react";
 
 const authOptions = {
   providers: [
@@ -25,7 +23,7 @@ const authOptions = {
           const resCheck = await axios.get(
             `${process.env.NEXTAUTH_URL}api/auth/admin/check?email=${email}`
           );
-          console.log("RES_CHECK: ", resCheck.data);
+          console.log("RES_AUTH: ", resCheck.data);
 
           if (resCheck.data.status === false) {
             await axios.post(`${process.env.NEXTAUTH_URL}api/auth/admin`, {
