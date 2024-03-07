@@ -6,7 +6,9 @@ import { useEffect, useState } from "react";
 // import { redirect, useRouter } from "next/navigation";
 // import { useRouter } from "next/router";
 import { PlusIcon } from "@heroicons/react/24/solid";
-// import { toast } from "react-toastify";
+import { MinusCircleIcon, PlusCircleIcon } from "@heroicons/react/20/solid";
+import { IoCloseCircle } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 const createService = async (body) => {
   const { data } = await axios.post(`/fetch/service/${body?.id}`, body);
@@ -23,8 +25,14 @@ const AddPage = () => {
 
   const [selectCategory, setSelectCategory] = useState(null);
   const [selectMerk, setSelectMerk] = useState(null);
-  const [selectType, setSelectType] = useState(null);
+  const [selectTipe, setSelectTipe] = useState(null);
   const [selectSize, setSelectSize] = useState(null);
+
+  const [isMerk, setIsMerk] = useState(false);
+  const [isTipe, setIsTipe] = useState(false);
+
+  const [inputMerk, setInputMerk] = useState(null);
+  const [inputTipe, setInputTipe] = useState(null);
 
   const mutation = useMutation({
     mutationFn: createService,
@@ -34,16 +42,27 @@ const AddPage = () => {
     },
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     // setLoading(true);
-    mutation.mutate({
-      city: selectCity,
-      distance: jarak,
-      service: selectServices,
-      vehicleSize: ukuran,
-      price: tarif,
-      priceDescription: keterangan,
-    });
+    const formData = {
+      category: selectCategory,
+      merk: inputMerk ? inputMerk : selectMerk,
+      tipe: inputTipe ? inputTipe : selectTipe,
+      size: selectSize,
+    };
+
+    if (
+      !formData.category ||
+      !formData.merk ||
+      !formData.tipe ||
+      !formData.size
+    ) {
+      toast.error("Silakan pilih/masukkan semua data");
+    } else {
+      // mutation.mutate(formData);
+      console.log("SUBMIT_DATA: ", formData);
+    }
   };
 
   mutation.isSuccess && console.log("IS_SUCCESS");
@@ -66,7 +85,7 @@ const AddPage = () => {
 
   useEffect(() => {
     getSize();
-  }, [selectCategory, selectMerk, selectType]);
+  }, [selectCategory, selectMerk, selectTipe]);
 
   const getCategory = async () => {
     const { data } = await axios.get("/fetch/vehicle/category");
@@ -96,7 +115,7 @@ const AddPage = () => {
   //   .filter((item) => item.category === selectCategories);
   // // .flat()
 
-  console.log("SIZE: ", size);
+  // console.log("SIZE: ", size);
 
   return (
     <div>
@@ -136,55 +155,87 @@ const AddPage = () => {
                 </select>
               </div>
               <div className="form-control w-full">
-                <label className="label font-small text-gray-500">Merk</label>
-                <select
-                  onChange={(e) => setSelectMerk(e.target.value)}
-                  className="select select-bordered select-sm w-full max-w-xs"
-                >
-                  <option disabled selected>
-                    Pilih Merk
-                  </option>
-                  {merk?.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
+                <div className="flex flex-row justify-between items-center">
+                  <label className="label font-small text-gray-500">Merk</label>
+                  {isMerk ? (
+                    <IoCloseCircle
+                      className="w-4 h-4 inline-block text-red-400 cursor-pointer"
+                      onClick={() => setIsMerk(false)}
+                    />
+                  ) : (
+                    <PlusCircleIcon
+                      className="w-4 h-4 inline-block cursor-pointer"
+                      onClick={() => setIsMerk(true)}
+                    />
+                  )}
+                </div>
+                {isMerk ? (
+                  <input
+                    type="text"
+                    value={inputMerk}
+                    onChange={(e) => setInputMerk(e.target.value)}
+                    className="input input-bordered input-sm w-full"
+                    placeholder="Masukkan Data"
+                  />
+                ) : (
+                  <select
+                    onChange={(e) => setSelectMerk(e.target.value)}
+                    className="select select-bordered select-sm w-full max-w-xs"
+                  >
+                    <option disabled selected className="text-gray-200">
+                      Pilih Merk
                     </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="w-full grid grid-cols-2 gap-3 mt-3">
-              <div className="form-control w-full">
-                <label className="label font-small text-gray-500">
-                  Pilih/Masukkan Tipe
-                </label>
-                <select
-                  onChange={(e) => setSelectType(e.target.value)}
-                  className="select select-bordered select-sm w-full max-w-xs"
-                >
-                  <option disabled selected>
-                    Pilih Tipe
-                  </option>
-                  {
-                    type?.map((item) => (
+                    {merk?.map((item) => (
                       <option key={item.id} value={item.id}>
                         {item.name}
                       </option>
-                    ))
-                    // .filter((item) => item.merk === selectMerk)
-                  }
-                </select>
-                {/* <input
-                  type="text"
-                  value={tarif}
-                  onChange={(e) => setTarif(e.target.value)}
-                  className="input input-bordered input-sm"
-                /> */}
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+            <div className="w-full grid grid-cols-2 gap-3 mt-3">
+              <div className="form-control w-full">
+                <div className="flex flex-row justify-between items-center">
+                  <label className="label font-small text-gray-500">Tipe</label>
+                  {isTipe ? (
+                    <IoCloseCircle
+                      className="w-4 h-4 inline-block text-red-400 cursor-pointer"
+                      onClick={() => setIsTipe(false)}
+                    />
+                  ) : (
+                    <PlusCircleIcon
+                      className="w-4 h-4 inline-block cursor-pointer"
+                      onClick={() => setIsTipe(true)}
+                    />
+                  )}
+                </div>
+                {isTipe ? (
+                  <input
+                    type="text"
+                    value={inputTipe}
+                    onChange={(e) => setInputTipe(e.target.value)}
+                    className="input input-bordered input-sm w-full"
+                    placeholder="Masukkan Data"
+                  />
+                ) : (
+                  <select
+                    onChange={(e) => setSelectTipe(e.target.value)}
+                    className="select select-bordered select-sm w-full max-w-xs"
+                  >
+                    <option disabled selected className="text-gray-200">
+                      Pilih Tipe
+                    </option>
+                    {type?.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
               <div className="form-control w-full">
-                <label className="label font-small text-gray-500">
-                  Ukuran Kendaraan
-                </label>
+                <label className="label font-small text-gray-500">Ukuran</label>
                 <select
                   onChange={(e) => setSelectSize(e.target.value)}
                   className="select select-bordered select-sm w-full max-w-xs"
@@ -200,7 +251,6 @@ const AddPage = () => {
                 </select>
               </div>
             </div>
-
             <div className="modal-action">
               {mutation.isPending ? (
                 <button type="button" className="btn btn-sm loading">

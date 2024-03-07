@@ -1,17 +1,16 @@
 "use client";
 
 import { ButtonUpdate } from "@/components/UI/TableAction";
-import { PencilIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const UpdatePage = ({ article }) => {
+const UpdatePage = ({ data }) => {
   const router = useRouter();
 
-  const [title, setTitle] = useState(article.title);
-  const [content, setContent] = useState(article.content);
-  const [image, setImage] = useState(article.image);
+  const [title, setTitle] = useState(data.title);
+  const [content, setContent] = useState(data.content);
+  const [image, setImage] = useState(data.image);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +18,7 @@ const UpdatePage = ({ article }) => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    await axios.put(`/api/article/${article.id}`, { title, content, image });
+    await axios.put(`/api/article/${data.id}`, { title, content, image });
     setIsLoading(false);
     router.refresh();
     setIsOpen(false);
@@ -34,7 +33,7 @@ const UpdatePage = ({ article }) => {
       <ButtonUpdate onClick={handleModal} />
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Update {article.title}</h3>
+          <h3 className="font-bold text-lg mb-4">Update Data</h3>
           <form onSubmit={handleUpdate}>
             <div className="form-control w-full">
               <label className="label font-bold">Title</label>

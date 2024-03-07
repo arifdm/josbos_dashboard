@@ -28,10 +28,7 @@ const DeletePage = ({ data }) => {
       <ButtonDelete onClick={handleModal} />
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">
-            Are sure to delete {data.title}?
-          </h3>
-
+          <p className="text-lg">Yakin akan menghapus data ini...?</p>
           <div className="modal-action">
             <button type="button" className="btn" onClick={handleModal}>
               No

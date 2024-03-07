@@ -1,19 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import prisma from "@/prisma/prisma";
-import Image from "next/image";
-import AddPage from "./addPage";
-import UpdatePage from "./updatePage";
-import DeletePage from "./deletePage";
-import { EyeIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { useQuery } from "@tanstack/react-query";
-import { WindowIcon } from "@heroicons/react/24/outline";
-import moment from "moment";
 import Search from "@/components/UI/Search";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import moment from "moment";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import DeletePage from "./deletePage";
+import UpdatePage from "./updatePage";
 
 const getMitra = async () => {
   const { data } = await axios.get(`/fetch/specialist`);
@@ -129,10 +124,11 @@ export default function Users() {
                               {item?.cities?.name}
                             </td>
                             <td className="full flex justify-center py-4 px-2">
-                              <Link href={`/mitra/${item.id}`}>
-                                <div className="flex justify-center align-middle w-[28px] h-[28px] bg-slate-100 rounded-md hover:bg-sky-200 cursor-pointer font-medium items-center">
-                                  {item._count.servicePriceOnSpecialist}
-                                </div>
+                              <Link
+                                href={`/mitra/${item.id}`}
+                                className="flex justify-center align-middle w-[28px] h-[28px] bg-slate-100 rounded-md hover:bg-sky-200 cursor-pointer font-medium items-center"
+                              >
+                                {item._count.servicePriceOnSpecialist}
                               </Link>
                             </td>
                             <td>

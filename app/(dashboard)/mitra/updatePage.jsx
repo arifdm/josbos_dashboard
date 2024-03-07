@@ -39,7 +39,7 @@ const UpdatePage = ({ article }) => {
       <ButtonUpdate onClick={handleModal} />
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Update {article.title}</h3>
+          <h3 className="font-bold text-lg">Update Data</h3>
           <form onSubmit={handleUpdate}>
             <div className="form-control w-full">
               <label className="label font-bold">Title</label>

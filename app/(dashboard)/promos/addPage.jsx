@@ -51,7 +51,7 @@ const AddPage = () => {
       </div>
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add New Promo</h3>
+          <h3 className="font-bold text-lg mb-4">Tambah Data</h3>
           <form onSubmit={handleSubmit} className="mt-5">
             {error && (
               <div className="alert alert-error shadow-lg mb-2">{error}</div>

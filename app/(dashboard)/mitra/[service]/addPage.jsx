@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 // import { redirect, useRouter } from "next/navigation";
 // import { useRouter } from "next/router";
 import { PlusIcon } from "@heroicons/react/24/solid";
-// import { toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const createService = async (body) => {
   const { data } = await axios.post(`/fetch/service/${body?.id}`, body);
@@ -57,10 +57,13 @@ const AddPage = ({ id }) => {
     onSuccess: () => {
       // setLoading(false);
       QueryClient.invalidateQueries({ queryKey: ["service-mitra"] });
+      toast.success("Data service berhasil ditambahkan");
     },
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
     // setLoading(true);
     mutation.mutate({
       id: id,

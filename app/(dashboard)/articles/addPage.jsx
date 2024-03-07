@@ -42,7 +42,7 @@ const AddPage = () => {
 
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add New Article</h3>
+          <h3 className="font-bold text-lg mb-4">Tambah Data</h3>
           <form onSubmit={handleSubmit}>
             <div className="form-control w-full">
               <label className="label font-bold">Title</label>

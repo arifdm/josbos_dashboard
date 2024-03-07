@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ButtonUserStatus } from "@/components/UI/TableAction";
 
-const DeletePage = ({ article }) => {
+const DeletePage = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -13,7 +13,7 @@ const DeletePage = ({ article }) => {
 
   const handleDelete = async (id) => {
     setIsLoading(true);
-    await axios.delete(`/api/articles?id=${id}`);
+    await axios.delete(`/api/user?id=${id}`);
     setIsLoading(false);
     router.refresh();
     setIsOpen(false);
@@ -28,10 +28,7 @@ const DeletePage = ({ article }) => {
       <ButtonUserStatus onClick={handleModal} />
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">
-            Are sure to delete {article.title}?
-          </h3>
-
+          <p className="text-lg">Yakin akan menghapus data ini...?</p>
           <div className="modal-action">
             <button type="button" className="btn" onClick={handleModal}>
               No
@@ -39,7 +36,7 @@ const DeletePage = ({ article }) => {
             {!isLoading ? (
               <button
                 type="button"
-                onClick={() => handleDelete(article.id)}
+                onClick={() => handleDelete(data.id)}
                 className="btn btn-primary"
               >
                 Yes

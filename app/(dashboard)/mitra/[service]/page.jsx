@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 import Search from "@/components/UI/Search";
 import { IoClose } from "react-icons/io5";
 import { FaArrowLeft } from "react-icons/fa6";
+import DataNotFound from "@/components/DataNotFound";
+import { BsDatabaseSlash } from "react-icons/bs";
 
 const getGetLayanan = async (id) => {
   const { data } = await axios.get(`/fetch/service/${id}`);
@@ -26,11 +28,12 @@ export default function Service({ params }) {
   const [filterData, setFilterData] = useState([]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["service-mitra"],
+    queryKey: ["service-mitra", id],
     queryFn: () => getGetLayanan(id),
+    // refetchOnWindowFocus: true,
   });
 
-  // console.log("DATA: ", data);
+  console.log("QUERY_LAYANAN: ", data);
 
   useEffect(() => {
     setFilterData(data);
@@ -40,16 +43,17 @@ export default function Service({ params }) {
     const searchTerm = e.target.value;
     setSearchItem(searchTerm);
 
-    const filteredItems = data.filter(
+    const filteredItems = data?.filter(
       (item) =>
         item.services.categories?.name
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
         item.services?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    console.log("SEARCH: ", filteredItems);
+    // console.log("SEARCH: ", filteredItems);
     setFilterData(filteredItems);
   };
+  // console.log("LAYANAN_MITRA: ", filterData);
 
   return (
     <div className="bg-white">
@@ -63,18 +67,23 @@ export default function Service({ params }) {
         <LoadingSpinner />
       ) : (
         <>
-          {filterData?.length > 0 && (
-            <div className="w-full grid grid-cols-2 gap-3">
+          <div className="w-full grid grid-cols-2 gap-3 items-center">
+            {filterData?.length > 0 ? (
               <Search
                 value={searchItem}
                 placeholder="Cari Layanan..."
                 onChange={handleSearch}
               />
-              <div className="flex justify-end">
-                <AddPage id={id} />
-              </div>
+            ) : (
+              <p className="flex flex-row items-center text-sm">
+                <BsDatabaseSlash className="text-3xl text-gray-200 mr-3" />
+                Belum ada data, silakan tambahkan...!
+              </p>
+            )}
+            <div className="flex justify-end">
+              <AddPage id={id} />
             </div>
-          )}
+          </div>
 
           <div className="flex flex-col mt-2">
             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">

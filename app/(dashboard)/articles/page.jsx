@@ -72,8 +72,8 @@ const Articles = async () => {
                         <td className="whitespace-nowrap py-4">{item.title}</td>
                         <td>
                           <div className="full flex justify-center gap-2 align-middle">
-                            <UpdatePage article={item} />
-                            <DeletePage article={item} />
+                            <UpdatePage data={item} />
+                            <DeletePage data={item} />
                           </div>
                         </td>
                       </tr>

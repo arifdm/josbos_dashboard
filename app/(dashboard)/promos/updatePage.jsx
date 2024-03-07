@@ -6,12 +6,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const UpdatePage = ({ promo }) => {
+const UpdatePage = ({ data }) => {
   const router = useRouter();
 
-  const [title, setTitle] = useState(promo?.title);
-  const [content, setContent] = useState(promo?.content);
-  const [image, setImage] = useState(promo?.image);
+  const [title, setTitle] = useState(data?.title);
+  const [content, setContent] = useState(data?.content);
+  const [image, setImage] = useState(data?.image);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +19,7 @@ const UpdatePage = ({ promo }) => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    await axios.put(`/api/promos/${promo.id}`, { title, content, image });
+    await axios.put(`/api/promo/${data.id}`, { title, content, image });
     setIsLoading(false);
     router.refresh();
     setIsOpen(false);
@@ -34,7 +34,7 @@ const UpdatePage = ({ promo }) => {
       <ButtonUpdate onClick={handleModal} />
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Update {promo?.title}</h3>
+          <h3 className="font-bold text-lg">Update Data</h3>
           <form onSubmit={handleUpdate}>
             <div className="form-control w-full">
               <label className="label font-bold">Title</label>

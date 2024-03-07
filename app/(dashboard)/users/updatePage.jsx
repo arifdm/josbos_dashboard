@@ -7,12 +7,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TbPencil } from "react-icons/tb";
 
-const UpdatePage = ({ article }) => {
+const UpdatePage = ({ data }) => {
   const router = useRouter();
 
-  const [title, setTitle] = useState(article.title);
-  const [content, setContent] = useState(article.content);
-  const [image, setImage] = useState(article.image);
+  const [name, setName] = useState(data.name);
+  const [email, setEmail] = useState(data.email);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +19,7 @@ const UpdatePage = ({ article }) => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    await axios.put(`/api/articles/${article.id}`, { title, content, image });
+    await axios.put(`/api/user/${data.id}`, { name, email });
     setIsLoading(false);
     router.refresh();
     setIsOpen(false);
@@ -35,36 +34,26 @@ const UpdatePage = ({ article }) => {
       <ButtonUpdate onClick={handleModal} />
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Update {article.title}</h3>
+          <h3 className="font-bold text-lg mb-4">Update Data</h3>
           <form onSubmit={handleUpdate}>
             <div className="form-control w-full">
-              <label className="label font-bold">Title</label>
+              <label className="label font-bold">Nama</label>
               <input
                 type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="input input-bordered"
-                placeholder="Product Name"
+                placeholder="Nama Lengkap"
               />
             </div>
             <div className="form-control w-full">
-              <label className="label font-bold">Content</label>
+              <label className="label font-bold">Email</label>
               <input
                 type="text"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="input input-bordered"
-                placeholder="Content"
-              />
-            </div>
-            <div className="form-control w-full">
-              <label className="label font-bold">Image</label>
-              <input
-                type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="input input-bordered"
-                placeholder="Url"
+                placeholder="Email"
               />
             </div>
             <div className="modal-action">
