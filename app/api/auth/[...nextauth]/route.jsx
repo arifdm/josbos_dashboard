@@ -1,6 +1,8 @@
 import axios from "axios";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { redirect } from "next/navigation";
+import { FaLessThanEqual } from "react-icons/fa6";
 
 const authOptions = {
   providers: [
@@ -9,6 +11,7 @@ const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, account }) {
       const { name, email } = user;
@@ -31,8 +34,14 @@ const authOptions = {
               email,
               status: "inactive",
             });
+            console.log("RES_AUTH_STATUS: ", resCheck.data.status);
+            return true;
+          } else {
+            if (resCheck.data.data.status === "inactive") {
+              return false;
+            }
+            return true;
           }
-          return true;
         } catch (error) {
           console.log("ERROR_AUTH: ", error);
           return false;
@@ -40,7 +49,6 @@ const authOptions = {
       } else {
         return false;
       }
-      // return true;
     },
 
     // async redirect({ url, baseUrl }) {
@@ -50,16 +58,16 @@ const authOptions = {
     // },
   },
 
-  async jwt({ token, account, profile }) {
-    // Persist the OAuth access_token and or the user id to the token right after signin
-    console.log("JWT: ", { token, account, profile });
+  // async jwt({ token, account, profile }) {
+  //   // Persist the OAuth access_token and or the user id to the token right after signin
+  //   console.log("JWT: ", { token, account, profile });
 
-    if (account) {
-      token.accessToken = account.access_token;
-      token.id = profile.id;
-    }
-    return token;
-  },
+  //   if (account) {
+  //     token.accessToken = account.access_token;
+  //     token.id = profile.id;
+  //   }
+  //   return token;
+  // },
 };
 
 const handler = NextAuth(authOptions);
