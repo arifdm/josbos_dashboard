@@ -34,7 +34,6 @@ const authOptions = {
               email,
               status: "inactive",
             });
-            console.log("RES_AUTH_STATUS: ", resCheck.data.status);
             return true;
           } else {
             if (resCheck.data.data.status === "inactive") {
