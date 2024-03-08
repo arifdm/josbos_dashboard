@@ -11,6 +11,9 @@ CREATE TYPE "enum_account_type" AS ENUM ('bank_transfer', 'e_wallet', 'qris', 'c
 CREATE TYPE "enum_promo_type" AS ENUM ('amount', 'percent');
 
 -- CreateEnum
+CREATE TYPE "enum_saldo_type" AS ENUM ('increase', 'decrease');
+
+-- CreateEnum
 CREATE TYPE "enum_size" AS ENUM ('small', 'middle', 'big');
 
 -- CreateEnum
@@ -47,11 +50,11 @@ CREATE TABLE "User" (
     "photo" TEXT,
     "otp" VARCHAR(10),
     "tokenFCM" VARCHAR(255),
+    "password" VARCHAR(100),
     "status" "enum_status" DEFAULT 'active',
+    "referral" VARCHAR(100),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "password" VARCHAR(100) NOT NULL,
-    "referral" VARCHAR(100),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -102,6 +105,7 @@ CREATE TABLE "Transaction" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "orderDate" TIMESTAMP(3),
     "status" "enum_transactions_status" NOT NULL DEFAULT 'pending',
+    "alasanBatal" VARCHAR(255),
     "promo" TEXT,
     "servicePrice" TEXT,
     "user" TEXT,
@@ -120,6 +124,8 @@ CREATE TABLE "TakeOnTransaction" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "orderMethod" VARCHAR(100),
     "amountBids" INTEGER,
+    "partnerRevenue" INTEGER,
+    "feeOrder" INTEGER,
     "rating" INTEGER,
     "ratingComment" VARCHAR(250),
     "serviceDate" TIMESTAMP(3),
@@ -161,15 +167,20 @@ CREATE TABLE "Service" (
 -- CreateTable
 CREATE TABLE "Specialist" (
     "id" TEXT NOT NULL,
-    "name" VARCHAR(100),
+    "name" VARCHAR(100) NOT NULL,
     "address" TEXT,
     "latitude" VARCHAR(20),
     "longitude" VARCHAR(20),
-    "phone" VARCHAR(50),
+    "phone" VARCHAR(50) NOT NULL,
+    "email" VARCHAR(100),
+    "ktp" VARCHAR(20),
     "photo" TEXT,
-    "balances" INTEGER,
+    "otp" VARCHAR(10),
+    "tokenFCM" VARCHAR(255),
+    "password" VARCHAR(100),
     "status" "enum_specialists_status" DEFAULT 'offline',
-    "rating" INTEGER NOT NULL DEFAULT 0,
+    "balances" INTEGER,
+    "rating" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "city" TEXT,
@@ -196,9 +207,11 @@ CREATE TABLE "ServicePriceOnSpecialist" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "price" INTEGER NOT NULL,
+    "priceDescription" VARCHAR(200),
+    "maxDistance" INTEGER,
+    "city" TEXT,
     "service" TEXT NOT NULL,
     "specialist" TEXT NOT NULL,
-    "city" TEXT NOT NULL,
     "vehicleSize" TEXT,
 
     CONSTRAINT "ServicePriceOnSpecialist_pkey" PRIMARY KEY ("id")
@@ -258,7 +271,6 @@ CREATE TABLE "VehicleModel" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "brand" TEXT NOT NULL,
     "vehicleSize" TEXT,
-    "serviceId" TEXT,
 
     CONSTRAINT "VehicleModel_pkey" PRIMARY KEY ("id")
 );
@@ -266,7 +278,7 @@ CREATE TABLE "VehicleModel" (
 -- CreateTable
 CREATE TABLE "BankAccount" (
     "id" TEXT NOT NULL,
-    "category" "enum_account_type" NOT NULL DEFAULT 'e_wallet',
+    "category" "enum_account_type",
     "brandName" VARCHAR(100) NOT NULL,
     "accountName" VARCHAR(100) NOT NULL,
     "number" VARCHAR(50),
@@ -280,6 +292,22 @@ CREATE TABLE "BankAccount" (
     CONSTRAINT "BankAccount_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "SaldoSpecialist" (
+    "id" TEXT NOT NULL,
+    "note" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "status" BOOLEAN DEFAULT false,
+    "type" "enum_saldo_type",
+    "amount" INTEGER,
+    "saldo" INTEGER,
+    "specialist" TEXT NOT NULL,
+    "transaction" TEXT,
+
+    CONSTRAINT "SaldoSpecialist_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Admin_email_key" ON "Admin"("email");
 
@@ -288,6 +316,9 @@ CREATE UNIQUE INDEX "Admin_phone_key" ON "Admin"("phone");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- AddForeignKey
+ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_payment_fkey" FOREIGN KEY ("payment") REFERENCES "BankAccount"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_promo_fkey" FOREIGN KEY ("promo") REFERENCES "Promo"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -302,13 +333,10 @@ ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_user_fkey" FOREIGN KEY ("u
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_vehicleModel_fkey" FOREIGN KEY ("vehicleModel") REFERENCES "VehicleModel"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_payment_fkey" FOREIGN KEY ("payment") REFERENCES "BankAccount"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "TakeOnTransaction" ADD CONSTRAINT "TakeOnTransaction_servicePriceOnSpecialist_fkey" FOREIGN KEY ("servicePriceOnSpecialist") REFERENCES "ServicePriceOnSpecialist"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TakeOnTransaction" ADD CONSTRAINT "TakeOnTransaction_specialist_fkey" FOREIGN KEY ("specialist") REFERENCES "Specialist"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "TakeOnTransaction" ADD CONSTRAINT "TakeOnTransaction_servicePriceOnSpecialist_fkey" FOREIGN KEY ("servicePriceOnSpecialist") REFERENCES "ServicePriceOnSpecialist"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TakeOnTransaction" ADD CONSTRAINT "TakeOnTransaction_transaction_fkey" FOREIGN KEY ("transaction") REFERENCES "Transaction"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -329,25 +357,22 @@ ALTER TABLE "ServicePricing" ADD CONSTRAINT "ServicePricing_service_fkey" FOREIG
 ALTER TABLE "ServicePricing" ADD CONSTRAINT "ServicePricing_vehicleSize_fkey" FOREIGN KEY ("vehicleSize") REFERENCES "VehicleSize"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ServicePriceOnSpecialist" ADD CONSTRAINT "ServicePriceOnSpecialist_city_fkey" FOREIGN KEY ("city") REFERENCES "Cities"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ServicePriceOnSpecialist" ADD CONSTRAINT "public_ServicePriceOnSpecialist_city_fkey" FOREIGN KEY ("city") REFERENCES "Cities"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ServicePriceOnSpecialist" ADD CONSTRAINT "ServicePriceOnSpecialist_service_fkey" FOREIGN KEY ("service") REFERENCES "Service"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ServicePriceOnSpecialist" ADD CONSTRAINT "public_ServicePriceOnSpecialist_service_fkey" FOREIGN KEY ("service") REFERENCES "Service"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ServicePriceOnSpecialist" ADD CONSTRAINT "ServicePriceOnSpecialist_specialist_fkey" FOREIGN KEY ("specialist") REFERENCES "Specialist"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "ServicePriceOnSpecialist" ADD CONSTRAINT "public_ServicePriceOnSpecialist_specialist_fkey" FOREIGN KEY ("specialist") REFERENCES "Specialist"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ServicePriceOnSpecialist" ADD CONSTRAINT "ServicePriceOnSpecialist_vehicleSize_fkey" FOREIGN KEY ("vehicleSize") REFERENCES "VehicleSize"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "ServicePriceOnSpecialist" ADD CONSTRAINT "public_ServicePriceOnSpecialist_vehicleSize_fkey" FOREIGN KEY ("vehicleSize") REFERENCES "VehicleSize"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "VehicleBrand" ADD CONSTRAINT "VehicleBrand_type_fkey" FOREIGN KEY ("type") REFERENCES "VehicleType"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "VehicleModel" ADD CONSTRAINT "VehicleModel_brand_fkey" FOREIGN KEY ("brand") REFERENCES "VehicleBrand"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "VehicleModel" ADD CONSTRAINT "VehicleModel_serviceId_fkey" FOREIGN KEY ("serviceId") REFERENCES "Service"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "VehicleModel" ADD CONSTRAINT "VehicleModel_vehicleSize_fkey" FOREIGN KEY ("vehicleSize") REFERENCES "VehicleSize"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -357,3 +382,9 @@ ALTER TABLE "BankAccount" ADD CONSTRAINT "BankAccount_specialist_fkey" FOREIGN K
 
 -- AddForeignKey
 ALTER TABLE "BankAccount" ADD CONSTRAINT "BankAccount_user_fkey" FOREIGN KEY ("user") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SaldoSpecialist" ADD CONSTRAINT "SaldoSpecialist_specialist_fkey" FOREIGN KEY ("specialist") REFERENCES "Specialist"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "SaldoSpecialist" ADD CONSTRAINT "SaldoSpecialist_transaction_fkey" FOREIGN KEY ("transaction") REFERENCES "Transaction"("id") ON DELETE SET NULL ON UPDATE CASCADE;

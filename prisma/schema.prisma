@@ -3,10 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  // url      = env("DATABASE_URL")
-  url       = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Admin {
@@ -23,22 +21,21 @@ model Admin {
 }
 
 model User {
-  id        String       @id @default(uuid())
-  email     String?      @unique @db.VarChar(100)
-  name      String       @db.VarChar(50)
-  phone     String       @db.VarChar(20)
-  address   String?      @db.VarChar(150)
-  city      String?      @db.VarChar(50)
-  ktp       String?      @db.VarChar(20)
-  photo     String?
-  otp       String?      @db.VarChar(10)
-  tokenFCM  String?      @db.VarChar(255)
-  password  String?      @db.VarChar(100)
-  status    enum_status? @default(active)
-  referral  String?      @db.VarChar(100)
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
-
+  id           String        @id @default(uuid())
+  email        String?       @unique @db.VarChar(100)
+  name         String        @db.VarChar(50)
+  phone        String        @db.VarChar(20)
+  address      String?       @db.VarChar(150)
+  city         String?       @db.VarChar(50)
+  ktp          String?       @db.VarChar(20)
+  photo        String?
+  otp          String?       @db.VarChar(10)
+  tokenFCM     String?       @db.VarChar(255)
+  password     String?       @db.VarChar(100)
+  status       enum_status?  @default(active)
+  referral     String?       @db.VarChar(100)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   bankAccounts BankAccount[]
   transactions Transaction[]
 }
@@ -71,61 +68,52 @@ model Promo {
 }
 
 model Transaction {
-  id          String                   @id @default(uuid())
-  address     String?
-  latitude    String?                  @db.VarChar(20)
-  longitude   String?                  @db.VarChar(20)
-  amount      Int?
-  discount    Int?
-  total       Int?
-  note        String?
-  createdAt   DateTime                 @default(now())
-  updatedAt   DateTime                 @updatedAt
-  orderDate   DateTime?
-  status      enum_transactions_status @default(pending)
-  alasanBatal String?                  @db.VarChar(255)
-
-  promo  String? @default(uuid())
-  promos Promo?  @relation(fields: [promo], references: [id])
-
-  servicePrice    String?         @default(uuid())
-  servicePricings ServicePricing? @relation(fields: [servicePrice], references: [id])
-
-  user  String? @default(uuid())
-  users User?   @relation(fields: [user], references: [id])
-
-  vehicleModel  String?       @default(uuid())
-  vehicleModels VehicleModel? @relation(fields: [vehicleModel], references: [id])
-
-  payment      String?      @default(uuid())
-  bankAccounts BankAccount? @relation(fields: [payment], references: [id])
-
-  takeOnTransactions TakeOnTransaction[]
+  id                 String                   @id @default(uuid())
+  address            String?
+  latitude           String?                  @db.VarChar(20)
+  longitude          String?                  @db.VarChar(20)
+  amount             Int?
+  discount           Int?
+  total              Int?
+  note               String?
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+  orderDate          DateTime?
+  status             enum_transactions_status @default(pending)
+  alasanBatal        String?                  @db.VarChar(255)
+  promo              String?                  @default(uuid())
+  servicePrice       String?                  @default(uuid())
+  user               String?                  @default(uuid())
+  vehicleModel       String?                  @default(uuid())
+  payment            String?                  @default(uuid())
   saldoSpecialists   SaldoSpecialist[]
+  takeOnTransactions TakeOnTransaction[]
+  bankAccounts       BankAccount?             @relation(fields: [payment], references: [id])
+  promos             Promo?                   @relation(fields: [promo], references: [id])
+  servicePricings    ServicePricing?          @relation(fields: [servicePrice], references: [id])
+  users              User?                    @relation(fields: [user], references: [id])
+  vehicleModels      VehicleModel?            @relation(fields: [vehicleModel], references: [id])
 }
 
 model TakeOnTransaction {
-  id             String    @id @default(uuid())
-  status         Boolean?  @default(true)
-  selected       Boolean?  @default(false)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  orderMethod    String?   @db.VarChar(100)
-  amountBids     Int?
-  partnerRevenue Int?
-  feeOrder       Int?
-  rating         Int?
-  ratingComment  String?   @db.VarChar(250)
-  serviceDate    DateTime?
-
-  specialist  String?     @default(uuid())
-  specialists Specialist? @relation(fields: [specialist], references: [id])
-
+  id                        String                    @id @default(uuid())
+  status                    Boolean?                  @default(true)
+  selected                  Boolean?                  @default(false)
+  createdAt                 DateTime                  @default(now())
+  updatedAt                 DateTime                  @updatedAt
+  orderMethod               String?                   @db.VarChar(100)
+  amountBids                Int?
+  partnerRevenue            Int?
+  feeOrder                  Int?
+  rating                    Int?
+  ratingComment             String?                   @db.VarChar(250)
+  serviceDate               DateTime?
+  specialist                String?                   @default(uuid())
   servicePriceOnSpecialist  String?                   @default(uuid())
+  transaction               String                    @default(uuid())
   servicePriceOnSpecialists ServicePriceOnSpecialist? @relation(fields: [servicePriceOnSpecialist], references: [id])
-
-  transaction  String      @default(uuid())
-  transactions Transaction @relation(fields: [transaction], references: [id])
+  specialists               Specialist?               @relation(fields: [specialist], references: [id])
+  transactions              Transaction               @relation(fields: [transaction], references: [id])
 }
 
 model Category {
@@ -152,35 +140,32 @@ model Service {
   categories                Category                   @relation(fields: [category], references: [id])
   servicePriceOnSpecialists ServicePriceOnSpecialist[]
   servicePricings           ServicePricing[]
-  //vehicleModels             VehicleModel[]
 }
 
 model Specialist {
-  id        String                   @id @default(uuid())
-  name      String                   @db.VarChar(100)
-  address   String?
-  latitude  String?                  @db.VarChar(20)
-  longitude String?                  @db.VarChar(20)
-  phone     String                   @db.VarChar(50)
-  email     String?                  @db.VarChar(100)
-  ktp       String?                  @db.VarChar(20)
-  photo     String?
-  otp       String?                  @db.VarChar(10)
-  tokenFCM  String?                  @db.VarChar(255)
-  password  String?                  @db.VarChar(100)
-  status    enum_specialists_status? @default(offline)
-  balances  Int?
-  rating    Int?                     @default(0)
-  createdAt DateTime                 @default(now())
-  updatedAt DateTime                 @updatedAt
-
-  city   String? @default(uuid())
-  cities Cities? @relation(fields: [city], references: [id])
-
-  servicePriceOnSpecialist ServicePriceOnSpecialist[]
-  takeOnTransactions       TakeOnTransaction[]
+  id                       String                     @id @default(uuid())
+  name                     String                     @db.VarChar(100)
+  address                  String?
+  latitude                 String?                    @db.VarChar(20)
+  longitude                String?                    @db.VarChar(20)
+  phone                    String                     @db.VarChar(50)
+  email                    String?                    @db.VarChar(100)
+  ktp                      String?                    @db.VarChar(20)
+  photo                    String?
+  otp                      String?                    @db.VarChar(10)
+  tokenFCM                 String?                    @db.VarChar(255)
+  password                 String?                    @db.VarChar(100)
+  status                   enum_specialists_status?   @default(offline)
+  balances                 Int?
+  rating                   Int?                       @default(0)
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @updatedAt
+  city                     String?                    @default(uuid())
   bankAccounts             BankAccount[]
   saldoSpecialists         SaldoSpecialist[]
+  servicePriceOnSpecialist ServicePriceOnSpecialist[]
+  cities                   Cities?                    @relation(fields: [city], references: [id])
+  takeOnTransactions       TakeOnTransaction[]
 }
 
 model ServicePricing {
@@ -198,24 +183,20 @@ model ServicePricing {
 }
 
 model ServicePriceOnSpecialist {
-  id               String   @id @default(uuid())
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  price            Int
-  priceDescription String?  @db.VarChar(200)
-  maxDistance      Int?
-
-  city   String? @default(uuid())
-  cities Cities? @relation(fields: [city], references: [id])
-
-  service  String  @default(uuid())
-  services Service @relation(fields: [service], references: [id])
-
-  specialist  String     @default(uuid())
-  specialists Specialist @relation(fields: [specialist], references: [id])
-
+  id                 String              @id @default(uuid())
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  price              Int
+  priceDescription   String?             @db.VarChar(200)
+  maxDistance        Int?
+  city               String?             @default(uuid())
+  service            String              @default(uuid())
+  specialist         String              @default(uuid())
   vehicleSize        String?             @default(uuid())
-  vehicleSizes       VehicleSize?        @relation(fields: [vehicleSize], references: [id])
+  cities             Cities?             @relation(fields: [city], references: [id], map: "public_ServicePriceOnSpecialist_city_fkey")
+  services           Service             @relation(fields: [service], references: [id], map: "public_ServicePriceOnSpecialist_service_fkey")
+  specialists        Specialist          @relation(fields: [specialist], references: [id], map: "public_ServicePriceOnSpecialist_specialist_fkey")
+  vehicleSizes       VehicleSize?        @relation(fields: [vehicleSize], references: [id], map: "public_ServicePriceOnSpecialist_vehicleSize_fkey")
   takeOnTransactions TakeOnTransaction[]
 }
 
@@ -271,47 +252,39 @@ model VehicleModel {
   vehicleSize  String?
   transactions Transaction[]
   brands       VehicleBrand  @relation(fields: [brand], references: [id])
-
-  // serviceId    String?
-  // Service      Service?      @relation(fields: [serviceId], references: [id])
-
-  vehicleSizes VehicleSize? @relation(fields: [vehicleSize], references: [id])
+  vehicleSizes VehicleSize?  @relation(fields: [vehicleSize], references: [id])
 }
 
 model BankAccount {
-  id          String             @id @default(uuid())
-  category    enum_account_type?
-  brandName   String             @db.VarChar(100)
-  accountName String             @db.VarChar(100)
-  number      String?            @db.VarChar(50)
-  isOnline    Boolean            @default(true)
-  status      Boolean?           @default(true)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-
-  specialist  String?     @default(uuid())
-  specialists Specialist? @relation(fields: [specialist], references: [id])
-  user        String?     @default(uuid())
-  users       User?       @relation(fields: [user], references: [id])
-
+  id           String             @id @default(uuid())
+  category     enum_account_type?
+  brandName    String             @db.VarChar(100)
+  accountName  String             @db.VarChar(100)
+  number       String?            @db.VarChar(50)
+  isOnline     Boolean            @default(true)
+  status       Boolean?           @default(true)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  specialist   String?            @default(uuid())
+  user         String?            @default(uuid())
+  specialists  Specialist?        @relation(fields: [specialist], references: [id])
+  users        User?              @relation(fields: [user], references: [id])
   transactions Transaction[]
 }
 
 model SaldoSpecialist {
-  id        String           @id @default(uuid())
-  note      String?
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  status    Boolean?         @default(false)
-  type      enum_saldo_type?
-  amount    Int?
-  saldo     Int?
-
-  specialist  String     @default(uuid())
-  specialists Specialist @relation(fields: [specialist], references: [id])
-
-  transaction  String?      @default(uuid())
-  transactions Transaction? @relation(fields: [transaction], references: [id])
+  id           String           @id @default(uuid())
+  note         String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  status       Boolean?         @default(false)
+  type         enum_saldo_type?
+  amount       Int?
+  saldo        Int?
+  specialist   String           @default(uuid())
+  transaction  String?          @default(uuid())
+  specialists  Specialist       @relation(fields: [specialist], references: [id])
+  transactions Transaction?     @relation(fields: [transaction], references: [id])
 }
 
 enum enum_admins_role {
