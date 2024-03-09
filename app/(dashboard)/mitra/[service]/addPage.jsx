@@ -1,10 +1,9 @@
 "use client";
 
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-// import { redirect, useRouter } from "next/navigation";
-// import { useRouter } from "next/router";
+import { redirect, useRouter } from "next/navigation";
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { toast } from "react-toastify";
 
@@ -13,7 +12,8 @@ const createService = async (body) => {
   return data.data;
 };
 const AddPage = ({ id }) => {
-  // const router = useRouter();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [jarak, setJarak] = useState("");
   const [tarif, setTarif] = useState("");
@@ -28,7 +28,6 @@ const AddPage = ({ id }) => {
   const [selectCategories, setSelectCategories] = useState(null);
   const [selectServices, setSelectServices] = useState(null);
   const [ukuran, setUkuran] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
@@ -55,16 +54,16 @@ const AddPage = ({ id }) => {
   const mutation = useMutation({
     mutationFn: createService,
     onSuccess: () => {
-      // setLoading(false);
-      QueryClient.invalidateQueries({ queryKey: ["service-mitra"] });
-      toast.success("Data service berhasil ditambahkan");
+      console.log("SUKSES");
+      queryClient.invalidateQueries({ queryKey: ["service-mitra", id] });
+      router.refresh();
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    handleModal();
 
-    // setLoading(true);
     mutation.mutate({
       id: id,
       city: selectCity,
@@ -76,7 +75,7 @@ const AddPage = ({ id }) => {
     });
   };
 
-  mutation.isSuccess && console.log("IS_SUCCESS");
+  // isSuccess && toast.success("Data service berhasil ditambahkan");
 
   const handleModal = () => {
     setIsOpen(!isOpen);
@@ -239,7 +238,7 @@ const AddPage = ({ id }) => {
             </div>
 
             <div className="modal-action">
-              {mutation.isPending ? (
+              {mutation.isLoading ? (
                 <button type="button" className="btn btn-sm loading">
                   Loading...
                 </button>

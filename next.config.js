@@ -10,6 +10,7 @@ const nextConfig = {
       "images.unsplash.com",
       "i.dummyjson.com",
       "josbos-dashboard.vercel.app",
+      "images.remotePatterns",
     ],
     formats: ["image/webp"],
   },

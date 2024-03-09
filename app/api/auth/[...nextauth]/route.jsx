@@ -26,7 +26,7 @@ const authOptions = {
           const resCheck = await axios.get(
             `${process.env.NEXTAUTH_URL}api/auth/admin/check?email=${email}`
           );
-          console.log("RES_AUTH: ", resCheck.data);
+          // console.log("RES_AUTH: ", resCheck.data);
 
           if (resCheck.data.status === false) {
             await axios.post(`${process.env.NEXTAUTH_URL}api/auth/admin`, {
@@ -42,7 +42,6 @@ const authOptions = {
             return true;
           }
         } catch (error) {
-          console.log("ERROR_AUTH: ", error);
           return false;
         }
       } else {

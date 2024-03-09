@@ -157,10 +157,40 @@ export default function NavDashboard() {
                 <div className="ml-4 flow-root lg:ml-6">
                   <button
                     onClick={async () => await signOut()}
-                    className="text-red-500 hover:text-gray-700 text-sm font-normal border border-red-500 rounded-full px-4 py-1 hover:border-gray-700"
+                    className="text-gray-700 text-sm font-normal border border-slate-700 rounded-full px-4 py-0.5 hover:bg-slate-500 hover:text-slate-100 hover:border-slate-500 transition-color duration-400 delay-100 ease-in-out"
                   >
                     Sign Out
                   </button>
+                  {/* <div class="dropdown inline-block">
+                    <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center">
+                      <span class="mr-1">Dropdown</span>
+                      <svg
+                        class="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />{" "}
+                      </svg>
+                    </button>
+                    <ul class="dropdown-menu absolute hidden text-gray-700 pt-1">
+                      <li class="">
+                        <a
+                          class="rounded-t bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                          href="#"
+                        >
+                          One
+                        </a>
+                      </li>
+                      <li class="">
+                        <a
+                          class="bg-gray-200 hover:bg-gray-400 py-2 px-4 block whitespace-no-wrap"
+                          href="#"
+                        >
+                          Two
+                        </a>
+                      </li>
+                    </ul>
+                  </div> */}
                 </div>
               </div>
             </div>

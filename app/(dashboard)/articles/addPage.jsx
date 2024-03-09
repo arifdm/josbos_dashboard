@@ -16,6 +16,7 @@ const AddPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setIsLoading(true);
     await axios.post("/api/article", { title, content, image });
     setIsLoading(false);

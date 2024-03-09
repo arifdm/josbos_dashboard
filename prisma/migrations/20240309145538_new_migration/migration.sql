@@ -50,11 +50,11 @@ CREATE TABLE "User" (
     "photo" TEXT,
     "otp" VARCHAR(10),
     "tokenFCM" VARCHAR(255),
-    "password" VARCHAR(100),
     "status" "enum_status" DEFAULT 'active',
-    "referral" VARCHAR(100),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "password" VARCHAR(100),
+    "referral" VARCHAR(100),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -105,12 +105,12 @@ CREATE TABLE "Transaction" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "orderDate" TIMESTAMP(3),
     "status" "enum_transactions_status" NOT NULL DEFAULT 'pending',
-    "alasanBatal" VARCHAR(255),
     "promo" TEXT,
     "servicePrice" TEXT,
     "user" TEXT,
     "vehicleModel" TEXT,
     "payment" TEXT,
+    "alasanBatal" VARCHAR(255),
 
     CONSTRAINT "Transaction_pkey" PRIMARY KEY ("id")
 );
@@ -124,14 +124,14 @@ CREATE TABLE "TakeOnTransaction" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "orderMethod" VARCHAR(100),
     "amountBids" INTEGER,
-    "partnerRevenue" INTEGER,
-    "feeOrder" INTEGER,
     "rating" INTEGER,
     "ratingComment" VARCHAR(250),
     "serviceDate" TIMESTAMP(3),
     "specialist" TEXT,
     "servicePriceOnSpecialist" TEXT,
     "transaction" TEXT NOT NULL,
+    "feeOrder" INTEGER,
+    "partnerRevenue" INTEGER,
 
     CONSTRAINT "TakeOnTransaction_pkey" PRIMARY KEY ("id")
 );
@@ -172,18 +172,18 @@ CREATE TABLE "Specialist" (
     "latitude" VARCHAR(20),
     "longitude" VARCHAR(20),
     "phone" VARCHAR(50) NOT NULL,
-    "email" VARCHAR(100),
-    "ktp" VARCHAR(20),
     "photo" TEXT,
-    "otp" VARCHAR(10),
-    "tokenFCM" VARCHAR(255),
-    "password" VARCHAR(100),
-    "status" "enum_specialists_status" DEFAULT 'offline',
     "balances" INTEGER,
+    "status" "enum_specialists_status" DEFAULT 'offline',
     "rating" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "city" TEXT,
+    "email" VARCHAR(100),
+    "ktp" VARCHAR(20),
+    "otp" VARCHAR(10),
+    "password" VARCHAR(100),
+    "tokenFCM" VARCHAR(255),
 
     CONSTRAINT "Specialist_pkey" PRIMARY KEY ("id")
 );
@@ -207,12 +207,12 @@ CREATE TABLE "ServicePriceOnSpecialist" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "price" INTEGER NOT NULL,
-    "priceDescription" VARCHAR(200),
-    "maxDistance" INTEGER,
-    "city" TEXT,
     "service" TEXT NOT NULL,
     "specialist" TEXT NOT NULL,
+    "city" TEXT,
     "vehicleSize" TEXT,
+    "priceDescription" VARCHAR(200),
+    "maxDistance" INTEGER,
 
     CONSTRAINT "ServicePriceOnSpecialist_pkey" PRIMARY KEY ("id")
 );
@@ -296,14 +296,14 @@ CREATE TABLE "BankAccount" (
 CREATE TABLE "SaldoSpecialist" (
     "id" TEXT NOT NULL,
     "note" TEXT,
+    "status" BOOLEAN DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "status" BOOLEAN DEFAULT false,
-    "type" "enum_saldo_type",
+    "specialist" TEXT NOT NULL,
     "amount" INTEGER,
     "saldo" INTEGER,
-    "specialist" TEXT NOT NULL,
     "transaction" TEXT,
+    "type" "enum_saldo_type",
 
     CONSTRAINT "SaldoSpecialist_pkey" PRIMARY KEY ("id")
 );

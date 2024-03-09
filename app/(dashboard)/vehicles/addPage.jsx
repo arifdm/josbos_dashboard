@@ -252,7 +252,7 @@ const AddPage = () => {
               </div>
             </div>
             <div className="modal-action">
-              {mutation.isPending ? (
+              {mutation.isLoading ? (
                 <button type="button" className="btn btn-sm loading">
                   Loading...
                 </button>
