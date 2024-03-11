@@ -26,6 +26,7 @@ export default function PesananMasuk() {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["pesanan-masuk"],
     queryFn: () => getPesanan(),
+    refetchOnWindowFocus: true,
   });
   console.log("RES: ", posts);
 

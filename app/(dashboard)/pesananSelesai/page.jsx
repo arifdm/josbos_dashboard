@@ -25,6 +25,7 @@ export default function PesananSelesai() {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["pesanan-selesai"],
     queryFn: () => getPesanan(),
+    refetchOnWindowFocus: true,
   });
   // console.log("SELESAI: ", posts);
 

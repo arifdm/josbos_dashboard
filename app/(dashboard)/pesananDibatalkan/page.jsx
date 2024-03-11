@@ -26,6 +26,7 @@ export default function PesananDibatalkan() {
   const { data: posts, isLoading } = useQuery({
     queryKey: ["pesanan-dibatalkan"],
     queryFn: () => getPesanan(),
+    refetchOnWindowFocus: true,
   });
   // console.log("DIBATALKAN: ", posts);
 
