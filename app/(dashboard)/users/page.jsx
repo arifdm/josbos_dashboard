@@ -17,7 +17,7 @@ export default async function Users() {
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-7">Pemesan</div>
+      <div className="text-xl font-semibold mb-7 text-primary">Pemesan</div>
       <div className="w-full grid grid-cols-2 gap-3">
         <Search value="" placeholder="Cari pemesan..." />
         <div className="flex justify-end"></div>

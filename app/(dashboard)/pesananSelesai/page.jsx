@@ -56,7 +56,9 @@ export default function PesananSelesai() {
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-7">Pesanan Selesai</div>
+      <div className="text-xl font-semibold mb-7 text-primary">
+        Pesanan Selesai
+      </div>
       {isLoading ? (
         <LoadingSpinner />
       ) : (

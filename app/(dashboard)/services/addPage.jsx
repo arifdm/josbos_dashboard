@@ -1,31 +1,56 @@
 "use client";
 
-import { PlusIcon } from "@heroicons/react/20/solid";
+import { PlusIcon } from "@heroicons/react/24/solid";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
-const AddPage = () => {
+const getCategory = async () => {
+  const { data } = await axios.get(`/fetch/category`);
+  return data.data;
+};
+
+const createService = async (body) => {
+  const { data } = await axios.post(`/fetch/category`, body);
+  return data.data;
+};
+
+const AddPage = ({ id }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectCategory, setSelectCategory] = useState([]);
+  const [layanan, setLayanan] = useState("");
 
-  const handleSubmit = async (e) => {
+  const { data: dataCategory, isLoading } = useQuery({
+    queryKey: ["category"],
+    queryFn: getCategory,
+  });
+
+  const mutation = useMutation({
+    mutationFn: createService,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["service-mitra", id] });
+      toast.success("Layanan telah berhasil ditambahkan");
+      // router.refresh();
+    },
+  });
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    await axios.post("/api/articles", { title, content, image });
-    setIsLoading(false);
-    setTitle("");
-    setContent("");
-    setImage("");
-
-    router.refresh();
-    setIsOpen(false);
+    handleModal();
+    const formData = {
+      category: selectCategory,
+      newService: layanan,
+    };
+    // console.log("FORM_DATA: ", formData);
+    mutation.mutate(formData);
   };
+
+  // isSuccess && toast.success("Data service berhasil ditambahkan");
 
   const handleModal = () => {
     setIsOpen(!isOpen);
@@ -41,49 +66,53 @@ const AddPage = () => {
       </div>
       <div className={isOpen ? "modal modal-open" : "modal"}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg">Add New Data</h3>
+          <button
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            onClick={handleModal}
+          >
+            ✕
+          </button>
+          <h3 className="text-lg mb-4">Tambah Layanan</h3>
           <form onSubmit={handleSubmit}>
-            <div className="form-control w-full">
-              <label className="label font-bold">Title</label>
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="input input-bordered"
-                placeholder="Article Name"
-              />
-            </div>
-            <div className="form-control w-full">
-              <label className="label font-bold">Content</label>
-              <input
-                type="text"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                className="input input-bordered"
-                placeholder="Content"
-              />
-            </div>
-            <div className="form-control w-full">
-              <label className="label font-bold">Images</label>
-              <input
-                type="text"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-                className="input input-bordered"
-                placeholder="Url"
-              />
+            <div className="w-full grid grid-cols-2 gap-3 mt-3">
+              <div className="form-control w-full">
+                <label className="label font-small text-gray-500">
+                  Kategori
+                </label>
+                <select
+                  onChange={(e) => setSelectCategory(e.target.value)}
+                  className="select select-bordered select-sm w-full max-w-xs"
+                >
+                  <option disabled selected>
+                    Pilih
+                  </option>
+                  {dataCategory?.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-control w-full">
+                <label className="label font-small text-gray-500">
+                  Layanan
+                </label>
+                <input
+                  type="text"
+                  value={layanan}
+                  onChange={(e) => setLayanan(e.target.value)}
+                  className="input input-bordered input-sm"
+                />
+              </div>
             </div>
             <div className="modal-action">
-              <button type="button" className="btn" onClick={handleModal}>
-                Close
-              </button>
-              {!isLoading ? (
-                <button type="submit" className="btn btn-primary">
-                  Save
+              {mutation.isLoading ? (
+                <button type="button" className="btn btn-sm loading">
+                  Loading...
                 </button>
               ) : (
-                <button type="button" className="btn loading">
-                  Saving...
+                <button type="submit" className="btn btn-sm btn-primary">
+                  Simpan
                 </button>
               )}
             </div>

@@ -19,10 +19,22 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const { name } = await request.json();
+  const { type, brand, newBrand, vehicleSize, name } = await request.json();
+
+  let idNewBrand = null;
+  if (newBrand) {
+    const dataNewBrand = await prisma.vehicleBrand.create({
+      data: { type, name: newBrand },
+    });
+    idNewBrand = dataNewBrand?.id;
+  }
 
   const data = await prisma.vehicleModel.create({
-    data: { name },
+    data: {
+      brand: idNewBrand ? idNewBrand : brand,
+      vehicleSize,
+      name,
+    },
   });
 
   return NextResponse.json({

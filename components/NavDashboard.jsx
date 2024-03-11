@@ -87,7 +87,7 @@ export default function NavDashboard() {
                     <div key={page.name} className="flow-root">
                       <Link
                         href={page.href}
-                        className="-m-2 block p-2 font-medium text-gray-900"
+                        className="-m-2 block p-2 font-normal text-gray-600"
                       >
                         {page.name}
                       </Link>
@@ -100,68 +100,64 @@ export default function NavDashboard() {
         </Dialog>
       </Transition.Root>
 
-      <header className="relative bg-[#FCB92D]">
-        <nav
-          aria-label="Top"
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-        >
-          <div className="border-b border-gray-200">
-            <div className="flex h-16 items-center">
-              <button
-                type="button"
-                className="relative rounded-md p-2 text-white lg:hidden"
-                onClick={() => setOpen(true)}
-              >
-                <span className="absolute -inset-0.5" />
-                <span className="sr-only">Open menu</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-              </button>
+      <header className="relative bg-primary">
+        <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="flex h-16 items-center">
+            <button
+              type="button"
+              className="relative text-black text-lg font-bold lg:hidden"
+              onClick={() => setOpen(true)}
+            >
+              <span className="absolute -inset-0.5" />
+              <span className="sr-only">Open menu</span>
+              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+            </button>
 
-              {/* Logo */}
-              <div className="ml-4 flex lg:ml-0">
-                <Link href="/mainboard">
-                  <Image
-                    className="h-8 w-auto rounded max-w-full align-middle border-none"
-                    width={80}
-                    height={80}
-                    src="/logoDashboard.png"
-                    alt="Logo"
-                    priority
-                  />
+            {/* Logo */}
+            <div className="ml-4 flex lg:ml-0">
+              <Link href="/mainboard">
+                <Image
+                  className="h-8 w-auto rounded max-w-full align-middle border-none"
+                  width={80}
+                  height={80}
+                  src="/logoDashboard.png"
+                  alt="Logo"
+                  priority
+                />
+              </Link>
+            </div>
+
+            <div className="ml-auto flex items-center">
+              {/* Cart */}
+              <div className="ml-4 flow-root lg:ml-6">
+                <Link href="#" className="group -m-2 flex items-center p-2">
+                  {status === "authenticated" ? (
+                    <Image
+                      className="h-8 w-auto rounded-full max-w-full align-middle border-none"
+                      width={70}
+                      height={70}
+                      src={session?.user?.image}
+                      alt="Logo"
+                    />
+                  ) : (
+                    <UserCircleIcon
+                      className="h-6 w-6 flex-shrink-0 text-gray-700 group-hover:text-white"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-indigo-700">
+                    {session?.user?.name}
+                  </span>
                 </Link>
               </div>
-
-              <div className="ml-auto flex items-center">
-                {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-6">
-                  <Link href="#" className="group -m-2 flex items-center p-2">
-                    {status === "authenticated" ? (
-                      <Image
-                        className="h-8 w-auto rounded-full max-w-full align-middle border-none"
-                        width={70}
-                        height={70}
-                        src={session?.user?.image}
-                        alt="Logo"
-                      />
-                    ) : (
-                      <UserCircleIcon
-                        className="h-6 w-6 flex-shrink-0 text-gray-200 group-hover:text-white"
-                        aria-hidden="true"
-                      />
-                    )}
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-indigo-700">
-                      {session?.user?.name}
-                    </span>
-                  </Link>
-                </div>
-                <div className="ml-4 flow-root lg:ml-6">
-                  <button
-                    onClick={async () => await signOut()}
-                    className="text-gray-700 text-sm font-normal border border-slate-700 rounded-full px-4 py-0.5 hover:bg-slate-500 hover:text-slate-100 hover:border-slate-500 transition-color duration-400 delay-100 ease-in-out"
-                  >
-                    Sign Out
-                  </button>
-                  {/* <div class="dropdown inline-block">
+              <div className="ml-4 flow-root lg:ml-6">
+                <button
+                  onClick={async () => await signOut()}
+                  className="text-gray-700 text-sm font-normal border border-slate-700 rounded-full px-4 py-0.5 hover:bg-slate-500 hover:text-slate-100 hover:border-slate-500 transition-color duration-400 delay-100 ease-in-out"
+                >
+                  Sign Out
+                </button>
+                {/* <div class="dropdown inline-block">
                     <button class="bg-gray-300 text-gray-700 font-semibold py-2 px-4 rounded inline-flex items-center">
                       <span class="mr-1">Dropdown</span>
                       <svg
@@ -191,7 +187,6 @@ export default function NavDashboard() {
                       </li>
                     </ul>
                   </div> */}
-                </div>
               </div>
             </div>
           </div>

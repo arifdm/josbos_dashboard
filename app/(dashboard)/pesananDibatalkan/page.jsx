@@ -57,7 +57,9 @@ export default function PesananDibatalkan() {
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-7">Pesanan Dibatalkan</div>
+      <div className="text-xl font-semibold mb-7 text-primary">
+        Pesanan Dibatalkan
+      </div>
       {isLoading ? (
         <LoadingSpinner />
       ) : (

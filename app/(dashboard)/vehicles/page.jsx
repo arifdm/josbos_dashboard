@@ -51,6 +51,11 @@ const getVehicles = async () => {
   return data.data;
 };
 
+const getCategory = async () => {
+  const { data } = await axios.get("/fetch/vehicle/category");
+  return data.data;
+};
+
 export default function Vehicles() {
   // const data = await getData();
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,16 +75,29 @@ export default function Vehicles() {
     setCurrentPage(pageNumber);
   };
 
+  const { data: dataCatagory, isLoading: isLoadingCatagory } = useQuery({
+    queryKey: ["category"],
+    queryFn: () => getCategory(),
+  });
+
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-4">Kendaraan</div>
+      <div className="text-xl font-semibold mb-4 text-primary">Kendaraan</div>
       <div className="w-full flex flex-row border-t border-gray-200">
         <div className="w-1/5 border-r border-gray-200 pt-8 hidden lg:block">
           <h2 className="font-medium mb-3">Kategori</h2>
-          <ul>
-            <li className="text-sm py-2">All</li>
-            <li className="text-sm py-2">Mobil</li>
-            <li className="text-sm py-2">Motor</li>
+          <ul className="pr-6">
+            <li className="text-sm px-2 py-0.5 border border-gray-100 rounded-md my-1.5">
+              All
+            </li>
+            {dataCatagory?.map((cat) => (
+              <li
+                className="text-sm px-2 py-0.5 border border-gray-100 rounded-md my-1.5"
+                key={cat.id}
+              >
+                {cat.name}
+              </li>
+            ))}
           </ul>
         </div>
         <div className="w-full pt-8 lg:pl-6">

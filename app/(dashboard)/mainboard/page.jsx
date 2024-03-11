@@ -29,7 +29,7 @@ const Mainboard = () => {
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-5">Dashboard</div>
+      <div className="text-xl font-semibold mb-5 text-primary">Dashboard</div>
       <div className="grid grid-flow-col gap-4">
         <div className="h-28 bg-gray-100 col-span-1 rounded-md"></div>
         <div className="h-28 bg-gray-100 col-span-1 rounded-md"></div>

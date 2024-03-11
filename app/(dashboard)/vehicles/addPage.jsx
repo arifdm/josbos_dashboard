@@ -1,6 +1,6 @@
 "use client";
 
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
 // import { redirect, useRouter } from "next/navigation";
@@ -11,26 +11,23 @@ import { IoCloseCircle } from "react-icons/io5";
 import { toast } from "react-toastify";
 
 const createService = async (body) => {
-  const { data } = await axios.post(`/fetch/service/${body?.id}`, body);
+  const { data } = await axios.post(`/fetch/vehicle/type`, body);
   return data.data;
 };
 const AddPage = () => {
   // const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const [category, setCategory] = useState([]);
   const [merk, setMerk] = useState([]);
-  const [type, setType] = useState([]);
   const [size, setSize] = useState([]);
 
   const [selectCategory, setSelectCategory] = useState(null);
   const [selectMerk, setSelectMerk] = useState(null);
-  const [selectTipe, setSelectTipe] = useState(null);
   const [selectSize, setSelectSize] = useState(null);
 
   const [isMerk, setIsMerk] = useState(false);
-  const [isTipe, setIsTipe] = useState(false);
-
   const [inputMerk, setInputMerk] = useState(null);
   const [inputTipe, setInputTipe] = useState(null);
 
@@ -38,34 +35,31 @@ const AddPage = () => {
     mutationFn: createService,
     onSuccess: () => {
       // setLoading(false);
-      QueryClient.invalidateQueries({ queryKey: ["service-mitra"] });
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      toast.success("Kendaraan telah berhasil ditambahkan");
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setLoading(true);
     const formData = {
-      category: selectCategory,
-      merk: inputMerk ? inputMerk : selectMerk,
-      tipe: inputTipe ? inputTipe : selectTipe,
-      size: selectSize,
+      type: selectCategory,
+      brand: inputMerk ? "" : selectMerk,
+      newBrand: inputMerk,
+      vehicleSize: selectSize,
+      name: inputTipe,
     };
+    // console.log("SUBMIT_DATA: ", formData);
 
-    if (
-      !formData.category ||
-      !formData.merk ||
-      !formData.tipe ||
-      !formData.size
-    ) {
+    if (!formData.type || !formData.vehicleSize || !formData.name) {
       toast.error("Silakan pilih/masukkan semua data");
+    } else if (!formData.brand && !formData.newBrand) {
+      toast.error("Silakan pilih/masukkan merk");
     } else {
-      // mutation.mutate(formData);
-      console.log("SUBMIT_DATA: ", formData);
+      handleModal();
+      mutation.mutate(formData);
     }
   };
-
-  mutation.isSuccess && console.log("IS_SUCCESS");
 
   const handleModal = () => {
     setIsOpen(!isOpen);
@@ -73,19 +67,12 @@ const AddPage = () => {
 
   useEffect(() => {
     getCategory();
+    getSize();
   }, []);
 
   useEffect(() => {
     getMerk();
   }, [selectCategory]);
-
-  useEffect(() => {
-    getType();
-  }, [selectMerk]);
-
-  useEffect(() => {
-    getSize();
-  }, [selectCategory, selectMerk, selectTipe]);
 
   const getCategory = async () => {
     const { data } = await axios.get("/fetch/vehicle/category");
@@ -97,11 +84,6 @@ const AddPage = () => {
       `/fetch/vehicle/merk?type=${selectCategory}`
     );
     setMerk(data.data);
-  };
-
-  const getType = async () => {
-    const { data } = await axios.get(`/fetch/vehicle/type?brand=${selectMerk}`);
-    setType(data.data);
   };
 
   const getSize = async () => {
@@ -196,43 +178,14 @@ const AddPage = () => {
             </div>
             <div className="w-full grid grid-cols-2 gap-3 mt-3">
               <div className="form-control w-full">
-                <div className="flex flex-row justify-between items-center">
-                  <label className="label font-small text-gray-500">Tipe</label>
-                  {isTipe ? (
-                    <IoCloseCircle
-                      className="w-4 h-4 inline-block text-red-400 cursor-pointer"
-                      onClick={() => setIsTipe(false)}
-                    />
-                  ) : (
-                    <PlusCircleIcon
-                      className="w-4 h-4 inline-block cursor-pointer"
-                      onClick={() => setIsTipe(true)}
-                    />
-                  )}
-                </div>
-                {isTipe ? (
-                  <input
-                    type="text"
-                    value={inputTipe}
-                    onChange={(e) => setInputTipe(e.target.value)}
-                    className="input input-bordered input-sm w-full"
-                    placeholder="Masukkan Data"
-                  />
-                ) : (
-                  <select
-                    onChange={(e) => setSelectTipe(e.target.value)}
-                    className="select select-bordered select-sm w-full max-w-xs"
-                  >
-                    <option disabled selected className="text-gray-200">
-                      Pilih Tipe
-                    </option>
-                    {type?.map((item) => (
-                      <option key={item.id} value={item.id}>
-                        {item.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
+                <label className="label font-small text-gray-500">Tipe</label>
+                <input
+                  type="text"
+                  value={inputTipe}
+                  onChange={(e) => setInputTipe(e.target.value)}
+                  className="input input-bordered input-sm w-full"
+                  placeholder="Masukkan Data"
+                />
               </div>
               <div className="form-control w-full">
                 <label className="label font-small text-gray-500">Ukuran</label>

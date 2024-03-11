@@ -29,28 +29,6 @@ const AddPage = ({ id }) => {
   const [selectServices, setSelectServices] = useState(null);
   const [ukuran, setUkuran] = useState(null);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     setIsLoading(true);
-  //     const res = await axios.post(`/fetch/service/${id}`, {
-  //       city: selectCity,
-  //       distance: jarak,
-  //       service: selectServices,
-  //       vehicleSize: ukuran,
-  //       price: tarif,
-  //       priceDescription: keterangan,
-  //     });
-  //     setIsLoading(false);
-  //     router.refresh();
-
-  //     setIsOpen(false);
-  //     console.log("RES: ", res);
-  //   } catch (error) {
-  //     console.log("ERROR: ", error);
-  //   }
-  // };
-
   const mutation = useMutation({
     mutationFn: createService,
     onSuccess: () => {
@@ -64,15 +42,15 @@ const AddPage = ({ id }) => {
     e.preventDefault();
     handleModal();
 
-    mutation.mutate({
-      id: id,
-      city: selectCity,
-      distance: jarak,
-      service: selectServices,
-      vehicleSize: ukuran,
-      price: tarif,
-      priceDescription: keterangan,
-    });
+    // mutation.mutate({
+    //   id: id,
+    //   city: selectCity,
+    //   distance: jarak,
+    //   service: selectServices,
+    //   vehicleSize: ukuran,
+    //   price: tarif,
+    //   priceDescription: keterangan,
+    // });
   };
 
   // isSuccess && toast.success("Data service berhasil ditambahkan");
@@ -82,15 +60,9 @@ const AddPage = ({ id }) => {
   };
 
   useEffect(() => {
-    getKategoriLayanan();
     getCity();
     getVehicleSize();
   }, [id]);
-
-  const getKategoriLayanan = async () => {
-    const { data } = await axios.get("/api/category");
-    setCategories(data.data);
-  };
 
   const getCity = async () => {
     const { data } = await axios.get("/fetch/city");
@@ -125,9 +97,9 @@ const AddPage = ({ id }) => {
           >
             ✕
           </button>
-          <h3 className="text-lg mb-4">Tambah Layanan</h3>
+          <h3 className="text-lg mb-4">Tambah Tarif</h3>
           <form onSubmit={handleSubmit}>
-            <div className="w-full grid grid-cols-2 gap-3 mt-3">
+            <div className="w-full grid grid-cols-3 gap-3 mt-3">
               <div className="form-control w-full">
                 <label className="label font-small text-gray-500">Kota</label>
                 <select
@@ -146,60 +118,7 @@ const AddPage = ({ id }) => {
               </div>
               <div className="form-control w-full">
                 <label className="label font-small text-gray-500">
-                  Jarak Layanan (Km)
-                </label>
-                <input
-                  type="text"
-                  value={jarak}
-                  onChange={(e) => setJarak(e.target.value)}
-                  className="input input-bordered input-sm"
-                />
-              </div>
-            </div>
-
-            <div className="w-full grid grid-cols-2 gap-3 mt-3">
-              <div className="form-control w-full">
-                <label className="label font-small text-gray-500">
-                  Kategori
-                </label>
-                <select
-                  onChange={(e) => setSelectCategories(e.target.value)}
-                  className="select select-bordered select-sm w-full max-w-xs"
-                >
-                  <option disabled selected>
-                    Pilih Kategori
-                  </option>
-                  {categories?.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="form-control w-full">
-                <label className="label font-small text-gray-500">
-                  Layanan
-                </label>
-                <select
-                  onChange={(e) => setSelectServices(e.target.value)}
-                  className="select select-bordered select-sm w-full max-w-xs"
-                >
-                  <option disabled selected>
-                    Pilih Layanan
-                  </option>
-                  {dataServices?.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="w-full grid grid-cols-2 gap-3 mt-3">
-              <div className="form-control w-full">
-                <label className="label font-small text-gray-500">
-                  Ukuran Kendaraan
+                  Kendaraan
                 </label>
                 <select
                   onChange={(e) => setUkuran(e.target.value)}
@@ -219,24 +138,12 @@ const AddPage = ({ id }) => {
                 <label className="label font-small text-gray-500">Tarif</label>
                 <input
                   type="text"
-                  value={tarif}
-                  onChange={(e) => setTarif(e.target.value)}
+                  value={jarak}
+                  onChange={(e) => setJarak(e.target.value)}
                   className="input input-bordered input-sm"
                 />
               </div>
             </div>
-            <div className="form-control w-full">
-              <label className="label font-small text-gray-500">
-                Keterangaan
-              </label>
-              <input
-                type="text"
-                value={keterangan}
-                onChange={(e) => setKeterangan(e.target.value)}
-                className="input input-bordered input-sm"
-              />
-            </div>
-
             <div className="modal-action">
               {mutation.isLoading ? (
                 <button type="button" className="btn btn-sm loading">

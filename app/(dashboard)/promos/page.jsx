@@ -23,7 +23,7 @@ const Promos = async () => {
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-7">Promo</div>
+      <div className="text-xl font-semibold mb-7 text-primary">Promo</div>
       <div className="w-full grid grid-cols-2 gap-3">
         <Search value="" placeholder="Cari promo..." />
         <div className="flex justify-end">

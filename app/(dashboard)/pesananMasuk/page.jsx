@@ -57,7 +57,9 @@ export default function PesananMasuk() {
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-7">Pesanan Masuk & Ambil</div>
+      <div className="text-xl font-semibold mb-7 text-primary">
+        Pesanan Masuk & Ambil
+      </div>
       {isLoading ? (
         <LoadingSpinner />
       ) : (

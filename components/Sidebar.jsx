@@ -21,8 +21,14 @@ export default function Menu() {
   const pathname = usePathname();
 
   return (
-    <div className="w-1/6 bg-slate-200 hidden lg:block px-4 py-8 text-sm max-h-full min-h-screen">
-      <div className="font-bold mt-2 mx-1">
+    <div className="w-1/6 bg-slate-100 hidden lg:block px-4 py-8 text-sm max-h-full min-h-screen">
+      <div
+        className={`font-bold mt-2 mx-1 hover:text-primary ${
+          pathname === "/mainboard"
+            ? "text-primary"
+            : "transition-color duration-400 delay-100 ease-in-out"
+        }`}
+      >
         <Link href="/mainboard">Dashboard</Link>
       </div>
       <div className="font-bold mt-6 mx-1">Pesanan</div>

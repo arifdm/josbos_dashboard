@@ -19,17 +19,25 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const { name } = await request.json();
+  const { type, name } = await request.json();
 
-  const data = await prisma.vehicleBrand.create({
-    data: { name },
-  });
+  try {
+    const data = await prisma.vehicleBrand.create({
+      data: { type, name },
+    });
 
-  return NextResponse.json({
-    status: true,
-    message: "Entry successfully created",
-    data: data,
-  });
+    return NextResponse.json({
+      status: true,
+      message: "Entry successfully created",
+      data: data,
+    });
+  } catch (error) {
+    console.log("ERROR: ", error);
+    return NextResponse.json({
+      status: false,
+      error: "Entry failed",
+    });
+  }
 }
 
 export async function DELETE(request) {
