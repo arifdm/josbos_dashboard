@@ -3,6 +3,7 @@ import prisma from "@/prisma/prisma";
 import moment from "moment";
 import DeletePage from "./deletePage";
 import UpdatePage from "./updatePage";
+import { LiaUserCircle } from "react-icons/lia";
 
 const getUser = async () => {
   const res = await prisma.user.findMany();
@@ -62,6 +63,7 @@ export default async function Users() {
                         {moment(item.createdAt).format("DD/MM/YYYY hh:mm")}
                       </td>
                       <td className="whitespace-nowrap py-4 font-bold">
+                        <LiaUserCircle size={35} className="inline" />{" "}
                         {item.name}
                       </td>
                       <td className="whitespace-nowrap py-4">{item.email}</td>

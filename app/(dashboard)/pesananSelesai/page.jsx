@@ -166,15 +166,18 @@ export default function PesananSelesai() {
                               {item.takeOnTransactions[0]?.specialists?.name}
                             </td>
                             <td className="px-2 py-4">
-                              Spe:{" "}
-                              <span className="font-medium">
-                                {item.takeOnTransactions[0]?.partnerRevenue}
-                              </span>
-                              <br />
-                              Apl:{" "}
-                              <span className="font-medium">
-                                {item.takeOnTransactions[0]?.feeOrder}
-                              </span>
+                              <div className="bg-sky-200 px-2 py-0.2 text-[12px] rounded-full w-24 text-gray-500 text-center mb-1">
+                                Spes:{" "}
+                                {new Intl.NumberFormat("id-ID").format(
+                                  item.takeOnTransactions[0]?.partnerRevenue
+                                )}
+                              </div>
+                              <div className="bg-rose-200 px-2 py-0.2 text-[12px] rounded-full w-24 text-gray-500 text-center">
+                                Apl:{" "}
+                                {new Intl.NumberFormat("id-ID").format(
+                                  item.takeOnTransactions[0]?.feeOrder
+                                )}
+                              </div>
                             </td>
                             <td className="text-center px-2">
                               {item.takeOnTransactions[0]?.rating}

@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import DeletePage from "./deletePage";
 import UpdatePage from "./updatePage";
+import { LiaUserCircle } from "react-icons/lia";
 
 const getMitra = async () => {
   const { data } = await axios.get(`/fetch/specialist`);
@@ -114,6 +115,7 @@ export default function Users() {
                               )}
                             </td>
                             <td className="whitespace-nowrap py-4 font-bold">
+                              <LiaUserCircle size={35} className="inline" />{" "}
                               {item.name}
                             </td>
                             <td className="whitespace-nowrap py-4">

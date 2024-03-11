@@ -101,7 +101,7 @@ export default function PesananDibatalkan() {
                           <th scope="col" width="15%" className="px-2 py-4">
                             Nama Pemesan
                           </th>
-                          <th scope="col" width="20%" className="px-2 py-4">
+                          <th scope="col" width="23%" className="px-2 py-4">
                             Lokasi & Alamat
                           </th>
                           <th scope="col" width="15%" className="px-2 py-4">
@@ -110,15 +110,8 @@ export default function PesananDibatalkan() {
                           <th scope="col" width="13%" className="px-2 py-4">
                             Pembayaran
                           </th>
-                          <th scope="col" width="15%" className="px-2 py-4">
+                          <th scope="col" width="20%" className="px-2 py-4">
                             Alasan Pembatalan
-                          </th>
-                          <th
-                            scope="col"
-                            width="8%"
-                            className="px-2 py-4 text-center"
-                          >
-                            Tgl Batal
                           </th>
                         </tr>
                       </thead>
@@ -166,10 +159,7 @@ export default function PesananDibatalkan() {
                               <br />
                               Total: {Rupiah(item.total)}
                             </td>
-                            <td className="px-2 py-4"></td>
-                            <td className="text-center px-2">
-                              <StatusTransaction data={item} />
-                            </td>
+                            <td className="px-2 py-4">{item?.alasanBatal}</td>
                           </tr>
                         ))}
                       </tbody>

@@ -16,6 +16,7 @@ export async function GET(request) {
       latitude: true,
       longitude: true,
       total: true,
+      alasanBatal: true,
       users: {
         select: {
           name: true,
