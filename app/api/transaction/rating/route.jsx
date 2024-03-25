@@ -71,7 +71,7 @@ export async function PUT(request, { params }) {
 
       const msg = {
         title: "TERIMA KASIH TELAH PESAN DI JOSBOS",
-        body: "Apabila Kamu puas dengan layanan kami, silakan untuk bagi ke teman atau saudara yang lain. Terima kasih.",
+        body: "Apabila Kamu puas dengan layanan kami, silakan beritahu teman atau saudara yang lain. Terima kasih.",
         data: {
           page: "Home",
           id: null,
