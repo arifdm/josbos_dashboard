@@ -128,21 +128,21 @@ export async function POST(request) {
             await prisma.$queryRaw`SELECT *, 6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION )))) as distance FROM "public"."Specialist" WHERE (6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION ))))) <= 10 AND status = 'online'`;
 
           // console.log("LIST_SPECIALIST: ", specialists);
-          const listTokenFCM = specialists
+          const specialistFCM = specialists
             ?.map((item) => item?.tokenFCM)
             .filter((tokenFCM) => tokenFCM != "" && tokenFCM != null);
 
-          // console.log("LIST_TOKEN: ", listTokenFCM);
+          // console.log("LIST_TOKEN: ", specialistFCM);
 
-          listTokenFCM?.map(async (token) => {
-            await SendFCM(token, msg.title, msg.body, msg.data);
+          specialistFCM?.map(async (token) => {
+            await SendFCM("SPECIALIST", token, msg.title, msg.body, msg.data);
           });
         } catch (error) {
           console.log("ERROR: ", error);
         }
       } else {
         const token = data?.takeOnTransactions?.[0]?.specialist?.tokenFCM;
-        SendFCM(token, msg.title, msg.body, msg.data);
+        SendFCM("SPECIALIST", token, msg.title, msg.body, msg.data);
         console.log("BUKAN RANDOM MITRA");
       }
 

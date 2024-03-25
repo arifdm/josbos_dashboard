@@ -78,7 +78,7 @@ export async function PUT(request, { params }) {
         },
       };
 
-      SendFCM(specialistFCM?.tokenFCM, msg.title, msg.body, msg.data)
+      SendFCM("USER", specialistFCM?.tokenFCM, msg.title, msg.body, msg.data)
         .then((res) => console.log("SEND_FCM_SUCCESS: ", res))
         .catch((err) => console.log("SEND_FCM_ERROR: ", err));
 

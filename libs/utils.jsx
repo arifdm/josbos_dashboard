@@ -23,9 +23,16 @@ export function Truncate(str, max, len) {
   return str.length > max ? str.substring(0, len) + "..." : str;
 }
 
-export function SendFCM(to, title, body, data) {
+export function SendFCM(server, to, title, body, data) {
   return new Promise(async (rs) => {
     try {
+      let key;
+      if (server === "USER") {
+        key = process.env.FCM_SERVER_KEY_USER;
+      } else if (server === "SPECIALIST") {
+        key = process.env.FCM_SERVER_KEY_SPESIALIST;
+      }
+
       const message = {
         to,
         priority: "high",
@@ -39,7 +46,7 @@ export function SendFCM(to, title, body, data) {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `key=${process.env.FCM_SERVER_KEY}`,
+            Authorization: `key=${key}`,
           },
         }
       );
