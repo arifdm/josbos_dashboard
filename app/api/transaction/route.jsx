@@ -114,8 +114,8 @@ export async function POST(request) {
       console.log("CREATED: ", data);
 
       const msg = {
-        title: "PESANAN UNTUK MITRA JOSBOS",
-        body: "Pesanan telah masuk, silakan buka aplikasi Josbos sekarang juga...!",
+        title: "PESANAN MASUK UNTUK MITRA JOSBOS",
+        body: "Pesanan telah masuk sesuai layanan dan jarak Kamu dengan pemesan. Silakan buka aplikasi Josbos sekarang juga...!",
         data: {
           page: "Home",
           id: data?.id,

@@ -70,12 +70,12 @@ export async function PUT(request, { params }) {
       });
 
       const msg = {
-        title: "Pesanan Anda telah diambil oleh Mitra",
-        body: `Kamu telah melakukan pemesanan di JOSBOS, Tanggal: ${moment(
+        title: "PESANAN KAMU TELAH DIAMBIL MITRA JOSBOS",
+        body: `Pemesanan Kamu, Tanggal: ${moment(
           resTransaction.createdAt
         ).format("DD MMM YYYY - HH:mm")}, No: JB-${moment(
           resTransaction.createdAt
-        ).unix()}. Silakan tunggu, mitra kami segera datang ke lokasi.`,
+        ).unix()} telah diambil. Silakan tunggu, mitra kami segera datang ke lokasi.`,
         data: {
           page: "Home",
           id: null,

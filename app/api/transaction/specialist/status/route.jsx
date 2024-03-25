@@ -92,14 +92,12 @@ export async function PUT(request, { params }) {
       });
 
       const msg = {
-        title: "UPDATE STATUS PESANAN",
+        title: "UPDATE STATUS PESANAN KAMU",
         body: `Pesanan Kamu Tanggal: ${moment(dataTrans.createdAt).format(
           "DD MMM YYYY - HH:mm"
         )}, No: JB-${moment(
           dataTrans.createdAt
-        ).unix()} telah diupdate menjadi ${upperCase(
-          status
-        )}. Silakan buka aplikasi Josbos.`,
+        ).unix()} telah diupdate menjadi ${status.toUpperCase()}. Silakan buka aplikasi Josbos.`,
         data: {
           page: "Home",
           id: null,

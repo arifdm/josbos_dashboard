@@ -88,7 +88,7 @@ export async function PUT(request, { params }) {
       });
 
       const msg2 = {
-        title: "RATING LAYANAN KAMU",
+        title: "RATING LAYANAN YANG KAMU SELESAIKAN",
         body: "Pemesan telah menilai layanan Kamu, silakan buka aplikasi Josbos.",
         data: {
           page: "Home",
