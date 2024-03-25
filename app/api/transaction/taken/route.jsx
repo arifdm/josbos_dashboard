@@ -1,6 +1,8 @@
 import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { SendFCM } from "@/libs/utils";
+import moment from "moment";
 
 export async function PUT(request, { params }) {
   const accessToken = request.headers.get("Authorization");
@@ -50,7 +52,7 @@ export async function PUT(request, { params }) {
         where: { id: transaction },
         data: { status: "taken" },
       });
-      console.log("RES_TRANSACTION: ", resTransaction);
+      console.log("SERVER_RES_TRANSACTION: ", resTransaction);
 
       const resTake = await prisma.takeOnTransaction.update({
         where: { id: takeID.id },
@@ -60,7 +62,29 @@ export async function PUT(request, { params }) {
           selected,
         },
       });
-      console.log("RES_TAKE: ", resTake);
+      console.log("SERVER_RES_TAKE: ", resTake);
+
+      // NOTIF TO USER
+      const userFCM = await prisma.user.findFirst({
+        where: { id: resTransaction.user },
+      });
+
+      const msg = {
+        title: "Pesanan Anda telah diambil oleh Mitra",
+        body: `Kamu telah melakukan pemesanan di JOSBOS, tanggal: ${moment(
+          resTransaction.createdAt
+        ).format("DD MMM YYYY - HH:mm")} (JB-${moment(
+          resTransaction.createdAt
+        ).unix()}). Silakan tunggu, mitra kami segera datang ke lokasi.`,
+        data: {
+          page: "Home",
+          id: null,
+        },
+      };
+
+      SendFCM(userFCM?.tokenFCM, msg.title, msg.body, msg.data)
+        .then((res) => console.log("SEND_FCM_SUCCESS: ", res))
+        .catch((err) => console.log("SEND_FCM_ERROR: ", err));
 
       return NextResponse.json({
         status: true,

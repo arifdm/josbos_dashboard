@@ -59,7 +59,7 @@ const Services = async () => {
           <ul>
             <li className="text-sm py-2">All</li>
             {category?.map((item) => (
-              <li key={item.id} className="text-sm py-2">
+              <li key={item.id} className="text-sm py-2 font-normal">
                 {item.name}
               </li>
             ))}

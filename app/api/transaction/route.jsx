@@ -2,6 +2,7 @@ import prisma from "@/prisma/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import jwt from "jsonwebtoken";
+import { SendFCM } from "@/libs/utils";
 
 export async function GET(request) {
   const data = await prisma.transaction.findMany();
@@ -16,6 +17,23 @@ export async function GET(request) {
 
 export async function POST(request) {
   const accessToken = request.headers.get("Authorization");
+  const {
+    address,
+    amount,
+    discount,
+    latitude,
+    longitude,
+    note,
+    orderMethod, // TakeOnTransaction
+    promo,
+    servicePrice,
+    servicePriceOnSpecialist, // TakeOnTransaction
+    total,
+    user,
+    orderDate,
+    vehicleModel,
+    payment,
+  } = await request.json();
 
   if (!accessToken) {
     return NextResponse.json({
@@ -63,24 +81,6 @@ export async function POST(request) {
     // }
 
     try {
-      const {
-        address,
-        amount,
-        discount,
-        latitude,
-        longitude,
-        note,
-        orderMethod, // TakeOnTransaction
-        promo,
-        servicePrice,
-        servicePriceOnSpecialist, // TakeOnTransaction
-        total,
-        user,
-        orderDate,
-        vehicleModel,
-        payment,
-      } = await request.json();
-
       const data = await prisma.transaction.create({
         data: {
           address,
@@ -110,8 +110,42 @@ export async function POST(request) {
           takeOnTransactions: true,
         },
       });
+      // revalidatePath(data);
+      console.log("CREATED: ", data);
 
-      revalidatePath(data);
+      const msg = {
+        title: "PESANAN UNTUK MITRA JOSBOS",
+        body: "Pesanan telah masuk, silakan buka aplikasi Josbos sekarang juga...!",
+        data: {
+          page: "Home",
+          id: data?.id,
+        },
+      };
+
+      if (data?.takeOnTransactions?.[0]?.orderMethod === "Random Mitra") {
+        try {
+          const specialists =
+            await prisma.$queryRaw`SELECT *, 6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION )))) as distance FROM "public"."Specialist" WHERE (6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION ))))) <= 10 AND status = 'online'`;
+
+          // console.log("LIST_SPECIALIST: ", specialists);
+          const listTokenFCM = specialists
+            ?.map((item) => item?.tokenFCM)
+            .filter((tokenFCM) => tokenFCM != "" && tokenFCM != null);
+
+          // console.log("LIST_TOKEN: ", listTokenFCM);
+
+          listTokenFCM?.map(async (token) => {
+            await SendFCM(token, msg.title, msg.body, msg.data);
+          });
+        } catch (error) {
+          console.log("ERROR: ", error);
+        }
+      } else {
+        const token = data?.takeOnTransactions?.[0]?.specialist?.tokenFCM;
+        SendFCM(token, msg.title, msg.body, msg.data);
+        console.log("BUKAN RANDOM MITRA");
+      }
+
       return NextResponse.json({
         status: true,
         message: "Create successfully",

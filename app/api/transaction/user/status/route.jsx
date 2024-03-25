@@ -79,6 +79,7 @@ export async function GET(request) {
               select: {
                 id: true,
                 name: true,
+                description: true,
                 categories: {
                   select: {
                     id: true,
@@ -134,6 +135,7 @@ export async function GET(request) {
                   select: {
                     id: true,
                     name: true,
+                    description: true,
                     categories: {
                       select: {
                         id: true,

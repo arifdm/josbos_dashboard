@@ -1,6 +1,8 @@
 import prisma from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { SendFCM } from "@/libs/utils";
+import moment from "moment";
 
 export async function PUT(request, { params }) {
   const accessToken = request.headers.get("Authorization");
@@ -40,6 +42,7 @@ export async function PUT(request, { params }) {
         select: {
           amount: true,
           discount: true,
+          user: true,
           servicePricings: {
             select: {
               services: {
@@ -82,6 +85,28 @@ export async function PUT(request, { params }) {
           },
         },
       });
+
+      // NOTIF TO USER
+      const userFCM = await prisma.user.findFirst({
+        where: { id: resTransaction.user },
+      });
+
+      const msg = {
+        title: "UPDATE STATUS PESANAN",
+        body: `Pesanan Kamu tanggal: ${moment(dataTrans.createdAt).format(
+          "DD MMM YYYY - HH:mm"
+        )} (JB-${moment(
+          dataTrans.createdAt
+        ).unix()}) telah diupdate menjadi ${status}. Silakan cek aplikasi Josbos.`,
+        data: {
+          page: "Home",
+          id: null,
+        },
+      };
+
+      SendFCM(userFCM?.tokenFCM, msg.title, msg.body, msg.data)
+        .then((res) => console.log("SEND_FCM_SUCCESS: ", res))
+        .catch((err) => console.log("SEND_FCM_ERROR: ", err));
 
       const description = dataTrans.servicePricings
         ? `${dataTrans.servicePricings.services.categories.name}, ${dataTrans.servicePricings.services.name} (${dataTrans.vehicleModels.brands.name} ${dataTrans.vehicleModels.name})`

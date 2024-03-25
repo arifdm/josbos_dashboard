@@ -1,6 +1,7 @@
 import prisma from "@/prisma/prisma";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { SendFCM } from "@/libs/utils";
 
 export async function PUT(request, { params }) {
   const accessToken = request.headers.get("Authorization");
@@ -48,7 +49,7 @@ export async function PUT(request, { params }) {
     }
 
     try {
-      const data = await prisma.takeOnTransaction.update({
+      const resTake = await prisma.takeOnTransaction.update({
         where: { id: transactionID.id },
         data: {
           rating: parseInt(rating),
@@ -56,14 +57,30 @@ export async function PUT(request, { params }) {
         },
       });
 
-      if (data) {
-        const data = await prisma.transaction.update({
-          where: { id },
-          data: {
-            status: "completed",
-          },
-        });
-      }
+      await prisma.transaction.update({
+        where: { id },
+        data: {
+          status: "completed",
+        },
+      });
+
+      // NOTIF TO SPECIALIST
+      const specialistFCM = await prisma.specialist.findFirst({
+        where: { id: resTake.specialist },
+      });
+
+      const msg = {
+        title: "TERIMA KASIH TELAH PESAN DI JOSBOS",
+        body: `Apabila Kamu puas dengan layanan kami, silakan untuk bagi ke teman atau saudara yang lain. Terima kasih.`,
+        data: {
+          page: "Home",
+          id: null,
+        },
+      };
+
+      SendFCM(specialistFCM?.tokenFCM, msg.title, msg.body, msg.data)
+        .then((res) => console.log("SEND_FCM_SUCCESS: ", res))
+        .catch((err) => console.log("SEND_FCM_ERROR: ", err));
 
       return NextResponse.json({
         status: true,

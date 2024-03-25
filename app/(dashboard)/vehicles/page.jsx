@@ -80,6 +80,18 @@ export default function Vehicles() {
     queryFn: () => getCategory(),
   });
 
+  // function groupBy(arr, key) {
+  //   return arr.reduce((acc, obj) => {
+  //     const group = obj[key];
+  //     acc[group] = acc[group] || [];
+  //     acc[group].push(obj);
+  //     return acc;
+  //   }, {});
+  // }
+
+  // const groupedData = groupBy(currentPosts, "category");
+  // console.log(groupedData);
+
   return (
     <div className="bg-white">
       <div className="text-xl font-semibold mb-4 text-primary">Kendaraan</div>
@@ -87,14 +99,9 @@ export default function Vehicles() {
         <div className="w-1/5 border-r border-gray-200 pt-8 hidden lg:block">
           <h2 className="font-medium mb-3">Kategori</h2>
           <ul className="pr-6">
-            <li className="text-sm px-2 py-0.5 border border-gray-100 rounded-md my-1.5">
-              All
-            </li>
+            <li className="text-sm py-2">All</li>
             {dataCatagory?.map((cat) => (
-              <li
-                className="text-sm px-2 py-0.5 border border-gray-100 rounded-md my-1.5"
-                key={cat.id}
-              >
+              <li key={cat.id} className="text-sm py-2 font-normal">
                 {cat.name}
               </li>
             ))}
