@@ -133,9 +133,8 @@ export async function POST(request) {
             .filter((tokenFCM) => tokenFCM != "" && tokenFCM != null);
 
           // console.log("LIST_TOKEN: ", specialistFCM);
-
-          specialistFCM?.map(async (token) => {
-            await SendFCM("SPECIALIST", token, msg.title, msg.body, msg.data);
+          specialistFCM?.map((token) => {
+            SendFCM("SPECIALIST", token, msg.title, msg.body, msg.data);
           });
         } catch (error) {
           console.log("ERROR: ", error);

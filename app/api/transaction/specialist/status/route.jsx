@@ -88,16 +88,16 @@ export async function PUT(request, { params }) {
 
       // NOTIF TO USER
       const userFCM = await prisma.user.findFirst({
-        where: { id: resTransaction.user },
+        where: { id: dataTrans.user },
       });
 
       const msg = {
         title: "UPDATE STATUS PESANAN",
         body: `Pesanan Kamu tanggal: ${moment(dataTrans.createdAt).format(
           "DD MMM YYYY - HH:mm"
-        )} (JB-${moment(
+        )}, No: (JB-${moment(
           dataTrans.createdAt
-        ).unix()}) telah diupdate menjadi ${status}. Silakan cek aplikasi Josbos.`,
+        ).unix()}) telah diupdate menjadi ${status}. Silakan buka aplikasi Josbos.`,
         data: {
           page: "Home",
           id: null,

@@ -57,28 +57,52 @@ export async function PUT(request, { params }) {
         },
       });
 
-      await prisma.transaction.update({
+      const resTrans = await prisma.transaction.update({
         where: { id },
         data: {
           status: "completed",
         },
       });
 
-      // NOTIF TO SPECIALIST
-      const specialistFCM = await prisma.specialist.findFirst({
-        where: { id: resTake.specialist },
+      // NOTIF TO USER
+      const userFCM = await prisma.user.findFirst({
+        where: { id: resTrans.user },
       });
 
       const msg = {
         title: "TERIMA KASIH TELAH PESAN DI JOSBOS",
-        body: `Apabila Kamu puas dengan layanan kami, silakan untuk bagi ke teman atau saudara yang lain. Terima kasih.`,
+        body: "Apabila Kamu puas dengan layanan kami, silakan untuk bagi ke teman atau saudara yang lain. Terima kasih.",
         data: {
           page: "Home",
           id: null,
         },
       };
 
-      SendFCM("USER", specialistFCM?.tokenFCM, msg.title, msg.body, msg.data)
+      SendFCM("USER", userFCM?.tokenFCM, msg.title, msg.body, msg.data)
+        .then((res) => console.log("SEND_FCM_SUCCESS: ", res))
+        .catch((err) => console.log("SEND_FCM_ERROR: ", err));
+
+      // NOTIF TO SPECIALIST
+      const specialistFCM = await prisma.specialist.findFirst({
+        where: { id: resTake.specialist },
+      });
+
+      const msg2 = {
+        title: "RATING LAYANAN KAMU",
+        body: "Pemesan telah menilai layanan Kamu, silakan buka aplikasi Josbos.",
+        data: {
+          page: "Home",
+          id: null,
+        },
+      };
+
+      SendFCM(
+        "SPECIALIST",
+        specialistFCM?.tokenFCM,
+        msg2.title,
+        msg2.body,
+        msg2.data
+      )
         .then((res) => console.log("SEND_FCM_SUCCESS: ", res))
         .catch((err) => console.log("SEND_FCM_ERROR: ", err));
 
