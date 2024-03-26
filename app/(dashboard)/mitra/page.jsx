@@ -46,9 +46,6 @@ export default function Users() {
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-7 text-primary">
-        Mitra Spesialis
-      </div>
       {isLoading ? (
         <LoadingSpinner />
       ) : (

@@ -36,9 +36,9 @@ export default function Menu() {
         <li>
           <Link href="/pesananMasuk">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/pesananMasuk"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-color duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -50,9 +50,9 @@ export default function Menu() {
         <li>
           <Link href="/pesananDibatalkan">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/pesananDibatalkan"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -64,9 +64,9 @@ export default function Menu() {
         <li>
           <Link href="/pesananSelesai">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/pesananSelesai"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -81,9 +81,9 @@ export default function Menu() {
         <li>
           <Link href="/users">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/users"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -95,9 +95,9 @@ export default function Menu() {
         <li>
           <Link href="/mitra">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/mitra"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -112,9 +112,9 @@ export default function Menu() {
         <li>
           <Link href="/articles">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/articles"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -126,9 +126,9 @@ export default function Menu() {
         <li>
           <Link href="/promos">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/promos"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -143,9 +143,9 @@ export default function Menu() {
         <li>
           <Link href="/cities">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/cities"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -157,9 +157,9 @@ export default function Menu() {
         <li>
           <Link href="/vehicles">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/vehicles"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
@@ -171,9 +171,9 @@ export default function Menu() {
         <li>
           <Link href="/services">
             <div
-              className={`text-slate-500 px-2 rounded-md cursor-pointer hover:bg-slate-400 hover:text-white ${
+              className={`text-slate-500 px-2 rounded-sm cursor-pointer hover:text-amber-500 ${
                 pathname === "/services"
-                  ? "bg-slate-400 text-white"
+                  ? "text-amber-500"
                   : "transition-all duration-400 delay-100 ease-in-out"
               }`}
             >
