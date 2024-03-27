@@ -1,8 +1,6 @@
 import Search from "@/components/UI/Search";
 import prisma from "@/prisma/prisma";
 import moment from "moment";
-import DeletePage from "./deletePage";
-import UpdatePage from "./updatePage";
 import { LiaUserCircle } from "react-icons/lia";
 
 const getUser = async () => {
@@ -12,18 +10,16 @@ const getUser = async () => {
 
 export const revalidate = 1;
 
-export default async function Users() {
+export default async function TransaksiMitra() {
   const users = await getUser();
   // console.log("RES: ", users);
 
   return (
     <div className="bg-white">
-      <div className="text-xl font-semibold mb-7 text-primary">Pemesan</div>
-      <div className="w-full grid grid-cols-2 gap-3">
-        <Search value="" placeholder="Cari pemesan..." />
-        <div className="flex justify-end"></div>
+      <div className="text-xl mb-7 font-semibold text-primary">
+        Transaksi Mitra
       </div>
-      <div className="flex flex-col mt-2">
+      <div className="flex flex-col -mt-6">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
             <div className="overflow-hidden">
@@ -69,10 +65,7 @@ export default async function Users() {
                       <td className="whitespace-nowrap py-4">{item.email}</td>
                       <td className="whitespace-nowrap py-4">{item?.phone}</td>
                       <td>
-                        <div className="full flex justify-center gap-2 align-middle">
-                          <UpdatePage data={item} />
-                          <DeletePage data={item} />
-                        </div>
+                        <div className="full flex justify-center gap-2 align-middle"></div>
                       </td>
                     </tr>
                   ))}

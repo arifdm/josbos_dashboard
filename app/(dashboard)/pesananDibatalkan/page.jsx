@@ -85,33 +85,25 @@ export default function PesananDibatalkan() {
                     <table className="min-w-full table-auto text-left text-sm font-light">
                       <thead className="border-b font-medium dark:border-neutral-200">
                         <tr>
-                          <th
-                            scope="col"
-                            width="4%"
-                            className="px-2 py-4 text-center"
-                          >
+                          <th width="4%" className="px-2 py-4 text-center">
                             #
                           </th>
-                          <th
-                            scope="col"
-                            width="10%"
-                            className="px-2 py-4 text-center"
-                          >
+                          <th width="10%" className="px-2 py-4 text-center">
                             Tgl Pesan
                           </th>
-                          <th scope="col" width="15%" className="px-2 py-4">
+                          <th width="15%" className="px-2 py-4">
                             Nama Pemesan
                           </th>
-                          <th scope="col" width="23%" className="px-2 py-4">
+                          <th width="23%" className="px-2 py-4">
                             Lokasi & Alamat
                           </th>
-                          <th scope="col" width="15%" className="px-2 py-4">
+                          <th width="15%" className="px-2 py-4">
                             Kategori & Layanan
                           </th>
-                          <th scope="col" width="13%" className="px-2 py-4">
+                          <th width="13%" className="px-2 py-4">
                             Pembayaran
                           </th>
-                          <th scope="col" width="20%" className="px-2 py-4">
+                          <th width="20%" className="px-2 py-4">
                             Alasan Pembatalan
                           </th>
                         </tr>

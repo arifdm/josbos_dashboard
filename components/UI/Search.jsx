@@ -23,7 +23,7 @@ export default function Search({ value, placeholder, onChange }) {
           <input
             type="search"
             value={value}
-            className="block w-full px-3 py-1.5 ps-10 text-sm text-neutral-500 border border-neutral-200 rounded-lg bg-white focus:bg-neutral-100 focus:outline-none placeholder-gray-300"
+            className="block w-full px-3 py-1.5 ps-10 bg-white border shadow-sm border-slate-300 placeholder-slate-300 focus:outline-none focus:border-slate-300 focus:ring-slate-300 rounded-md focus:ring-1"
             placeholder={placeholder}
             onChange={onChange}
             required

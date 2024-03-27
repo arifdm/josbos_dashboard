@@ -11,6 +11,7 @@ const createService = async (body) => {
   const { data } = await axios.post(`/fetch/service/${body?.id}`, body);
   return data.data;
 };
+
 const AddPage = ({ id }) => {
   const router = useRouter();
   const queryClient = useQueryClient();

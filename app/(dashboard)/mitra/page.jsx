@@ -46,12 +46,13 @@ export default function Users() {
 
   return (
     <div className="bg-white">
+      <div className="text-xl mb-7 font-semibold text-primary">Data Mitra</div>
       {isLoading ? (
         <LoadingSpinner />
       ) : (
         <>
           <div className="w-full grid grid-cols-2 gap-3">
-            {filteredUsers?.length > 0 && (
+            {data?.length > 0 && (
               <Search
                 value={searchItem}
                 placeholder="Cari mitra spesialis..."
@@ -112,7 +113,7 @@ export default function Users() {
                               )}
                             </td>
                             <td className="whitespace-nowrap py-4 font-bold">
-                              <LiaUserCircle size={35} className="inline" />{" "}
+                              <LiaUserCircle size={30} className="inline" />{" "}
                               {item.name}
                             </td>
                             <td className="whitespace-nowrap py-4">

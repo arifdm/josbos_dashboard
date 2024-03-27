@@ -1,17 +1,16 @@
 "use client";
 
-import { Fragment, useState } from "react";
-import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
-  MagnifyingGlassIcon,
   UserCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { useSession, signIn, signOut } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { Fragment, useState } from "react";
 
 const navigation = {
   pages: [
