@@ -122,27 +122,53 @@ export async function POST(request) {
         },
       };
 
-      if (data?.takeOnTransactions?.[0]?.orderMethod === "Random Mitra") {
+      if (
+        data?.takeOnTransactions?.[0]?.orderMethod === "Random Mitra" ||
+        data?.takeOnTransactions?.[0]?.orderMethod === "Lakukan Penawaran"
+      ) {
         try {
           const specialists =
             await prisma.$queryRaw`SELECT *, 6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION )))) as distance FROM "public"."Specialist" WHERE (6371 * acos(cos(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (latitude AS DOUBLE PRECISION ))) * cos(RADIANS(CAST (${longitude} AS DOUBLE PRECISION )) - RADIANS(CAST (longitude AS DOUBLE PRECISION ))) + sin(RADIANS(CAST (${latitude} AS DOUBLE PRECISION ))) * sin(RADIANS(CAST (latitude AS DOUBLE PRECISION ))))) <= 10 AND status = 'online'`;
 
-          // console.log("LIST_SPECIALIST: ", specialists);
+          console.log("LIST_SPECIALIST: ", specialists);
           const specialistFCM = specialists
             ?.map((item) => item?.tokenFCM)
             .filter((tokenFCM) => tokenFCM != "" && tokenFCM != null);
 
-          // console.log("LIST_TOKEN: ", specialistFCM);
+          console.log("LIST_TOKEN: ", specialistFCM);
           specialistFCM?.map((token) => {
-            SendFCM("SPECIALIST", token, msg.title, msg.body, msg.data);
+            if (token) {
+              SendFCM("SPECIALIST", token, msg.title, msg.body, msg.data)
+                .then((res) => console.log("RES_SEND_FCM: ", res))
+                .catch((err) => console.log("ERROR_SEND_FCM: ", err));
+            }
           });
         } catch (error) {
           console.log("ERROR: ", error);
         }
       } else {
-        const token = data?.takeOnTransactions?.[0]?.specialist?.tokenFCM;
-        SendFCM("SPECIALIST", token, msg.title, msg.body, msg.data);
-        console.log("BUKAN RANDOM MITRA");
+        const getSpecialistFCM =
+          await prisma.servicePriceOnSpecialist.findFirst({
+            where: {
+              id: data?.takeOnTransactions?.[0]?.servicePriceOnSpecialist,
+            },
+            select: {
+              specialists: { select: { tokenFCM: true } },
+            },
+          });
+
+        const token = getSpecialistFCM.specialists?.tokenFCM;
+        // console.log("Pilih Mitra Langsung: ", token);
+        if (token) {
+          const resSendFCM = await SendFCM(
+            "SPECIALIST",
+            token,
+            msg.title,
+            msg.body,
+            msg.data
+          );
+          console.log("RES_SEND_FCM: ", resSendFCM);
+        }
       }
 
       return NextResponse.json({
